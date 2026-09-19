@@ -267,7 +267,7 @@ var STR={
 en:{appName:'Immersion Journal',saved:'Saved on this device {t}',local:'Records stay on this device only',blocked:'This browser is blocking storage',
  settings:'Sections & settings',back:'Back to the day page',prevDay:'Previous day',nextDay:'Next day',today:'Today',yesterday:'Yesterday',tomorrow:'Tomorrow',
  daysAgo:'{n} days ago',inDays:'in {n} days',goToday:'Go to today',pickDate:'Pick a date',
- pitch:'Molip is an immersion journal, one page a day. Log your focused hours and intensity once a day, and after a week your immersion pattern shows.',intro:'Today’s page is ready whenever you open the app. For other days use the arrows, or tap the small date under the title to open a calendar. Write under each section, and tap ‘Summary’ beside a section to see its week and month. You can change the sections in ‘Sections & settings’, and add your immersion start date and purpose there to see which day and week of your immersion it is.',gotIt:'Got it',
+ pitch:'Molip is an immersion journal, one page a day. Log your focused hours and intensity once a day, and after a week your immersion pattern shows.',intro:'Write under each section, and tap ‘Summary’ beside a section to see its week and month. For other days use the arrows, or tap the small date under the title to open a calendar.',gotIt:'Got it',
  warnStorage:'This browser is blocking storage, so your records will disappear when you close this window. Turn off private browsing or open the app in another browser.',
  summary:'Summary',openSummary:'Open {name} summary',sumOf:'{name} summary',noSections:'There are no sections yet. Add some in ‘Sections & settings’.',
  write:'Write here',newItem:'{name}: new item',item:'{name} item',entries:'{n}',hours:'Hours',hoursOf:'{p} hours',intensityOf:'{p} intensity',hUnit:'{n} h',
@@ -309,7 +309,7 @@ en:{appName:'Immersion Journal',saved:'Saved on this device {t}',local:'Records 
 ko:{appName:'몰입 일지',saved:'이 기기에 저장됨 {t}',local:'기록은 이 기기에만 저장돼요',blocked:'이 브라우저가 저장을 막고 있어요',
  settings:'항목과 설정',back:'하루 기록으로 돌아가기',prevDay:'전날',nextDay:'다음 날',today:'오늘',yesterday:'어제',tomorrow:'내일',
  daysAgo:'{n}일 전',inDays:'{n}일 뒤',goToday:'오늘로 가기',pickDate:'날짜 고르기',
- pitch:'Molip은 매일 한 페이지씩 적는 몰입 일지예요. 하루 한 번 몰입 시간과 몰입도를 적으면, 일주일 뒤 내 몰입 패턴이 보여요.',intro:'앱을 열면 오늘 페이지가 바로 나와요. 다른 날은 양옆의 화살표로 가거나, 제목 밑의 작은 날짜를 누르면 달력이 나와요. 각 항목 아래에 그날의 기록을 남기고, 항목 오른쪽의 ‘요약’을 누르면 주간·월간 기록을 모아 볼 수 있어요. 기록할 항목은 ‘항목과 설정’에서 바꿀 수 있고, 거기에 몰입 시작일과 몰입 목적을 적으면 오늘이 몰입 몇 일차, 몇 주차인지 표시돼요.',gotIt:'알겠어요',
+ pitch:'Molip은 매일 한 페이지씩 적는 몰입 일지예요. 하루 한 번 몰입 시간과 몰입도를 적으면, 일주일 뒤 내 몰입 패턴이 보여요.',intro:'각 항목 아래에 그날의 기록을 남기고, 항목 오른쪽의 ‘요약’을 누르면 주간·월간 기록을 모아 볼 수 있어요. 다른 날은 양옆의 화살표로 가거나, 제목 밑의 작은 날짜를 누르면 달력이 나와요.',gotIt:'알겠어요',
  warnStorage:'이 브라우저가 저장을 막고 있어서, 창을 닫으면 기록이 사라져요. 사생활 보호 모드를 끄거나 다른 브라우저로 열어 주세요.',
  summary:'요약',openSummary:'{name} 요약 열기',sumOf:'{name} 요약',noSections:'기록할 항목이 없어요. ‘항목과 설정’에서 항목을 추가하세요.',
  write:'적기',newItem:'{name} 새 항목',item:'{name} 항목',entries:'{n}건',hours:'시간',hoursOf:'{p} 몰입 시간',intensityOf:'{p} 몰입도',hUnit:'{n}시간',
@@ -383,7 +383,7 @@ function el(tag,attrs){
   function add(x){ if(x==null||x===false) return; if(Array.isArray(x)){x.forEach(add);return;} n.appendChild(x.nodeType?x:document.createTextNode(String(x))); }
   return n;
 }
-var BUILD='9.19 12:09';   /* stamped by the build script */
+var BUILD='9.19 12:48';   /* stamped by the build script */
 function lang(){return STR[DB.settings.lang]?DB.settings.lang:'ko';}
 function t(k,vars){ var s=STR[lang()][k]; if(s==null) s=STR.en[k]!=null?STR.en[k]:k;
   return vars?s.replace(/\{(\w+)\}/g,function(m,a){return vars[a]!=null?vars[a]:'';}):s; }
@@ -790,7 +790,7 @@ function screenDay(){
       el('button',{class:'icon-btn',type:'button','aria-label':t('prevDay'),text:'‹',onclick:function(){pageTurn(-1);}}),
       el('div',{class:'when'},el('h1',{text:dayTitle(d)}),sub),
       el('button',{class:'icon-btn',type:'button','aria-label':t('nextDay'),text:'›',onclick:function(){pageTurn(1);}})));
-  var intro=DB.settings.introSeen?null:el('div',{class:'notice'},pitchEl(),t('intro'),
+  var intro=DB.settings.introSeen?null:el('div',{class:'notice'},(DB.settings.installLater||standalone())?null:pitchEl(),t('intro'),
     el('div',{class:'actions'},el('button',{class:'link',type:'button',text:t('gotIt'),onclick:function(){DB.settings.introSeen=true;save();render();}})));
   var warn=storageOk?null:el('div',{class:'notice bad'},t('warnStorage'));
   var secs=DB.template.map(function(sec){
