@@ -286,7 +286,7 @@ en:{appName:'Immersion Journal',saved:'Saved on this device {t}',local:'Records 
  nothingW:'Nothing written this week.',nothingM:'Nothing written this month.',todoLead:'{a} of {b} done',noTodoW:'No to-dos this week.',noTodoM:'No to-dos this month.',
  reportSet:'Enter your immersion start date and purpose',
  inTitle:'Open this in Safari or Chrome',inBody:'Right now this page is open inside another app (KakaoTalk, a mail app). Here it can’t be installed, and records are kept separately from your browser.',inOpen:'Open in my browser',inCopy:'Copy link',inCopied:'Copied. Paste it into your browser’s address bar',
- iosTitle:'First, add this to your Home Screen',iosBody:'It opens like an app and your records stay safe. Anything you write here in the browser does not carry over, so add it first and then start recording.',iosStep1:'Tap the Share button at the bottom of the screen',iosStep1b:'Tap the Share button beside the address bar',iosStep2:'Choose ‘Add to Home Screen’',iosStep3:'Tap ‘Add’ at the top right',
+ iosTitle:'First, add this to your Home Screen',iosBody:'It opens like an app and your records stay safe. Anything you write here in the browser does not carry over, so add it first and then start recording.',iosStep1:'Tap the three dots (⋯) beside the address bar, then Share. If you see a Share button, tap that instead',iosStep1b:'Tap the Share button beside the address bar',iosStep2:'Scroll down and tap ‘Add to Home Screen’',iosStep3:'Tap ‘Add’ at the top right',
  andTitle:'Install as an app',andBody:'You get an icon on your home screen and it opens like an app.',andInstall:'Install',andManual:'Open the browser menu (⋮) and choose ‘Install app’ or ‘Add to Home screen’.',later:'Later',
  flowBoth:'The parts of the day and the whole-day line are added together. To keep only one, set the other back to “Hours”.',
  flowMode:'How to record',flowSplit:'Morning · Noon · Evening',flowWhole:'Whole day in one',
@@ -328,7 +328,7 @@ ko:{appName:'몰입 일지',saved:'이 기기에 저장됨 {t}',local:'기록은
  nothingW:'이 주에 적은 것이 없어요.',nothingM:'이 달에 적은 것이 없어요.',todoLead:'{b}개 중 {a}개 완료',noTodoW:'이 주에는 할 일이 없어요.',noTodoM:'이 달에는 할 일이 없어요.',
  reportSet:'몰입 시작일과 목적 입력하기',
  inTitle:'Safari나 Chrome에서 열어 주세요',inBody:'지금은 다른 앱(카카오톡, 메일 앱 등) 안에서 열려 있어요. 여기서는 앱으로 설치할 수 없고, 기록도 브라우저와 따로 저장돼요.',inOpen:'내 브라우저로 열기',inCopy:'링크 복사',inCopied:'복사됨. 브라우저 주소창에 붙여 넣으세요',
- iosTitle:'먼저 홈 화면에 추가하세요',iosBody:'앱처럼 열리고 기록이 안전하게 남아요. 지금 브라우저에서 적은 기록은 홈 화면 앱으로 넘어가지 않으니, 홈 화면에 추가한 다음에 기록을 시작하세요.',iosStep1:'화면 아래 가운데 공유 버튼 누르기',iosStep1b:'주소창 옆 공유 버튼 누르기',iosStep2:'‘홈 화면에 추가’ 고르기',iosStep3:'오른쪽 위 ‘추가’ 누르기',
+ iosTitle:'먼저 홈 화면에 추가하세요',iosBody:'앱처럼 열리고 기록이 안전하게 남아요. 지금 브라우저에서 적은 기록은 홈 화면 앱으로 넘어가지 않으니, 홈 화면에 추가한 다음에 기록을 시작하세요.',iosStep1:'주소창 옆 점 세 개(⋯)를 누르고 ‘공유’ 누르기. 공유 버튼이 바로 보이면 그 버튼 누르기',iosStep1b:'주소창 옆 공유 버튼 누르기',iosStep2:'화면을 내려서 ‘홈 화면에 추가’ 누르기',iosStep3:'오른쪽 위 ‘추가’ 누르기',
  andTitle:'앱으로 설치하기',andBody:'홈 화면에 아이콘이 생기고 앱처럼 열려요.',andInstall:'설치',andManual:'브라우저 메뉴(⋮)에서 ‘앱 설치’ 또는 ‘홈 화면에 추가’를 고르세요.',later:'나중에',
  flowBoth:'아침·점심·저녁과 하루 기록이 함께 더해져요. 하나만 남기려면 다른 쪽을 ‘시간’으로 되돌리세요.',
  flowMode:'기록 방식',flowSplit:'아침·점심·저녁',flowWhole:'하루 통으로',
@@ -383,7 +383,7 @@ function el(tag,attrs){
   function add(x){ if(x==null||x===false) return; if(Array.isArray(x)){x.forEach(add);return;} n.appendChild(x.nodeType?x:document.createTextNode(String(x))); }
   return n;
 }
-var BUILD='9.19 09:26';   /* stamped by the build script */
+var BUILD='9.19 12:09';   /* stamped by the build script */
 function lang(){return STR[DB.settings.lang]?DB.settings.lang:'ko';}
 function t(k,vars){ var s=STR[lang()][k]; if(s==null) s=STR.en[k]!=null?STR.en[k]:k;
   return vars?s.replace(/\{(\w+)\}/g,function(m,a){return vars[a]!=null?vars[a]:'';}):s; }
