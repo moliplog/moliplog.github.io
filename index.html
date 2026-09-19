@@ -195,6 +195,12 @@ select.h{min-width:96px} select.p{min-width:70px}
 .line.form .field{flex:1;min-width:0;width:auto}
 input[type="date"].field{-webkit-appearance:none;appearance:none;text-align:left;line-height:40px;padding-top:0;padding-bottom:0}
 input[type="date"].field::-webkit-date-and-time-value{text-align:left;margin:0;line-height:40px}
+.field::placeholder{color:var(--ink-2);opacity:.45}
+input[type="date"].field.blank{position:relative}
+input[type="date"].field.blank::before{content:attr(data-eg);position:absolute;left:12px;top:0;line-height:40px;color:var(--ink-2);opacity:.45;pointer-events:none;white-space:nowrap}
+input[type="date"].field.blank:not(:focus)::-webkit-datetime-edit{color:transparent}
+input[type="date"].field.blank:not(:focus)::-webkit-date-and-time-value{color:transparent}
+input[type="date"].field.blank:focus::before{content:none}
 .tools{display:flex;gap:6px;flex:none}
 .tools button,.mini{flex:none;white-space:nowrap;height:42px;min-width:42px;padding:0 10px;border:1px solid var(--line);border-radius:10px;background:var(--surface);font-size:14px}
 .rowf{display:flex;gap:6px;align-items:center}
@@ -273,10 +279,10 @@ en:{appName:'Immersion Journal',saved:'Saved on this device {t}',local:'Records 
  version:'Version',allRecords:'All records',allSpan:'{a} to {b}, {n} days with records',allStart:'Immersion start {d}',allGoal:'purpose {g}',allDays:'{n} days with records',backSettings:'Back to settings',
  allTextOpen:'Save all records as text',allTextHint:'For reading only. Anyone can read it without this app, but it cannot be loaded back in. To move to another device, use “{btn}” above.',allTextSub:'For reading. Copy it or save it as a file and keep it in a note, an email or a document. It is not a backup the app can restore.',saveTxt:'Save as a file',saveTxtFail:'This phone can’t hand over a file here. Use “Copy text” instead.',
  memo:'Note',memoLine:'Show a note line',memoLink:'See this period’s {name} notes ({n})',memoHide:'Hide the {name} notes',memoWhere:'Notes written here are gathered, day by day, in the summary of ‘{name}’.',memoEgFlow:'e.g. 2+4+2+4',memoEgChecks:'e.g. Exercise 1 h 30 min',memoEgSleep:'e.g. Woke up twice before dawn',
- topMemo:'Extra memo',topMemoShow:'Show an extra memo line under the title',topMemoNote:'Other notes stay on their own day’s page; what you write here shows on every day’s page until you remove it with its ×. Enter makes the next line, up to {n} lines.',pinWrite:'Extra memo (e.g. monthly goal)',pinItem:'Extra memo',pinNew:'New extra memo',pinTake:'Remove this memo',pinTaken:'Removed: {text}',
+ topMemo:'Extra memo',topMemoShow:'Show an extra memo line under the title',topMemoNote:'Other notes stay on their own day’s page; what you write here (e.g. monthly goal) shows on every day’s page until you remove it with its ×. Enter makes the next line, up to {n} lines.',pinWrite:'Extra memo (e.g. monthly goal)',pinItem:'Extra memo',pinNew:'New extra memo',pinTake:'Remove this memo',pinTaken:'Removed: {text}',
  mergedJust:'Merged.',mergedPins:'{n} extra memos came in.',
  dayNo:'Day {n}',dayRange:'days {a}–{b}',
- report:'Enter your immersion start date and purpose',reportNote:'Once entered, the week number shows as a title at the top of the day page and as the first line of the week text. Leave the start date empty to hide it.',startDate:'Start date',goal:'Purpose',goalHint:'e.g. Thesis writing',reportEmpty:'No title yet. Choose a start date.',
+ report:'Enter your immersion start date and purpose',reportNote:'Once entered, the week number shows as a title at the top of the day page and as the first line of the week text. Leave the start date empty to hide it.',startDate:'Start date',goal:'Purpose',startEg:'e.g. {d}',goalHint:'e.g. Thesis writing',reportEmpty:'No title yet. Choose a start date.',
  setTitle:'Sections & settings',setSub:'Each day’s new page is built from these sections',secName:'Section name',up:'Move up',down:'Move down',type:'Type',
  tList:'Text',tTodo:'To-do',tFlow:'Immersion',tChecks:'Checkbox',tNumbers:'Number',delSection:'Delete section',delSectionSure:'Really delete (records are kept)',cancel:'Cancel',
  name:'Name',unit:'unit',del:'Delete',addCheck:'Add a checkbox',addNumber:'Add a number',newHabit:'New habit',newNumber:'New number',delNote:'Built-in sections you don’t need can be deleted, and brought back later from ‘Bring back a deleted section’ further down. Deleting keeps what you recorded; it shows again once the section is back.',bringBack:'Bring back a deleted section',bringBackNote:'A tap puts it back where it was, and what you recorded in it shows again.',addSection:'Add a section',addNote:'Make sections of your own.',addEg:'For example: mood, reading, gratitude, prayer',
@@ -315,10 +321,10 @@ ko:{appName:'몰입 일지',saved:'이 기기에 저장됨 {t}',local:'기록은
  version:'버전',allRecords:'전체 기록',allSpan:'{a} ~ {b}, 기록한 날 {n}일',allStart:'몰입 시작일 {d}',allGoal:'목적 {g}',allDays:'기록한 날 {n}일',backSettings:'설정으로 돌아가기',
  allTextOpen:'전체 기록을 텍스트로 저장',allTextHint:'읽기용 텍스트예요. 이 앱 없이도 누구나 읽을 수 있지만, 앱으로 다시 불러올 수는 없어요. 기기를 옮길 때는 위의 ‘{btn}’ 버튼을 쓰세요.',allTextSub:'읽기용 텍스트예요. 복사하거나 파일로 저장해서 메모장, 메일, 문서에 보관하세요. 앱으로 되돌리는 백업은 아니에요.',saveTxt:'파일로 저장',saveTxtFail:'이 폰에서는 파일로 내보낼 수 없어요. ‘텍스트 복사’를 써 주세요.',
  memo:'메모',memoLine:'메모 칸 보이기',memoLink:'이 기간의 {name} 메모 {n}건 보기',memoHide:'{name} 메모 접기',memoWhere:'여기에 적은 메모는 ‘{name}’ 항목의 요약에서 날짜별로 모아 볼 수 있어요.',memoEgFlow:'예: 2+4+2+4',memoEgChecks:'예: 운동 1시간 30분',memoEgSleep:'예: 새벽에 두 번 깼다',
- topMemo:'추가 메모',topMemoShow:'제목 아래 추가 메모 칸 보이기',topMemoNote:'다른 메모는 그날 페이지에만 남지만, 이 칸에 적은 것은 ×⁠로 지울 때까지 매일 페이지에 보여요. Enter를 치면 다음 줄이 생기고, {n}줄까지 적을 수 있어요.',pinWrite:'추가 메모 (예: 포커싱 포인트, 이달 목표)',pinItem:'추가 메모',pinNew:'새 추가 메모',pinTake:'이 메모 지우기',pinTaken:'지웠어요: {text}',
+ topMemo:'추가 메모',topMemoShow:'제목 아래 추가 메모 칸 보이기',topMemoNote:'다른 메모는 그날 페이지에만 남지만, 이 칸에 적은 것(예: 포커싱 포인트, 이달 목표)은 ×⁠로 지울 때까지 매일 페이지에 보여요. Enter를 치면 다음 줄이 생기고, {n}줄까지 적을 수 있어요.',pinWrite:'추가 메모 (예: 포커싱 포인트, 이달 목표)',pinItem:'추가 메모',pinNew:'새 추가 메모',pinTake:'이 메모 지우기',pinTaken:'지웠어요: {text}',
  mergedJust:'합쳤어요.',mergedPins:'추가 메모 {n}개가 들어왔어요.',
  dayNo:'{n}일차',dayRange:'{a}–{b}일차',
- report:'몰입 시작일과 목적 입력하기',reportNote:'입력해 두면 몇 주차인지가 하루 기록 맨 위와 주간 텍스트 첫 줄에 제목으로 나와요. 몰입 시작일을 비워 두면 나오지 않아요.',startDate:'몰입 시작일',goal:'몰입 목적',goalHint:'예: 공기업 입사준비',reportEmpty:'아직 제목이 없어요. 몰입 시작일을 골라 주세요.',
+ report:'몰입 시작일과 목적 입력하기',reportNote:'입력해 두면 몇 주차인지가 하루 기록 맨 위와 주간 텍스트 첫 줄에 제목으로 나와요. 몰입 시작일을 비워 두면 나오지 않아요.',startDate:'몰입 시작일',goal:'몰입 목적',startEg:'예: {d}',goalHint:'예: 공기업 입사준비',reportEmpty:'아직 제목이 없어요. 몰입 시작일을 골라 주세요.',
  setTitle:'항목과 설정',setSub:'매일 새 페이지가 이 항목들로 만들어져요',secName:'항목 이름',up:'위로',down:'아래로',type:'종류',
  tList:'텍스트',tTodo:'할 일',tFlow:'몰입도',tChecks:'체크',tNumbers:'숫자',delSection:'항목 삭제',delSectionSure:'정말 삭제 (기록은 남아요)',cancel:'취소',
  name:'이름',unit:'단위',del:'삭제',addCheck:'체크할 것 추가',addNumber:'숫자 추가',newHabit:'새 습관',newNumber:'새 숫자',delNote:'필요 없는 기본 항목은 ‘항목 삭제’로 지울 수 있고, 필요하면 아래쪽 ‘지운 항목 되살리기’에서 되살릴 수 있어요. 지워도 적어 둔 기록은 그대로 있어서, 되살리면 다시 보여요.',bringBack:'지운 항목 되살리기',bringBackNote:'누르면 원래 있던 자리에 다시 생기고, 예전에 적은 기록도 다시 보여요.',addSection:'항목 추가',addNote:'필요한 기록을 직접 만들 수 있어요.',addEg:'예: 기분, 독서, 감사, 기도',
@@ -363,7 +369,7 @@ function el(tag,attrs){
   function add(x){ if(x==null||x===false) return; if(Array.isArray(x)){x.forEach(add);return;} n.appendChild(x.nodeType?x:document.createTextNode(String(x))); }
   return n;
 }
-var BUILD='9.19 01:50';   /* stamped by the build script */
+var BUILD='9.19 09:09';   /* stamped by the build script */
 function lang(){return STR[DB.settings.lang]?DB.settings.lang:'ko';}
 function t(k,vars){ var s=STR[lang()][k]; if(s==null) s=STR.en[k]!=null?STR.en[k]:k;
   return vars?s.replace(/\{(\w+)\}/g,function(m,a){return vars[a]!=null?vars[a]:'';}):s; }
@@ -1082,6 +1088,9 @@ function screenSettings(){
     return el('button',{type:'button',text:x.name,onclick:function(){ DB.trash=(DB.trash||[]).filter(function(y){return y.id!==x.id;}); putBack(x); changed(); }}); })))]):null;
   var delNote=el('p',{class:'muted',style:'margin:-8px 0 24px 24px',text:t('delNote')});
   var sd=el('input',{class:'field',type:'date','aria-label':t('startDate')}); sd.value=DB.settings.startDate||'';
+  /* example date: the Monday four weeks before this week, so it always reads like a real start date */
+  (function(){var d=today();d=addDays(d,-((d.getDay()+6)%7)-28);sd.setAttribute('data-eg',t('startEg',{d:keyOf(d)}));})();
+  function egSync(){sd.classList.toggle('blank',!sd.value);} egSync(); sd.addEventListener('input',egSync); sd.addEventListener('change',egSync);
   var gl=el('input',{class:'field',type:'text','aria-label':t('goal'),placeholder:t('goalHint'),value:DB.settings.goal||''});
   var pv=el('span',{class:'muted','aria-live':'polite'}); function showTitle(){ pv.textContent=reportTitle(today())||t('reportEmpty'); } showTitle();
   sd.addEventListener('change',function(){DB.settings.startDate=sd.value||'';changed();});
