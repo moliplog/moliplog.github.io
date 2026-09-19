@@ -12,7 +12,7 @@
 <meta property="og:title" content="몰입 일지">
 <meta property="og:description" content="하루 한 페이지로 쓰는 몰입 일지. 몰입 시간, 습관, 메모를 적으면 주·월 통계가 자동으로 나옵니다. 가입 없이 쓰고, 기록은 내 기기에만 저장됩니다.">
 <meta property="og:url" content="https://moliplog.github.io/">
-<meta property="og:image" content="https://moliplog.github.io/og.png">
+<meta property="og:image" content="https://moliplog.github.io/og.png?v=2">
 <meta property="og:image:width" content="1200">
 <meta property="og:image:height" content="630">
 <meta property="og:image:alt" content="주황색 ML 모노그램 아래에 '몰입 일지'라고 적힌 그림">
@@ -383,7 +383,7 @@ function el(tag,attrs){
   function add(x){ if(x==null||x===false) return; if(Array.isArray(x)){x.forEach(add);return;} n.appendChild(x.nodeType?x:document.createTextNode(String(x))); }
   return n;
 }
-var BUILD='9.19 12:09';   /* stamped by the build script */
+var BUILD='9.19 12:14';   /* stamped by the build script */
 function lang(){return STR[DB.settings.lang]?DB.settings.lang:'ko';}
 function t(k,vars){ var s=STR[lang()][k]; if(s==null) s=STR.en[k]!=null?STR.en[k]:k;
   return vars?s.replace(/\{(\w+)\}/g,function(m,a){return vars[a]!=null?vars[a]:'';}):s; }
