@@ -1,8 +1,8 @@
 {
   "name": "Molip",
   "short_name": "Molip",
-  "description": "One page a day. Log focused hours and intensity, habits, sleep, to-dos and notes, then review them by week and month.",
-  "lang": "en",
+  "description": "하루 한 번 몰입 시간과 몰입도를 적으면, 일주일 뒤 내 몰입 패턴이 보입니다.",
+  "lang": "ko",
   "dir": "ltr",
   "id": "./",
   "start_url": "./",
