@@ -1,0 +1,13 @@
+/* Immersion Journal: service worker so the app opens offline. Bump VERSION whenever you change the app. */
+const VERSION = 'journal-v5';
+const SHELL = ['./', 'index.html', 'manifest.webmanifest', 'icons/icon-192.png', 'icons/icon-512.png'];
+self.addEventListener('install', e => { e.waitUntil(caches.open(VERSION).then(c => c.addAll(SHELL)).then(() => self.skipWaiting())); });
+self.addEventListener('activate', e => { e.waitUntil(caches.keys().then(ks => Promise.all(ks.filter(k => k !== VERSION).map(k => caches.delete(k)))).then(() => self.clients.claim())); });
+self.addEventListener('fetch', e => {
+  if (e.request.method !== 'GET') return;
+  e.respondWith(caches.open(VERSION).then(async c => {
+    const hit = await c.match(e.request, { ignoreSearch: true });
+    const net = fetch(e.request).then(r => { if (r && (r.ok || r.type === 'opaque')) c.put(e.request, r.clone()); return r; }).catch(() => hit);
+    return hit || net;   /* show the saved copy first, fetch the new one in the background */
+  }));
+});

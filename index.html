@@ -1,0 +1,1173 @@
+<!doctype html>
+<html lang="ko">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Immersion Journal</title>
+<meta name="description" content="One page a day. Log focused hours and intensity, habits, sleep, to-dos and notes, then review them by week and month.">
+<link rel="manifest" href="manifest.webmanifest">
+<meta name="theme-color" content="#F1F4F6" media="(prefers-color-scheme: light)">
+<meta name="theme-color" content="#0D1620" media="(prefers-color-scheme: dark)">
+<meta name="mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-title" content="Molip">
+<link rel="apple-touch-icon" href="icons/apple-touch-icon.png">
+<link rel="icon" type="image/png" sizes="192x192" href="icons/icon-192.png">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Gowun+Batang:wght@400;700&family=IBM+Plex+Sans+KR:wght@400;500;600&display=swap" rel="stylesheet">
+<style>
+:root{
+  --paper:#F1F4F6; --surface:#FFFFFF; --ink:#13233A; --ink-2:#55667C; --line:#D3DCE3;
+  --water:#0C6E7D; --water-rgb:12,110,125; --on-water:#FFFFFF; --sun:#9A6510; --bad:#A93226; --bad-bg:#FBECEA;
+  --ui:"IBM Plex Sans KR","Apple SD Gothic Neo","Noto Sans KR","Noto Sans CJK KR","Malgun Gothic",system-ui,sans-serif;
+  --display:"Gowun Batang","AppleMyungjo","Noto Serif KR","Noto Serif CJK KR","Batang",serif;
+}
+@media (prefers-color-scheme: dark){
+  :root:not([data-theme="light"]){
+    --paper:#0D1620; --surface:#142130; --ink:#E4ECF2; --ink-2:#93A5B6; --line:#27394B;
+    --water:#57BFCB; --water-rgb:87,191,203; --on-water:#06222A; --sun:#E3B25A; --bad:#F2998E; --bad-bg:#3A1D1A;
+  }
+}
+:root[data-theme="dark"]{
+  --paper:#0D1620; --surface:#142130; --ink:#E4ECF2; --ink-2:#93A5B6; --line:#27394B;
+  --water:#57BFCB; --water-rgb:87,191,203; --on-water:#06222A; --sun:#E3B25A; --bad:#F2998E; --bad-bg:#3A1D1A;
+}
+*{box-sizing:border-box}
+html{-webkit-text-size-adjust:100%}
+body{margin:0;background:var(--paper);color:var(--ink);font:400 16px/1.6 var(--ui);font-variant-numeric:tabular-nums;word-break:keep-all;overflow-wrap:break-word}
+button,input,select,textarea{font:inherit;color:inherit}
+button{cursor:pointer;-webkit-tap-highlight-color:transparent}
+button:disabled,select:disabled,input:disabled{cursor:default;opacity:.45}
+:focus-visible{outline:2px solid var(--water);outline-offset:2px}
+.app{max-width:560px;margin:0 auto;padding:0 18px calc(56px + env(safe-area-inset-bottom))}
+
+/* header */
+.top{position:sticky;top:0;z-index:5;background:var(--paper);padding:10px 0 14px;border-bottom:1px solid var(--line);margin-bottom:24px}
+.bar{display:flex;justify-content:space-between;align-items:center;min-height:30px;gap:12px}
+.status{margin:0;font-size:13px;color:var(--ink-2);display:flex;align-items:center;gap:7px}
+.status i{width:7px;height:7px;border-radius:50%;background:var(--water);flex:none}
+.status.bad{color:var(--bad)} .status.bad i{background:var(--bad)}
+.link{border:0;background:none;padding:6px 0;font-size:14px;color:var(--water);text-decoration:underline;text-underline-offset:3px}
+.link.danger{color:var(--bad)}
+.datenav{display:flex;align-items:center;gap:10px;margin-top:6px}
+.when{flex:1;min-width:0;text-align:center}
+.when h1{margin:0;font:700 25px/1.25 var(--display);letter-spacing:-.01em}
+.when p{margin:2px 0 0;font-size:13px;color:var(--ink-2);min-height:24px;display:flex;justify-content:center;align-items:center;gap:10px;flex-wrap:wrap}
+.when p .link{padding:0;font-size:13px}
+.when p b{font-weight:600;color:var(--ink)}
+.datepick{border:0;background:none;color:var(--water);font-size:13px;padding:0;min-height:24px;max-width:150px}
+.icon-btn{flex:none;width:44px;height:44px;border:1px solid var(--line);border-radius:12px;background:var(--surface);font-size:22px;line-height:1}
+.seg{display:flex;gap:0;margin:12px auto 0;border:1px solid var(--line);border-radius:12px;overflow:hidden;background:var(--surface);max-width:240px}
+.seg button{flex:1;height:40px;border:0;background:none;font-weight:500;color:var(--ink-2)}
+.seg button[aria-pressed="true"]{background:var(--ink);color:var(--paper);font-weight:600}
+
+.club{position:relative;margin:0 0 24px;padding-left:24px;font-size:15px;line-height:1.5;letter-spacing:-.01em;color:var(--ink-2);word-break:keep-all;overflow-wrap:anywhere}
+.club b{font-weight:600;color:var(--ink)}
+.club::before{content:"";position:absolute;left:6px;top:3px;bottom:3px;width:2px;border-radius:1px;background:var(--water)}
+.club.empty::before{background:var(--line)}
+.club.empty .link{padding:0;font-size:15px}
+.club:has(+.pins){margin-bottom:0}
+.club:has(+.pins)::before{bottom:0;border-radius:1px 1px 0 0}
+/* the memo under the journal title: written once, there on every day's page until its × is pressed */
+.pins{position:relative;margin:0 0 24px;padding:2px 0 0 24px}
+.pins::before{content:"";position:absolute;left:6px;top:0;bottom:3px;width:2px;border-radius:0 0 1px 1px;background:var(--water)}
+.pins.none::before{background:var(--line)}
+.pin{position:relative;display:flex;align-items:flex-start;gap:6px;padding-left:13px}
+.pin::before{content:"";position:absolute;left:1px;top:16px;width:4px;height:4px;border-radius:50%;background:var(--ink-2)}
+.pin textarea{display:block;flex:1;min-width:0;border:0;background:none;resize:none;overflow:hidden;padding:7px 0 8px;font-size:15px;line-height:1.5;letter-spacing:-.01em;color:var(--ink-2);outline:none;border-bottom:1px solid transparent;border-radius:0}
+.pin textarea:focus{color:var(--ink);border-bottom-color:var(--water)}
+.pin textarea::placeholder{color:var(--ink-2);opacity:.45}
+.pin textarea:focus::placeholder{color:transparent}
+.pinx{flex:none;width:30px;height:38px;margin:0 -9px 0 -2px;padding:0;border:0;border-radius:6px;background:none;font-size:19px;line-height:1;color:var(--ink-2);opacity:.65}
+.pinundo{margin:2px 0 6px;padding-left:13px;font-size:13px;color:var(--ink-2)}
+.pinundo .link{padding:0 0 0 8px;font-size:13px}
+#report{scroll-margin-top:140px}
+.endbar{margin:8px 0 0 24px}
+.endbar .solid{width:100%;height:48px}
+
+/* notices */
+.notice{border:1px solid var(--line);background:var(--surface);border-radius:12px;padding:12px 14px;margin:0 0 24px;font-size:14px;line-height:1.6}
+.notice.bad{border-color:var(--bad);background:var(--bad-bg)}
+.notice .actions{margin-top:6px;display:flex;gap:16px}
+
+.install{border-color:var(--water)}
+.install .ttl{display:block;font-weight:600;font-size:16px;margin-bottom:4px}
+.install ol{margin:10px 0 0;padding-left:22px}
+.install li{margin:5px 0}
+.install .ico{display:inline-block;width:20px;height:20px;vertical-align:-5px;margin:0 3px;color:var(--water)}
+.install .actions{margin-top:12px;gap:18px;align-items:center;flex-wrap:wrap}
+a.solid{display:inline-flex;align-items:center;text-decoration:none}
+
+/* outline: a bullet, then its children */
+.node{position:relative;padding-left:24px;margin:0 0 28px}
+.node>.dot{position:absolute;left:3px;top:13px;width:8px;height:8px;border-radius:50%;background:var(--ink)}
+.sec{display:flex;align-items:baseline;gap:10px;width:100%;border:0;background:none;padding:3px 0;text-align:left;margin-bottom:4px}
+.sec .t{font:600 17px/1.6 var(--ui)}
+.sec .sum{flex:1;text-align:right;font-size:14px;color:var(--ink-2)}
+.sec .go{flex:none;font-size:13px;color:var(--water);text-decoration:underline;text-underline-offset:3px}
+.node.edit>.dot{top:17px}
+.node>h2{margin:0 0 4px;font:600 17px/1.6 var(--ui);padding:3px 0}
+.kids{margin-left:-17px;padding-left:22px;border-left:1px solid var(--line)}
+.kid{position:relative;padding:7px 0}
+.kids>.kids{margin-left:0;padding-left:0;border-left:0}
+.kid::before{content:"";position:absolute;left:-13px;top:17px;width:5px;height:5px;border-radius:50%;background:var(--ink-2)}   /* the dot sits beside the FIRST line, however many lines follow */
+.kid.text::before,.kid.todo::before{top:23px}
+.kid.block::before{top:25px}
+.kid:has(>.muted:first-child)::before{top:16px}                      /* small grey text */
+.kid:has(>.chips)::before{top:24px}                                  /* a row of chips, even when it wraps */
+.kid:has(>.rowf>.link)::before,.kid:has(>.link:first-child)::before{top:22px}
+.kid.block:has(>.line:first-child)::before{top:17px}
+.kid:not(.block):has(>.line)::before,.kid:has(>.habit)::before,.kid:has(>.rowf>.field)::before,.kid:has(>.mini)::before{top:50%;margin-top:-3px}   /* one row holding a control: centre on it */
+.line{display:flex;align-items:center;justify-content:space-between;gap:8px;flex-wrap:wrap}
+.label{font-weight:500}
+.label small{font-weight:400;font-size:13px;color:var(--ink-2);margin-left:6px}
+.muted{color:var(--ink-2);font-size:14px}
+.picks{display:flex;gap:6px;align-items:center}
+select,.num{height:40px;padding:0 10px;border:1px solid var(--line);border-radius:10px;background:var(--surface);font-weight:600;text-align:center;text-align-last:center;appearance:none;-webkit-appearance:none}
+select.h{min-width:96px} select.p{min-width:70px}
+.line{flex-wrap:nowrap}.line .label{min-width:0;white-space:nowrap}
+@media (max-width:359px){select.h{min-width:84px;padding:0 6px} select.p{min-width:62px;padding:0 6px} .label small{display:none}}
+.num{width:96px}
+.unit{font-size:14px;color:var(--ink-2)}
+.kid textarea{display:block;width:100%;border:0;background:none;resize:none;overflow:hidden;padding:6px 0;line-height:1.6;outline:none;border-bottom:1px solid transparent;border-radius:0}
+.kid textarea:focus{border-bottom-color:var(--water)}
+.kid textarea.box{border:1px solid var(--line);border-radius:10px;background:var(--surface);padding:10px 12px;overflow:auto;resize:vertical}
+.kid textarea.box:focus{border-color:var(--water)}
+.kid textarea::placeholder{color:var(--ink-2);opacity:.45}
+.kid textarea:focus::placeholder{color:transparent}
+.habit{display:flex;align-items:center;gap:12px;width:100%;min-height:42px;padding:2px 0;border:0;background:none;text-align:left;font-weight:500}
+.check{flex:none;width:24px;height:24px;border-radius:7px;border:1.5px solid var(--ink-2);display:grid;place-items:center}
+.check svg{width:14px;height:14px;opacity:0}
+.habit[aria-pressed="true"] .check{background:var(--water);border-color:var(--water);color:var(--on-water)}
+.habit[aria-pressed="true"] .check svg{opacity:1}
+
+/* summaries */
+.lead{margin:0 0 4px;font:700 22px/1.4 var(--display)}
+.sub{margin:0 0 16px;font-size:14px;color:var(--ink-2)}
+.depth{display:grid;grid-template-columns:30px repeat(7,minmax(0,1fr));gap:4px;margin:4px 0 10px}
+.depth .axis{font-size:12px;color:var(--ink-2);display:flex;align-items:center}
+.dayhead{border:0;background:none;padding:2px 0 4px;text-align:center;font-size:12px;color:var(--ink-2);line-height:1.3;border-radius:8px}
+.dayhead b{display:block;font-size:15px;color:var(--ink);font-weight:600}
+.dayhead.today b{color:var(--water)} .dayhead.today{box-shadow:inset 0 -2px 0 var(--water)}
+.cell{position:relative;height:58px;border-radius:7px;background:var(--surface);border:1px solid var(--line);overflow:hidden;padding:0;display:block;width:100%}
+.cell .bar{position:absolute;left:0;right:0;top:20px;bottom:0}
+.cell .bar i{position:absolute;left:0;right:0;bottom:0;display:block}
+.cell .v{position:absolute;left:0;right:0;top:0;height:20px;display:flex;align-items:center;justify-content:center;font-size:13px;font-weight:600}
+.cell.cal .v{justify-content:space-between;padding:0 4px;font-size:11.5px;letter-spacing:-.02em}
+.cell.cal .v em{font-style:normal;font-weight:400;color:var(--ink-2);font-size:10px}
+.cell.none{border-style:dashed;background:none}
+.cell.today{border-color:var(--water)}
+.foot{text-align:center;font-size:12px;line-height:1.35;color:var(--ink-2);padding-top:2px}
+.foot b{display:block;color:var(--ink);font-weight:600;font-size:13px}
+@keyframes turnL{from{opacity:0;transform:translateX(45%)}to{opacity:1;transform:none}}
+@keyframes turnR{from{opacity:0;transform:translateX(-45%)}to{opacity:1;transform:none}}
+@keyframes dateFlash{0%,35%{color:var(--water)}100%{color:var(--ink)}}
+#root.turn-l{animation:turnL .28s cubic-bezier(.2,.7,.2,1)}
+#root.turn-r{animation:turnR .28s cubic-bezier(.2,.7,.2,1)}
+#root.turn-l .when h1,#root.turn-r .when h1{animation:dateFlash 1.1s ease-out}
+@media (prefers-reduced-motion:reduce){#root.turn-l,#root.turn-r{animation:none}}
+.legend{font-size:12.5px;color:var(--ink-2);margin:0}
+.scale{display:flex;flex-wrap:wrap;gap:4px 12px;margin:8px 0 20px;font-size:12px;color:var(--ink-2)}
+.scale i{display:inline-block;width:20px;height:12px;border-radius:3px;margin-right:5px;vertical-align:-1px;border:1px solid var(--line)}
+.cal7{display:grid;grid-template-columns:repeat(7,minmax(0,1fr));gap:4px;margin:6px 0 4px}
+.cal7 .wd{text-align:center;font-size:12px;color:var(--ink-2)}
+.pipc{border:0;background:none;padding:2px 0;text-align:center;font-size:11px;color:var(--ink-2);line-height:1.2}
+.pip{width:22px;height:22px;border-radius:7px;border:1.5px solid var(--line);margin:0 auto 1px}
+.pip.on{background:var(--water);border-color:var(--water)}
+.pipc.today{color:var(--water);font-weight:600}
+.bars{display:flex;align-items:flex-end;gap:3px;height:84px;margin:8px 0 2px}
+.bars button{flex:1;min-width:0;height:100%;border:0;background:none;padding:0;display:flex;align-items:flex-end}
+.bars i{display:block;width:100%;border-radius:4px 4px 1px 1px;background:var(--ink);opacity:.82;min-height:2px}
+.bars i.none{background:var(--line);opacity:1;height:2px!important}
+.barlabels{display:flex;gap:3px;font-size:11px;color:var(--ink-2)}
+.barlabels span{flex:1;min-width:0;text-align:center;white-space:nowrap;overflow:visible}
+.barlabels b{display:block;color:var(--ink);font-weight:600;font-size:12px}
+.rows .r{display:flex;justify-content:space-between;gap:12px;padding:8px 0;border-top:1px dashed var(--line);font-size:14px}
+.rows .r span:last-child{font-weight:600}
+.entry{display:flex;gap:10px;align-items:baseline;width:100%;border:0;background:none;padding:0;text-align:left}
+.entry .d{flex:none;width:76px;font-weight:600;font-size:14px;color:var(--sun)}
+
+/* settings */
+.field{display:block;width:100%;height:42px;padding:0 12px;border:1px solid var(--line);border-radius:10px;background:var(--surface)}
+.field.sm{width:84px;flex:none;text-align:center;padding:0 6px}
+.line.form .label{flex:none;width:88px}
+.line.form .field{flex:1;min-width:0;width:auto}
+input[type="date"].field{-webkit-appearance:none;appearance:none;text-align:left;line-height:40px;padding-top:0;padding-bottom:0}
+input[type="date"].field::-webkit-date-and-time-value{text-align:left;margin:0;line-height:40px}
+.tools{display:flex;gap:6px;flex:none}
+.tools button,.mini{flex:none;white-space:nowrap;height:42px;min-width:42px;padding:0 10px;border:1px solid var(--line);border-radius:10px;background:var(--surface);font-size:14px}
+.rowf{display:flex;gap:6px;align-items:center}
+.chips{display:flex;gap:6px;flex-wrap:wrap}
+.chips button{min-width:52px;height:40px;padding:0 14px;border:1px solid var(--line);border-radius:20px;background:var(--surface);font-weight:500}
+.chips.week{display:grid;grid-template-columns:repeat(7,minmax(0,1fr));gap:4px;flex-wrap:nowrap}
+.chips.week button{min-width:0;padding:0;font-size:14px;border-radius:12px}
+.chips button[aria-pressed="true"]{background:var(--ink);border-color:var(--ink);color:var(--paper)}
+.solid{flex:none;white-space:nowrap;height:44px;padding:0 16px;border:0;border-radius:10px;background:var(--ink);color:var(--paper);font-weight:600}
+.box{width:100%;min-height:120px;padding:10px 12px;border:1px solid var(--line);border-radius:10px;background:var(--surface);font-size:12px;line-height:1.5;resize:vertical}
+.box.tall{min-height:420px;font:400 13px/1.6 var(--ui);white-space:pre-wrap}
+.tag{font-size:12px;color:var(--ink-2);border:1px solid var(--line);border-radius:6px;padding:1px 6px;margin-left:8px;font-weight:400}
+.kid.todo{display:flex;gap:10px;align-items:flex-start}
+.kid.todo textarea{flex:1;min-width:0}
+.tcheck{flex:none;width:22px;height:22px;margin-top:9px;border-radius:6px;border:1.5px solid var(--ink-2);background:none;padding:0;display:grid;place-items:center;color:var(--on-water)}
+.tcheck svg{width:13px;height:13px;opacity:0}
+.tcheck[aria-pressed="true"]{background:var(--water);border-color:var(--water)} .tcheck[aria-pressed="true"] svg{opacity:1}
+.tcheck:disabled{opacity:.3}
+.kid.todo.done textarea{color:var(--ink-2);text-decoration:line-through}
+.entry .m{flex:none;width:18px;color:var(--water);font-weight:600}
+</style>
+</head>
+<body>
+<div class="app" id="root"></div>
+<script>
+(function(){
+'use strict';
+var KEY='molip-bullet-journal-v1';
+var HOSTED=!window.claude;            /* opened on its own address, outside the Claude viewer */
+
+/* ---------- opened from a link on a phone: where am I, and how do I get installed ---------- */
+var UA=navigator.userAgent||'';
+var IOS=/iPad|iPhone|iPod/.test(UA)||(navigator.platform==='MacIntel'&&navigator.maxTouchPoints>1);
+var ANDROID=/Android/i.test(UA);
+var KAKAO=/KAKAOTALK/i.test(UA);
+var INAPP=KAKAO||/NAVER\(inapp|DaumApps|Line\/|FBAN|FBAV|FB_IAB|Instagram|; wv\)/i.test(UA)||(IOS&&!/Safari\//.test(UA));
+var INSTALLABLE=HOSTED&&!!document.querySelector('link[rel="manifest"]');   /* only the hosted copy can be installed */
+var installEvt=null,installed=false;
+function standalone(){ try{ return navigator.standalone===true||!!(window.matchMedia&&matchMedia('(display-mode: standalone)').matches); }catch(e){ return false; } }
+function externalUrl(){
+  var u=location.href.split('#')[0];
+  if(KAKAO) return 'kakaotalk://web/openExternal?url='+encodeURIComponent(u);
+  if(ANDROID) return 'intent://'+u.replace(/^https?:\/\//,'')+'#Intent;scheme=https;action=android.intent.action.VIEW;category=android.intent.category.BROWSABLE;end';
+  return 'x-safari-'+u;
+}
+var SHARE='<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 15V3.5M8 7l4-4 4 4M7.5 10.5H6A1.5 1.5 0 0 0 4.5 12v7A1.5 1.5 0 0 0 6 20.5h12a1.5 1.5 0 0 0 1.5-1.5v-7a1.5 1.5 0 0 0-1.5-1.5h-1.5"/></svg>';
+
+/* ---------- words ---------- */
+var STR={
+en:{appName:'Immersion Journal',saved:'Saved on this device {t}',local:'Records stay on this device only',blocked:'This browser is blocking storage',
+ settings:'Sections & settings',back:'Back to the day page',prevDay:'Previous day',nextDay:'Next day',today:'Today',yesterday:'Yesterday',tomorrow:'Tomorrow',
+ daysAgo:'{n} days ago',inDays:'in {n} days',goToday:'Go to today',pickDate:'Pick a date',
+ intro:'Today’s page is ready whenever you open the app. For other days use the arrows, or tap the small date under the title to open a calendar. Write under each section, and tap ‘Summary’ beside a section to see its week and month. You can change the sections in ‘Sections & settings’, and add your immersion start date and purpose there to see which day and week of your immersion it is.',gotIt:'Got it',
+ warnStorage:'This browser is blocking storage, so your records will disappear when you close this window. Turn off private browsing or open the app in another browser.',
+ summary:'Summary',openSummary:'Open {name} summary',sumOf:'{name} summary',noSections:'There are no sections yet. Add some in ‘Sections & settings’.',
+ write:'Write here',newItem:'{name}: new item',item:'{name} item',entries:'{n}',hours:'Hours',hoursOf:'{p} hours',intensityOf:'{p} intensity',hUnit:'{n} h',
+ daySum:'{h} h, avg {p}%',daySumNoAvg:'{h} h',noChecks:'Add things to check in Sections & settings.',noNumbers:'Add numbers to track in Sections & settings.',none:'Not recorded',
+ copyWeek:'Copy the whole week’s records as text',weekText:'Week as text',weekTextSub:'Check it, then copy it into an email and delete what you don’t need',copyText:'Copy text',shareText:'Share',weekTextAria:'The week as text',weeklySummary:'Weekly summary',noRecordsDay:'no records',sumFlowLine:'{h} h, average intensity {p}%, {d} days recorded',sumTodoLine:'{a} done, {b} unfinished',sumListLine:'{n} entries',avgShort:'avg',
+ markDone:'Mark as done',openList:'Open list',openListAria:'Open the list of unfinished {name} items',openTodos:'Unfinished to-dos',upcoming:'Upcoming',earlier:'Earlier',since:'since {date}',noneOpen:'Nothing unfinished',markedDone:'Marked done: {text}',undo:'Undo',
+ week:'Week',month:'Month',unitAria:'Summary period',prevWeek:'Previous week',nextWeek:'Next week',prevMonth:'Previous month',nextMonth:'Next month',
+ thisWeek:'This week',lastWeek:'Last week',weeksAgo:'{n} weeks ago',inWeeks:'in {n} weeks',thisMonth:'This month',lastMonth:'Last month',monthsAgo:'{n} months ago',inMonths:'in {n} months',
+ toThisWeek:'Back to this week',toThisMonth:'Back to this month',open:'Open {date}',
+ flowLead:'{h} hours, average intensity {p}%',noRecords:'No records yet',flowSub:'{d} days recorded, {a} h a day on average. ',
+ prevW:'The week before: {h} h, average {p}%.',prevM:'The month before: {h} h, average {p}%.',noPrevW:'Nothing recorded the week before.',noPrevM:'Nothing recorded the month before.',
+ legendW:'The number and the bar height show hours; the bar’s colour shows intensity. The bottom row is each day’s total and average.',
+ legendM:'The number beside the date and the bar height show the day’s hours; the bar’s colour shows intensity.',weekRow:'{h} h, {p}%',
+ checkLine:'{n} of {d} days, {prev} before: {pn}',wWord:'week',mWord:'month',didIt:'done',didNot:'not done',
+ avg:'avg {v}',numDetail:'{n} days recorded, min {a}, max {b}',numPrev:'. The {w} before: avg {v}',
+ nothingW:'Nothing written this week.',nothingM:'Nothing written this month.',todoLead:'{a} of {b} done',noTodoW:'No to-dos this week.',noTodoM:'No to-dos this month.',
+ reportSet:'Enter your immersion start date and purpose',
+ inTitle:'Open this in Safari or Chrome',inBody:'Right now this page is open inside another app (KakaoTalk, a mail app). Here it can’t be installed, and records are kept separately from your browser.',inOpen:'Open in my browser',inCopy:'Copy link',inCopied:'Copied. Paste it into your browser’s address bar',
+ iosTitle:'First, add this to your Home Screen',iosBody:'It opens like an app and your records stay safe. Anything you write here in the browser does not carry over, so add it first and then start recording.',iosStep1:'Tap the Share button at the bottom of the screen',iosStep1b:'Tap the Share button beside the address bar',iosStep2:'Choose ‘Add to Home Screen’',iosStep3:'Tap ‘Add’ at the top right',
+ andTitle:'Install as an app',andBody:'You get an icon on your home screen and it opens like an app.',andInstall:'Install',andManual:'Open the browser menu (⋮) and choose ‘Install app’ or ‘Add to Home screen’.',later:'Later',
+ flowBoth:'The parts of the day and the whole-day line are added together. To keep only one, set the other back to “Hours”.',
+ flowMode:'How to record',flowSplit:'Morning · Noon · Evening',flowWhole:'Whole day in one',
+ version:'Version',allRecords:'All records',allSpan:'{a} to {b}, {n} days with records',allStart:'Immersion start {d}',allGoal:'purpose {g}',allDays:'{n} days with records',backSettings:'Back to settings',
+ allTextOpen:'Save all records as text',allTextHint:'For reading only. Anyone can read it without this app, but it cannot be loaded back in. To move to another device, use “{btn}” above.',allTextSub:'For reading. Copy it or save it as a file and keep it in a note, an email or a document. It is not a backup the app can restore.',saveTxt:'Save as a file',saveTxtFail:'This phone can’t hand over a file here. Use “Copy text” instead.',
+ memo:'Note',memoLine:'Show a note line',memoLink:'See this period’s {name} notes ({n})',memoHide:'Hide the {name} notes',memoWhere:'Notes written here are gathered, day by day, in the summary of ‘{name}’.',memoEgFlow:'e.g. 2+4+2+4',memoEgChecks:'e.g. Exercise 1 h 30 min',memoEgSleep:'e.g. Woke up twice before dawn',
+ topMemo:'Extra memo',topMemoShow:'Show an extra memo line under the title',topMemoNote:'Other notes stay on their own day’s page; what you write here shows on every day’s page until you remove it with its ×. Enter makes the next line, up to {n} lines.',pinWrite:'Extra memo (e.g. monthly goal)',pinItem:'Extra memo',pinNew:'New extra memo',pinTake:'Remove this memo',pinTaken:'Removed: {text}',
+ mergedJust:'Merged.',mergedPins:'{n} extra memos came in.',
+ dayNo:'Day {n}',dayRange:'days {a}–{b}',
+ report:'Enter your immersion start date and purpose',reportNote:'Once entered, the week number shows as a title at the top of the day page and as the first line of the week text. Leave the start date empty to hide it.',startDate:'Start date',goal:'Purpose',goalHint:'e.g. Thesis writing',reportEmpty:'No title yet. Choose a start date.',
+ setTitle:'Sections & settings',setSub:'Each day’s new page is built from these sections',secName:'Section name',up:'Move up',down:'Move down',type:'Type',
+ tList:'Text',tTodo:'To-do',tFlow:'Immersion',tChecks:'Checkbox',tNumbers:'Number',delSection:'Delete section',delSectionSure:'Really delete (records are kept)',cancel:'Cancel',
+ name:'Name',unit:'unit',del:'Delete',addCheck:'Add a checkbox',addNumber:'Add a number',newHabit:'New habit',newNumber:'New number',delNote:'Built-in sections you don’t need can be deleted, and brought back later from ‘Bring back a deleted section’ further down. Deleting keeps what you recorded; it shows again once the section is back.',bringBack:'Bring back a deleted section',bringBackNote:'A tap puts it back where it was, and what you recorded in it shows again.',addSection:'Add a section',addNote:'Make sections of your own.',addEg:'For example: mood, reading, gratitude, prayer',
+ newChecks:'New checklist',newNumbers:'New numbers',newList:'New notes',weekStart:'Week starts on',language:'Language',
+ backup:'Backup',backupNote:'Your records live only in this browser on this device. Make a backup before you switch devices or clear browser data.',
+ makeBackup:'Make a backup',backupText:'Backup text',copyBackup:'Copy backup',copied:'Copied',copyHint:'Paste it into a note or an email to yourself.',
+ merge:'Merge with backup',mergeNote:'Merge keeps everything on this device and adds what only the backup has. Replace swaps everything here for the backup.',merged:'Merged. {a} new days came in, {b} days gained something.',mergedNone:'Merged. Nothing new was in the backup.',
+ saveFile:'Save backup file',saveIOS:'On iPhone a share sheet opens. Choose ‘Save to Files’.',saveAsText:'This phone can’t hand over a file here, so the backup is shown as text above. Copy it and keep it in a note or an email.',pickFile:'Choose backup file',pasteHere:'Paste a backup here',importAria:'Backup to restore',restore:'Replace with backup',importEmpty:'Nothing to read yet. Paste your backup text into the box above first.',importEmptyFile:'Nothing to read yet. Paste your backup text into the box above, or use ‘Choose backup file’.',fileRead:'Backup file read: {n} days of records. Now choose Merge or Replace below.',fileBad:'That file isn’t a backup from this app. Choose the file whose name starts with journal-backup.',restoreSure:'Replace now',restoreWarn:'Everything on this device will be replaced by the backup. Tap ‘Replace now’ to go ahead.',
+ importErr:'Couldn’t read that backup. Make sure you pasted all of it, from start to end.',wipe:'Erase all records',wipeSure:'Really erase everything'},
+ko:{appName:'몰입 일지',saved:'이 기기에 저장됨 {t}',local:'기록은 이 기기에만 저장돼요',blocked:'이 브라우저가 저장을 막고 있어요',
+ settings:'항목과 설정',back:'하루 기록으로 돌아가기',prevDay:'전날',nextDay:'다음 날',today:'오늘',yesterday:'어제',tomorrow:'내일',
+ daysAgo:'{n}일 전',inDays:'{n}일 뒤',goToday:'오늘로 가기',pickDate:'날짜 고르기',
+ intro:'앱을 열면 오늘 페이지가 바로 나와요. 다른 날은 양옆의 화살표로 가거나, 제목 밑의 작은 날짜를 누르면 달력이 나와요. 각 항목 아래에 그날의 기록을 남기고, 항목 오른쪽의 ‘요약’을 누르면 주간·월간 기록을 모아 볼 수 있어요. 기록할 항목은 ‘항목과 설정’에서 바꿀 수 있고, 거기에 몰입 시작일과 몰입 목적을 적으면 오늘이 몰입 몇 일차, 몇 주차인지 표시돼요.',gotIt:'알겠어요',
+ warnStorage:'이 브라우저가 저장을 막고 있어서, 창을 닫으면 기록이 사라져요. 사생활 보호 모드를 끄거나 다른 브라우저로 열어 주세요.',
+ summary:'요약',openSummary:'{name} 요약 열기',sumOf:'{name} 요약',noSections:'기록할 항목이 없어요. ‘항목과 설정’에서 항목을 추가하세요.',
+ write:'적기',newItem:'{name} 새 항목',item:'{name} 항목',entries:'{n}건',hours:'시간',hoursOf:'{p} 몰입 시간',intensityOf:'{p} 몰입도',hUnit:'{n}시간',
+ daySum:'{h}시간, 평균 {p}%',daySumNoAvg:'{h}시간',noChecks:'항목과 설정에서 체크할 것을 추가하세요.',noNumbers:'항목과 설정에서 기록할 숫자를 추가하세요.',none:'기록 없음',
+ copyWeek:'일주일치 전체 기록을 텍스트로 복사',weekText:'주간 텍스트',weekTextSub:'확인한 뒤 복사해서 이메일에 붙이고, 필요 없는 부분은 지우세요',copyText:'텍스트 복사',shareText:'공유',weekTextAria:'일주일치 텍스트',weeklySummary:'주간 요약',noRecordsDay:'기록 없음',sumFlowLine:'{h}시간, 평균 몰입도 {p}%, 기록한 날 {d}일',sumTodoLine:'완료 {a}개, 미완료 {b}개',sumListLine:'{n}건',avgShort:'평균',
+ markDone:'완료 표시',openList:'미완료 목록',openListAria:'{name} 미완료 목록 열기',openTodos:'미완료 할 일',upcoming:'다가오는 할 일',earlier:'이전 미완료',since:'{date} 이후',noneOpen:'미완료 없음',markedDone:'완료로 표시: {text}',undo:'되돌리기',
+ week:'주간',month:'월간',unitAria:'요약 단위',prevWeek:'전 주',nextWeek:'다음 주',prevMonth:'전 달',nextMonth:'다음 달',
+ thisWeek:'이번 주',lastWeek:'지난주',weeksAgo:'{n}주 전',inWeeks:'{n}주 뒤',thisMonth:'이번 달',lastMonth:'지난달',monthsAgo:'{n}달 전',inMonths:'{n}달 뒤',
+ toThisWeek:'이번 주로',toThisMonth:'이번 달로',open:'{date} 열기',
+ flowLead:'{h}시간, 평균 몰입도 {p}%',noRecords:'아직 기록이 없어요',flowSub:'기록한 날 {d}일, 하루 평균 {a}시간. ',
+ prevW:'전 주에는 {h}시간, 평균 {p}%.',prevM:'전 달에는 {h}시간, 평균 {p}%.',noPrevW:'전 주 기록은 없어요.',noPrevM:'전 달 기록은 없어요.',
+ legendW:'칸의 숫자와 막대 높이는 몰입 시간, 막대 색은 몰입도예요. 맨 아래는 하루 합계와 평균.',
+ legendM:'날짜 옆 숫자와 막대 높이는 하루 몰입 시간, 막대 색은 몰입도예요.',weekRow:'{h}시간, {p}%',
+ checkLine:'{n}회 / {d}일, 전 {prev} {pn}회',wWord:'주',mWord:'달',didIt:'함',didNot:'안 함',
+ avg:'평균 {v}',numDetail:'기록 {n}일, 최소 {a}, 최대 {b}',numPrev:'. 전 {w} 평균 {v}',
+ nothingW:'이 주에 적은 것이 없어요.',nothingM:'이 달에 적은 것이 없어요.',todoLead:'{b}개 중 {a}개 완료',noTodoW:'이 주에는 할 일이 없어요.',noTodoM:'이 달에는 할 일이 없어요.',
+ reportSet:'몰입 시작일과 목적 입력하기',
+ inTitle:'Safari나 Chrome에서 열어 주세요',inBody:'지금은 다른 앱(카카오톡, 메일 앱 등) 안에서 열려 있어요. 여기서는 앱으로 설치할 수 없고, 기록도 브라우저와 따로 저장돼요.',inOpen:'내 브라우저로 열기',inCopy:'링크 복사',inCopied:'복사됨. 브라우저 주소창에 붙여 넣으세요',
+ iosTitle:'먼저 홈 화면에 추가하세요',iosBody:'앱처럼 열리고 기록이 안전하게 남아요. 지금 브라우저에서 적은 기록은 홈 화면 앱으로 넘어가지 않으니, 홈 화면에 추가한 다음에 기록을 시작하세요.',iosStep1:'화면 아래 가운데 공유 버튼 누르기',iosStep1b:'주소창 옆 공유 버튼 누르기',iosStep2:'‘홈 화면에 추가’ 고르기',iosStep3:'오른쪽 위 ‘추가’ 누르기',
+ andTitle:'앱으로 설치하기',andBody:'홈 화면에 아이콘이 생기고 앱처럼 열려요.',andInstall:'설치',andManual:'브라우저 메뉴(⋮)에서 ‘앱 설치’ 또는 ‘홈 화면에 추가’를 고르세요.',later:'나중에',
+ flowBoth:'아침·점심·저녁과 하루 기록이 함께 더해져요. 하나만 남기려면 다른 쪽을 ‘시간’으로 되돌리세요.',
+ flowMode:'기록 방식',flowSplit:'아침·점심·저녁',flowWhole:'하루 통으로',
+ version:'버전',allRecords:'전체 기록',allSpan:'{a} ~ {b}, 기록한 날 {n}일',allStart:'몰입 시작일 {d}',allGoal:'목적 {g}',allDays:'기록한 날 {n}일',backSettings:'설정으로 돌아가기',
+ allTextOpen:'전체 기록을 텍스트로 저장',allTextHint:'읽기용 텍스트예요. 이 앱 없이도 누구나 읽을 수 있지만, 앱으로 다시 불러올 수는 없어요. 기기를 옮길 때는 위의 ‘{btn}’ 버튼을 쓰세요.',allTextSub:'읽기용 텍스트예요. 복사하거나 파일로 저장해서 메모장, 메일, 문서에 보관하세요. 앱으로 되돌리는 백업은 아니에요.',saveTxt:'파일로 저장',saveTxtFail:'이 폰에서는 파일로 내보낼 수 없어요. ‘텍스트 복사’를 써 주세요.',
+ memo:'메모',memoLine:'메모 칸 보이기',memoLink:'이 기간의 {name} 메모 {n}건 보기',memoHide:'{name} 메모 접기',memoWhere:'여기에 적은 메모는 ‘{name}’ 항목의 요약에서 날짜별로 모아 볼 수 있어요.',memoEgFlow:'예: 2+4+2+4',memoEgChecks:'예: 운동 1시간 30분',memoEgSleep:'예: 새벽에 두 번 깼다',
+ topMemo:'추가 메모',topMemoShow:'제목 아래 추가 메모 칸 보이기',topMemoNote:'다른 메모는 그날 페이지에만 남지만, 이 칸에 적은 것은 ×⁠로 지울 때까지 매일 페이지에 보여요. Enter를 치면 다음 줄이 생기고, {n}줄까지 적을 수 있어요.',pinWrite:'추가 메모 (예: 포커싱 포인트, 이달 목표)',pinItem:'추가 메모',pinNew:'새 추가 메모',pinTake:'이 메모 지우기',pinTaken:'지웠어요: {text}',
+ mergedJust:'합쳤어요.',mergedPins:'추가 메모 {n}개가 들어왔어요.',
+ dayNo:'{n}일차',dayRange:'{a}–{b}일차',
+ report:'몰입 시작일과 목적 입력하기',reportNote:'입력해 두면 몇 주차인지가 하루 기록 맨 위와 주간 텍스트 첫 줄에 제목으로 나와요. 몰입 시작일을 비워 두면 나오지 않아요.',startDate:'몰입 시작일',goal:'몰입 목적',goalHint:'예: 공기업 입사준비',reportEmpty:'아직 제목이 없어요. 몰입 시작일을 골라 주세요.',
+ setTitle:'항목과 설정',setSub:'매일 새 페이지가 이 항목들로 만들어져요',secName:'항목 이름',up:'위로',down:'아래로',type:'종류',
+ tList:'텍스트',tTodo:'할 일',tFlow:'몰입도',tChecks:'체크',tNumbers:'숫자',delSection:'항목 삭제',delSectionSure:'정말 삭제 (기록은 남아요)',cancel:'취소',
+ name:'이름',unit:'단위',del:'삭제',addCheck:'체크할 것 추가',addNumber:'숫자 추가',newHabit:'새 습관',newNumber:'새 숫자',delNote:'필요 없는 기본 항목은 ‘항목 삭제’로 지울 수 있고, 필요하면 아래쪽 ‘지운 항목 되살리기’에서 되살릴 수 있어요. 지워도 적어 둔 기록은 그대로 있어서, 되살리면 다시 보여요.',bringBack:'지운 항목 되살리기',bringBackNote:'누르면 원래 있던 자리에 다시 생기고, 예전에 적은 기록도 다시 보여요.',addSection:'항목 추가',addNote:'필요한 기록을 직접 만들 수 있어요.',addEg:'예: 기분, 독서, 감사, 기도',
+ newChecks:'새 체크 항목',newNumbers:'새 숫자 항목',newList:'새 메모',weekStart:'한 주의 시작',language:'언어',
+ backup:'백업',backupNote:'기록은 이 기기의 이 브라우저에만 저장돼요. 기기를 바꾸거나 브라우저 데이터를 지우기 전에 백업을 만들어 두세요.',
+ makeBackup:'백업 만들기',backupText:'백업 내용',copyBackup:'백업 복사',copied:'복사됨',copyHint:'복사해서 메모장이나 메일에 붙여 두세요.',
+ merge:'백업과 합치기',mergeNote:'합치기는 이 기기의 기록을 그대로 두고, 백업에만 있는 날짜와 글을 더해요. 바꾸기는 이 기기의 기록을 백업으로 통째로 바꿔요.',merged:'합쳤어요. 새로 들어온 날 {a}일, 내용이 더해진 날 {b}일.',mergedNone:'합쳤어요. 백업에 새로운 내용은 없었어요.',
+ saveFile:'백업 파일로 저장',saveIOS:'아이폰에서는 공유 창이 열려요. ‘파일에 저장’을 고르세요.',saveAsText:'이 폰에서는 파일로 내보낼 수 없어서 위에 백업을 글자로 띄웠어요. 복사해서 메모장이나 메일에 보관하세요.',pickFile:'백업 파일 고르기',pasteHere:'백업 내용을 여기에 붙여 넣기',importAria:'불러올 백업',restore:'백업으로 바꾸기',importEmpty:'아직 읽을 백업이 없어요. 먼저 위 칸에 백업 글자를 붙여 넣으세요.',importEmptyFile:'아직 읽을 백업이 없어요. 위 칸에 백업 글자를 붙여 넣거나 ‘백업 파일 고르기’로 파일을 고르세요.',fileRead:'백업 파일을 읽었어요. {n}일치 기록이 들어 있어요. 아래에서 합치기나 바꾸기를 누르세요.',fileBad:'이 파일은 이 앱의 백업 파일이 아니에요. 이름이 journal-backup으로 시작하는 파일을 골라 주세요.',restoreSure:'지금 바꾸기',restoreWarn:'이 기기의 기록이 모두 백업 내용으로 바뀌어요. 계속하려면 ‘지금 바꾸기’를 누르세요.',
+ importErr:'백업 내용을 읽지 못했어요. 처음부터 끝까지 빠짐없이 붙여 넣었는지 확인하세요.',wipe:'모든 기록 지우기',wipeSure:'정말 모두 지우기'}
+};
+var DEF={
+ en:{events:'Today’s events',eventsHint:'e.g. Seminar at 2',todo:'Todo',todoHint:'Add a to-do',flow:'Immersion',habits:'Habit Tracker',exercise:'Exercise',vitamins:'Vitamins',sleep:'Sleep Tracker',sleepHours:'Last night’s sleep',light:'Light naps',notes:'Notes',notesHint:'Write freely',uH:'h',uX:'times'},
+ ko:{events:'오늘 이벤트',eventsHint:'예: 세미나 2시',todo:'할 일',todoHint:'할 일 적기',flow:'몰입도',habits:'습관',exercise:'운동',vitamins:'비타민',sleep:'수면',sleepHours:'어젯밤 수면',light:'선잠',notes:'메모',notesHint:'자유롭게 적기',uH:'시간',uX:'회'}
+};
+var PER={en:[['m','Morning','09–12','Morn'],['a','Noon','12–18','Noon'],['e','Evening','18–24','Eve']],ko:[['m','아침','09–12','아침'],['a','점심','12–18','점심'],['e','저녁','18–24','저녁']]};
+var DOWS={en:['Sun','Mon','Tue','Wed','Thu','Fri','Sat'],ko:['일','월','화','수','목','금','토']};
+var DOWL=['Sunday','Monday','Tuesday','Wednesday','Thursday','Friday','Saturday'];
+var MON=['Jan','Feb','Mar','Apr','May','Jun','Jul','Aug','Sep','Oct','Nov','Dec'];
+var MONL=['January','February','March','April','May','June','July','August','September','October','November','December'];
+
+function defaultTemplate(lang){ var D=DEF[lang]||DEF.en; return [
+  {id:'events',type:'list',name:D.events,hint:D.eventsHint},
+  {id:'todo',type:'todo',name:D.todo,hint:D.todoHint},
+  {id:'flow',type:'flow',name:D.flow,whole:true},
+  {id:'habits',type:'checks',name:D.habits,items:[{id:'exercise',name:D.exercise},{id:'vitamins',name:D.vitamins}]},
+  {id:'sleep',type:'numbers',name:D.sleep,items:[{id:'hours',name:D.sleepHours,unit:D.uH,kind:'hours',step:0.5,max:16,pick:true},{id:'light',name:D.light,unit:D.uX,step:1,max:10,pick:true}]},
+  {id:'notes',type:'list',name:D.notes,hint:D.notesHint}
+];}
+var DB={v:5,template:defaultTemplate('ko'),days:{},pins:[],trash:[],settings:{weekStart:1,defWeek:1,weekPicked:false,lastIntensity:90,introSeen:false,lang:'ko',defLang:'ko',langPicked:false,startDate:'',goal:''}};
+var UI={mergeMsg:null,exportText:null,lastDone:null,screen:'day',date:sod(new Date()),sec:null,mode:'week',anchor:sod(new Date()),confirm:null,backup:null,importText:'',importErr:''};
+var storageOk=true,lastSaved=null,saveTimer=null,todayKeySeen=keyOf(sod(new Date()));
+
+/* ---------- helpers ---------- */
+function $(s){return document.querySelector(s);}
+function el(tag,attrs){
+  var n=document.createElement(tag),k,v,i;
+  if(attrs) for(k in attrs){ v=attrs[k]; if(v==null||v===false) continue;
+    if(k==='class') n.className=v; else if(k==='text') n.textContent=v;
+    else if(k.slice(0,2)==='on') n.addEventListener(k.slice(2),v);
+    else if(v===true) n.setAttribute(k,''); else n.setAttribute(k,v); }
+  for(i=2;i<arguments.length;i++) add(arguments[i]);
+  function add(x){ if(x==null||x===false) return; if(Array.isArray(x)){x.forEach(add);return;} n.appendChild(x.nodeType?x:document.createTextNode(String(x))); }
+  return n;
+}
+var BUILD='9.19 01:50';   /* stamped by the build script */
+function lang(){return STR[DB.settings.lang]?DB.settings.lang:'ko';}
+function t(k,vars){ var s=STR[lang()][k]; if(s==null) s=STR.en[k]!=null?STR.en[k]:k;
+  return vars?s.replace(/\{(\w+)\}/g,function(m,a){return vars[a]!=null?vars[a]:'';}):s; }
+function periods(){return PER[lang()].map(function(p){return {key:p[0],label:p[1],range:p[2],short:p[3]};});}
+var DAYP={en:['d','Whole day','','Day'],ko:['d','하루','','하루']};
+function dayPeriod(){var p=DAYP[lang()];return {key:p[0],label:p[1],range:p[2],short:p[3]};}
+function allPeriods(){return periods().concat([dayPeriod()]);}
+/* What to show for an Immersion section: always the lines of the chosen way of recording, plus the lines of the other way wherever those already hold something.
+   So a change of setting shows at once on every day, and nothing recorded is ever hidden. Order: the parts of the day first, the whole day below them. */
+function shownPeriods(sec,vals){ var P=periods(),D=dayPeriod(),wantWhole=sec.whole===true;
+  function has(x){ return vals.some(function(v){ return v&&v[x.key]&&v[x.key].t!=null; }); }
+  var split=!wantWhole||P.some(has),whole=wantWhole||has(D);
+  return (split?P:[]).concat(whole?[D]:[]); }
+function dow(d){return DOWS[lang()][d.getDay()];}
+function pad(n){return String(n).padStart(2,'0');}
+function sod(d){var x=new Date(d);x.setHours(0,0,0,0);return x;}
+function addDays(d,n){var x=new Date(d);x.setDate(x.getDate()+n);return x;}
+function range(s,n){var a=[],i;for(i=0;i<n;i++)a.push(addDays(s,i));return a;}
+function keyOf(d){return d.getFullYear()+'-'+pad(d.getMonth()+1)+'-'+pad(d.getDate());}
+function parseKey(k){var p=k.split('-');return new Date(+p[0],+p[1]-1,+p[2]);}
+function today(){return sod(new Date());}
+function sameDay(a,b){return keyOf(a)===keyOf(b);}
+function weekStartOf(d){return addDays(sod(d),-((d.getDay()-DB.settings.weekStart+7)%7));}
+function monthDays(d){var y=d.getFullYear(),m=d.getMonth();return range(new Date(y,m,1),new Date(y,m+1,0).getDate());}
+function md(d){return lang()==='ko'?(d.getMonth()+1)+'/'+d.getDate():MON[d.getMonth()]+' '+d.getDate();}
+function mdw(d){return lang()==='ko'?md(d)+' '+dow(d):dow(d)+', '+md(d);}
+function dayTitle(d){return lang()==='ko'?(d.getMonth()+1)+'월 '+d.getDate()+'일 '+dow(d)+'요일':DOWL[d.getDay()]+', '+MON[d.getMonth()]+' '+d.getDate();}
+function hm(d){return pad(d.getHours())+':'+pad(d.getMinutes());}
+function fmt(n){return Number.isInteger(n)?String(n):String(+n.toFixed(2));}
+function hmText(v){var m=Math.round(v*60),h=Math.floor(m/60);m=m%60;return lang()==='ko'?h+'시간'+(m?' '+m+'분':''):h+'h'+(m?' '+m+'m':'');}
+function withUnit(n,unit){ if(unit==='times'&&n===1) unit='time';      /* 1 time, 2 times */
+  return fmt(n)+(unit?(/^[A-Za-z]/.test(unit)?' ':'')+unit:''); }
+function isHours(it){return it.kind==='hours'||it.unit==='시간'||it.unit==='h';}
+function valText(v,it){return v==null?'—':(isHours(it)?hmText(v):withUnit(+v.toFixed(1),it.unit));}
+function uid(){return Math.random().toString(36).slice(2,9);}
+function daysBetween(a,b){return Math.round((sod(a)-sod(b))/864e5);}
+function ymd(d){return lang()==='ko'?d.getFullYear()+'.'+(d.getMonth()+1)+'.'+d.getDate():MON[d.getMonth()]+' '+d.getDate()+', '+d.getFullYear();}
+
+/* ---------- pinned notes ----------
+   The memo under the journal title: lines that stay on every day's page until their × is pressed. One record per line: {id,text,from,to}; `to` is FOREVER until then.
+   A line is never copied into the days; a day's page simply shows every line of that section whose from..to holds that day,
+   so a year-long line costs as much room as a one-week line, and an old page still shows what stood there then. */
+var KEYRE=/^\d{4}-\d{2}-\d{2}$/,PIN_MAX=5,FOREVER='9999-12-31';
+function topMemoOn(){ return DB.settings.topMemo!==false; }                   /* there unless the person switches it off */
+function pinsBetween(a,b){ return (DB.pins||[]).filter(function(p){ return p.from<=b&&p.to>=a&&String(p.text).trim(); }); }
+function pinsAt(key){ return pinsBetween(key,key); }
+/* Taking a note down: it is gone from the page being read and from today on, whichever comes first, so it never lingers on today's page.
+   Pages before that keep it, with the words it had; a note that only began on or after that day is simply removed. Returns what is needed to take it back. */
+function pinTakeDown(p,key,orig){
+  var i=DB.pins.indexOf(p); if(i<0) DB.pins.forEach(function(x,n){ if(i<0&&x.id===p.id){ i=n; p=x; } }); if(i<0) return null;
+  var tk=keyOf(today()),cut=key<tk?key:tk,was={i:i,pin:JSON.parse(JSON.stringify(p))};
+  if(p.from>=cut) DB.pins.splice(i,1); else { if(orig) p.text=orig; p.to=keyOf(addDays(parseKey(cut),-1)); }
+  save(); return was; }
+function pinRestore(was){ var cur=null; DB.pins.forEach(function(x){ if(x.id===was.pin.id) cur=x; });
+  if(cur){ cur.to=was.pin.to; cur.text=was.pin.text; } else DB.pins.splice(Math.min(was.i,DB.pins.length),0,was.pin);
+  save(); }
+
+/* ---------- club week and journal title ----------
+   Week N = floor((last day of the week that holds d - start date) / 7) + 1,
+   so the day page and the week text always show the same number. */
+function weekNo(d){
+  var s=DB.settings.startDate; if(!s||!/^\d{4}-\d{2}-\d{2}$/.test(s)) return null;
+  var n=Math.floor(daysBetween(addDays(weekStartOf(d),6),parseKey(s))/7)+1; return n>=1?n:null;
+}
+function dayNo(d){
+  var s=DB.settings.startDate; if(!s||!/^\d{4}-\d{2}-\d{2}$/.test(s)) return null;
+  var n=daysBetween(d,parseKey(s))+1; return n>=1?n:null;
+}
+function reportTitle(d,parts){
+  var n=weekNo(d); if(n==null) return null;
+  var s=DB.settings.startDate,g=(DB.settings.goal||'').trim(),head=lang()==='ko'?'[몰입클럽] '+n+'주차':'[Molip Club] Week '+n,sub=s+(g?', '+g:'');   /* the title follows the screen language */
+  return parts?{head:head,sub:sub}:head+' ('+sub+')';
+}
+
+/* ---------- storage: this browser only ---------- */
+function relabel(to){
+  var map={},l,k; for(l in DEF) for(k in DEF[l]) map[DEF[l][k]]=k; map['영양제']='vitamins'; map["Last night's sleep"]='sleepHours'; map['Light sleep']='light'; map['×']='uX';
+  function tr(s){return (s!=null&&map[s]&&DEF[to][map[s]])||s;}
+  DB.template.concat(DB.trash||[]).forEach(function(sec){ sec.name=tr(sec.name); if(sec.hint) sec.hint=tr(sec.hint);
+    (sec.items||[]).forEach(function(it){ it.name=tr(it.name); if(it.unit) it.unit=tr(it.unit); }); });
+}
+function normalize(){
+  if(!STR[DB.settings.lang]) DB.settings.lang='ko';
+  if([0,1,2,3,4,5,6].indexOf(DB.settings.weekStart)<0) DB.settings.weekStart=1;
+  if(!(DB.v>=2)){
+    if(!DB.template.some(function(s){return s.type==='todo';})){
+      var i=-1; DB.template.forEach(function(s,n){ if(i<0&&s.id==='events') i=n; });
+      var D=DEF[lang()]; DB.template.splice(i+1,0,{id:'todo',type:'todo',name:D.todo,hint:D.todoHint}); }
+    DB.template.forEach(function(sec){ (sec.items||[]).forEach(function(it){ if(sec.id==='sleep'&&it.id==='hours') it.kind='hours'; }); });
+    DB.v=2;
+  }
+  DB.pins=(Array.isArray(DB.pins)?DB.pins:[]).filter(function(p){ return p&&typeof p.text==='string'&&p.text.trim()&&KEYRE.test(p.from)&&KEYRE.test(p.to)&&p.from<=p.to; });
+  DB.pins.forEach(function(p){ if(!p.id) p.id=uid(); });
+  /* The versions of one night (a switch, then a "Goals" section with a last day per line) all end here: one plain memo under the title.
+     Lines that were still showing stay until their × is pressed; lines already taken down stay as they were on their old pages. */
+  var tk=keyOf(today()); DB.pins.forEach(function(p){ if(!(DB.v>=5)||p.sec!==undefined){ if(p.to>=tk) p.to=FOREVER; delete p.sec; } });
+  DB.template=DB.template.filter(function(x){ return !(x&&x.type==='pins'); });
+  delete DB.settings.pins;
+  if(!(DB.v>=4)){ DB.template.forEach(function(x){ if(x.id==='events'&&(x.name==='이벤트'||x.name==='Events')) x.name=(DEF[DB.settings.lang]||DEF.ko).events; }); DB.v=4; }   /* renamed once; a name the person typed is never touched again */
+  if(!(DB.v>=5)) DB.v=5;
+  DB.trash=(Array.isArray(DB.trash)?DB.trash:[]).filter(function(x){ return x&&x.id&&x.type&&x.type!=='pins'&&!DB.template.some(function(y){return y.id===x.id;}); });
+  relabel(lang());
+}
+
+function adopt(o){
+  if(!o||!Array.isArray(o.template)||!o.days||typeof o.days!=='object') throw new Error('shape');
+  var keep=DB.settings.lang; DB.template=o.template; DB.days=o.days; DB.pins=Array.isArray(o.pins)?o.pins:[]; DB.trash=Array.isArray(o.trash)?o.trash:[]; DB.v=o.v||1;
+  if(o.settings) for(var k in o.settings) DB.settings[k]=o.settings[k];
+  if(keep&&!(o.settings&&o.settings.lang)) DB.settings.lang=keep;
+  if(!(o.settings&&o.settings.defLang==='ko')&&!DB.settings.langPicked) DB.settings.lang='ko';
+  DB.settings.defLang='ko';
+  if(!(o.settings&&o.settings.defWeek===1)&&!DB.settings.weekPicked) DB.settings.weekStart=1;
+  DB.settings.defWeek=1;
+  normalize();
+}
+/* Merge a backup into the records here. Text is all kept (same id or same words = one entry); a slot that holds one value
+   (hours, intensity, a number) is only filled when it is empty here; a checkbox is ticked if either side ticked it. */
+function mergeBackup(o){
+  if(!o||!Array.isArray(o.template)||!o.days||typeof o.days!=='object') throw new Error('shape');
+  function clone(x){ return JSON.parse(JSON.stringify(x)); }
+  function blank(v){ return v===undefined||v===null||v===''; }
+  var added=0,grew=0;
+  o.template.forEach(function(bs){                                   /* sections and items this device does not have yet */
+    if(!bs||!bs.id) return; var ds=null; DB.template.forEach(function(x){ if(x.id===bs.id) ds=x; });
+    if(!ds){ DB.template.push(clone(bs)); return; }
+    if(Array.isArray(bs.items)&&Array.isArray(ds.items)) bs.items.forEach(function(bi){ if(bi&&bi.id&&!ds.items.some(function(x){return x.id===bi.id;})) ds.items.push(clone(bi)); });
+  });
+  Object.keys(o.days).forEach(function(k){
+    var bd=o.days[k]; if(!/^\d{4}-\d{2}-\d{2}$/.test(k)||!bd||!bd.s||typeof bd.s!=='object') return;
+    var dd=DB.days[k]; if(!dd||!dd.s||!Object.keys(dd.s).length){ if(Object.keys(bd.s).length){ DB.days[k]=clone(bd); added++; } return; }
+    var changed=false;
+    Object.keys(bd.s).forEach(function(id){
+      var bv=bd.s[id],dv=dd.s[id];
+      if(blank(bv)) return;
+      if(dv===undefined){ dd.s[id]=clone(bv); changed=true; return; }
+      if(Array.isArray(bv)&&Array.isArray(dv)){
+        bv.forEach(function(bi){ if(!bi||blank(bi.text)) return;
+          var same=null; dv.forEach(function(x){ if(!same&&(x.id===bi.id||String(x.text).trim()===String(bi.text).trim())) same=x; });
+          if(!same){ dv.push(clone(bi)); changed=true; } else if(bi.done&&!same.done){ same.done=true; changed=true; } });
+      } else if(bv&&dv&&typeof bv==='object'&&typeof dv==='object'&&!Array.isArray(bv)&&!Array.isArray(dv)){
+        Object.keys(bv).forEach(function(f){ var b=bv[f],d=dv[f];
+          if(blank(b)) return;
+          if(typeof b==='object'){ if(blank(d)||blank(d.t)){ if(!blank(b.t)){ dv[f]=clone(b); changed=true; } } }     /* one part of the day: hours + intensity */
+          else if(typeof b==='boolean'){ if(b&&!d){ dv[f]=true; changed=true; } }
+          else if(blank(d)){ dv[f]=b; changed=true; } });
+      }
+    });
+    if(changed) grew++;
+  });
+  var pinned=0;                                                       /* pinned notes: the same note (same id, or same words from the same day) comes in once */
+  if(!Array.isArray(DB.pins)) DB.pins=[];
+  (Array.isArray(o.pins)?o.pins:[]).forEach(function(bp){ if(!bp||typeof bp.text!=='string'||!bp.text.trim()||!KEYRE.test(bp.from)||!KEYRE.test(bp.to)) return;
+    if(DB.pins.some(function(x){ return (bp.id&&x.id===bp.id)||(x.from===bp.from&&String(x.text).trim()===bp.text.trim()); })) return;
+    DB.pins.push(clone(bp)); pinned++; });
+  if(o.settings){ if(!DB.settings.startDate&&o.settings.startDate){ DB.settings.startDate=o.settings.startDate; } if(!(DB.settings.goal||'').trim()&&o.settings.goal){ DB.settings.goal=o.settings.goal; } }
+  normalize();
+  return {added:added,grew:grew,pins:pinned};
+}
+function load(){ try{ var raw=localStorage.getItem(KEY); if(raw) adopt(JSON.parse(raw)); }catch(e){ if(e&&e.message!=='shape') storageOk=false; } }
+function saveNow(){
+  clearTimeout(saveTimer); saveTimer=null;
+  try{ localStorage.setItem(KEY,JSON.stringify(DB)); storageOk=true; lastSaved=new Date(); }catch(e){ storageOk=false; }
+  renderStatus();
+}
+function save(){ clearTimeout(saveTimer); saveTimer=setTimeout(saveNow,250); }
+function dayRec(key,create){ var d=DB.days[key]; if(!d&&create){ d=DB.days[key]={created:Date.now(),s:{}}; } return d||null; }
+function secVal(key,id){ var d=DB.days[key]; return d&&d.s?d.s[id]:undefined; }
+function setVal(key,id,v){ var d=dayRec(key,true); if(v===undefined) delete d.s[id]; else d.s[id]=v; save(); }
+
+/* ---------- stats ---------- */
+function flowDay(key,id){
+  var f=secVal(key,id),tt=0,w=0,wt=0,any=false; if(!f) return {total:null,avg:null};
+  allPeriods().forEach(function(P){var p=f[P.key]; if(p&&p.t!=null){any=true;tt+=p.t; if(p.t>0&&p.i!=null){wt+=p.t;w+=p.t*p.i;}}});
+  return {total:any?tt:null,avg:wt?w/wt:null};
+}
+function flowRange(dates,id){
+  var tt=0,w=0,n=0; dates.forEach(function(d){ var f=secVal(keyOf(d),id),any=false; if(!f) return;
+    allPeriods().forEach(function(P){var p=f[P.key]; if(p&&p.t!=null){any=true; if(p.t>0&&p.i!=null){tt+=p.t;w+=p.t*p.i;}}}); if(any) n++; });
+  return {time:tt,avg:tt?w/tt:null,days:n};
+}
+function checkCount(dates,id,itemId){ var n=0; dates.forEach(function(d){var v=secVal(keyOf(d),id); if(v&&v[itemId]) n++;}); return n; }
+function numVals(dates,id,itemId){ return dates.map(function(d){var v=secVal(keyOf(d),id); return v&&v[itemId]!=null?v[itemId]:null;}); }
+function avg(a){var b=a.filter(function(v){return v!=null;}); return b.length?b.reduce(function(x,y){return x+y;},0)/b.length:null;}
+
+/* ---------- shared pieces ---------- */
+function renderStatus(){
+  var s=$('#status'); if(!s) return;
+  s.className='status'+(storageOk?'':' bad');
+  s.replaceChildren(el('i'),storageOk?(lastSaved?t('saved',{t:hm(lastSaved)}):t('local')):t('blocked'));
+}
+function go(screen,opts){ UI.screen=screen; UI.confirm=null; UI.pinUndo=null; UI.memoOpen=null; UI.allText=null; UI.mergeMsg=null; if(opts) for(var k in opts) UI[k]=opts[k]; render(); window.scrollTo(0,0); }
+function goDay(d){ go('day',{date:sod(d)}); }
+/* Turning the page with a sideways swipe: next/previous day on the day page, next/previous week or month in a summary, next/previous week in the week text. The arrow buttons stay. */
+function pageTurn(n){
+  if(UI.screen==='day'){ UI.confirm=null; UI.pinUndo=null; UI.date=addDays(UI.date,n); }
+  else if(UI.screen==='summary'){ var sec=DB.template.filter(function(x){return x.id===UI.sec;})[0]; if(!sec||sec.type==='todo') return false;
+    UI.anchor=UI.mode==='week'?addDays(UI.anchor,7*n):new Date(UI.anchor.getFullYear(),UI.anchor.getMonth()+n,1); }
+  else if(UI.screen==='export'){ UI.anchor=addDays(UI.anchor,7*n); UI.exportText=null; }
+  else return false;
+  render(); window.scrollTo(0,0);
+  var r=$('#root'); r.classList.remove('turn-l','turn-r'); void r.offsetWidth; r.classList.add(n>0?'turn-l':'turn-r');
+  return true;
+}
+(function(){ var sx=0,sy=0,st=0,ok=false;
+  document.addEventListener('touchstart',function(e){ ok=false; if(e.touches.length!==1) return;
+    var tg=e.target; if(tg&&tg.closest&&tg.closest('textarea,input,select')) return;      /* never while writing, picking a value or moving a cursor */
+    sx=e.touches[0].clientX; sy=e.touches[0].clientY; st=Date.now(); ok=true; },{passive:true});
+  document.addEventListener('touchend',function(e){ if(!ok) return; ok=false; var c=e.changedTouches[0],dx=c.clientX-sx,dy=c.clientY-sy;
+    if(Date.now()-st>700) return;                                   /* a slow drag is not a swipe */
+    if(Math.abs(dx)<70||Math.abs(dx)<2.2*Math.abs(dy)) return;      /* clearly sideways, not a scroll */
+    var sel=window.getSelection&&String(window.getSelection()); if(sel) return;
+    pageTurn(dx<0?1:-1); },{passive:true});
+})();
+function node(head,kids){ return el('section',{class:'node'},el('span',{class:'dot'}),head,el('div',{class:'kids'},kids)); }
+var CHECK='<svg viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><path d="M3 8.5l3.2 3.2L13 4.8"/></svg>';
+function checkSvg(n){ n.innerHTML=CHECK; return n; }
+function autosize(ta){
+  var ph=!ta.value&&ta.placeholder&&document.activeElement!==ta;      /* measure the example text when that is all there is */
+  if(ph) ta.value=ta.placeholder;
+  ta.style.height='auto'; ta.style.height=Math.max(ta.scrollHeight,38)+'px';
+  if(ph) ta.value='';
+}
+
+/* ---------- day page ---------- */
+function listSum(sec,rows){ rows=rows||[]; if(!rows.length) return '';
+  return sec.type==='todo'?rows.filter(function(r){return r.done;}).length+' / '+rows.length:t('entries',{n:rows.length}); }
+function secSum(sec,key){
+  var v=secVal(key,sec.id);
+  if(sec.type==='flow'){ var f=flowDay(key,sec.id); return f.total==null?'':(f.avg==null?t('daySumNoAvg',{h:fmt(f.total)}):t('daySum',{h:fmt(f.total),p:Math.round(f.avg)})); }
+  if(sec.type==='checks'){ var items=sec.items||[]; return items.length?items.filter(function(i){return v&&v[i.id];}).length+' / '+items.length:''; }
+  if(sec.type==='list'||sec.type==='todo') return listSum(sec,v);
+  return '';
+}
+function memoOn(sec){ return (sec.type==='flow'||sec.type==='checks'||sec.type==='numbers')&&sec.memo===true; }   /* off unless the person switches it on for that section */
+function memoEg(sec){ return t(sec.type==='flow'?'memoEgFlow':sec.type==='checks'?'memoEgChecks':sec.id==='sleep'?'memoEgSleep':'memo'); }
+function memoSec(sec){ return {id:sec.id+':memo',type:'list',name:sec.name+' '+t('memo'),hint:memoEg(sec)}; }
+function memoRows(sec,key){ return memoOn(sec)?(secVal(key,sec.id+':memo')||[]):[]; }
+function listEditor(sec,key,sumEl){
+  var todo=sec.type==='todo';
+  var rows=(secVal(key,sec.id)||[]).map(function(r){return {id:r.id,text:r.text,done:!!r.done};});
+  var box=el('div',{class:'kids'});
+  function commit(){ var clean=rows.filter(function(r){return r.text.trim();}).map(function(r){var o={id:r.id,text:r.text.trim()}; if(todo&&r.done) o.done=true; return o;});
+    setVal(key,sec.id,clean.length?clean:undefined); sumEl.textContent=listSum(sec,clean); }
+  function removeRow(wrap){ var i=rows.indexOf(wrap._row); if(i>=0) rows.splice(i,1); if(wrap.parentNode) wrap.parentNode.removeChild(wrap); commit(); }
+  function insertAfter(wrap,text){ var nr={id:uid(),text:text||'',done:false}; rows.splice(rows.indexOf(wrap._row)+1,0,nr); var ne=rowEl(nr); box.insertBefore(ne,wrap.nextSibling); return ne; }
+  function rowEl(r){
+    var ta=el('textarea',{rows:'1','aria-label':t(r?'item':'newItem',{name:sec.name}),placeholder:r?'':(sec.hint||t('write')),enterkeyhint:'enter'});
+    ta.addEventListener('focus',function(){ if(!ta.value) ta.style.height='38px'; }); ta.addEventListener('blur',function(){ if(!ta.value) autosize(ta); });
+    var cb=todo?checkSvg(el('button',{class:'tcheck',type:'button','aria-label':t('markDone'),'aria-pressed':String(!!(r&&r.done)),disabled:!r})):null;
+    var wrap=el('div',{class:'kid text'+(todo?' todo':'')+(r&&r.done?' done':'')},cb,ta); wrap._row=r||null; wrap._ta=ta; ta.value=r?r.text:'';
+    if(cb) cb.addEventListener('click',function(){ if(!wrap._row) return; wrap._row.done=!wrap._row.done;
+      cb.setAttribute('aria-pressed',String(wrap._row.done)); wrap.classList.toggle('done',wrap._row.done); commit(); });
+    function promote(){ var nr={id:uid(),text:ta.value,done:false}; rows.push(nr); wrap._row=nr; ta.placeholder=''; if(cb) cb.disabled=false; box.appendChild(rowEl(null)); }
+    ta.addEventListener('input',function(){
+      if(ta.value.indexOf('\n')>=0){               /* Enter from an IME, or pasted lines */
+        var parts=ta.value.split('\n'), first=parts.shift(), rest=parts.join(' ').trim();
+        ta.value=first;
+        if(!wrap._row&&first.trim()) promote();
+        if(wrap._row){ wrap._row.text=first; var ne=(rest||first.trim())?insertAfter(wrap,rest):null; autosize(ta); commit(); if(ne) ne._ta.focus(); return; }
+      }
+      if(!wrap._row){ if(ta.value.trim()) promote(); } else wrap._row.text=ta.value;
+      autosize(ta); commit();
+    });
+    ta.addEventListener('keydown',function(e){
+      if(e.isComposing||e.keyCode===229) return;
+      if(e.key==='Enter'&&!e.shiftKey){ e.preventDefault();
+        if(!wrap._row){ ta.blur(); return; }
+        var nxt=wrap.nextSibling; if(nxt&&nxt._ta&&!nxt._row){ nxt._ta.focus(); return; }
+        insertAfter(wrap,'')._ta.focus(); }
+      else if(e.key==='Backspace'&&ta.value===''&&wrap._row){ e.preventDefault(); var prev=wrap.previousSibling; removeRow(wrap);
+        if(prev&&prev._ta){ var p=prev._ta; p.focus(); p.setSelectionRange(p.value.length,p.value.length); } }
+    });
+    ta.addEventListener('blur',function(){ if(wrap._row&&!ta.value.trim()) setTimeout(function(){ if(document.activeElement!==ta) removeRow(wrap); },0); });
+    setTimeout(function(){autosize(ta);},0);
+    return wrap;
+  }
+  rows.forEach(function(r){box.appendChild(rowEl(r));}); box.appendChild(rowEl(null));
+  return box;
+}
+/* The memo under the journal title: one bullet per line, a × at the end of each. An empty line stands there only while there is no memo at all
+   (room at the top of the page is dear); after that, Enter on a line makes the next one. */
+function memoBlock(d){
+  var key=keyOf(d),live=pinsAt(key),blank=null,undoEl=null,box=el('div',{class:'pins'});
+  function addBlank(){ if(!blank&&live.length<PIN_MAX){ blank=rowEl(null); box.insertBefore(blank,undoEl); } return blank; }
+  function sync(){ if(!live.length) addBlank(); box.classList.toggle('none',!live.length); }
+  function takeBtn(p){ return el('button',{class:'pinx',type:'button','aria-label':t('pinTake'),text:'×',onclick:function(){ UI.pinUndo=pinTakeDown(p,key,null); render(); }}); }
+  function rowEl(p){
+    var orig=p?p.text:'',gone=false;
+    var ta=el('textarea',{rows:'1','aria-label':t(p?'pinItem':'pinNew'),placeholder:p?'':t('pinWrite'),enterkeyhint:'enter'});
+    var wrap=el('div',{class:'pin'+(p?'':' new')},ta,p?takeBtn(p):null); wrap._pin=p||null; wrap._ta=ta; ta.value=orig;
+    function promote(){ var np={id:uid(),text:ta.value.trim(),from:key,to:FOREVER}; DB.pins.push(np); live.push(np);
+      wrap._pin=np; wrap.classList.remove('new'); ta.placeholder=''; ta.setAttribute('aria-label',t('pinItem')); wrap.appendChild(takeBtn(np)); if(blank===wrap) blank=null; sync(); }
+    function drop(){ var q=wrap._pin; if(!q||gone) return; gone=true; pinTakeDown(q,key,orig);
+      var i=live.indexOf(q); if(i>=0) live.splice(i,1); if(wrap.parentNode) wrap.parentNode.removeChild(wrap); sync(); }
+    function typed(){
+      var rest='',nl=ta.value.indexOf('\n')>=0;
+      if(nl){ var parts=ta.value.split('\n'); ta.value=parts.shift(); rest=parts.join(' ').trim(); }      /* Enter from an IME, or pasted lines */
+      if(!wrap._pin){ if(ta.value.trim()) promote(); } else wrap._pin.text=ta.value.trim()||orig;
+      autosize(ta); save();
+      if(nl&&wrap._pin){ var nx=addBlank(); if(nx){ if(rest) nx._fill(rest); nx._ta.focus(); } }
+    }
+    wrap._fill=function(text){ ta.value=text; typed(); };
+    ta.addEventListener('input',typed);
+    ta.addEventListener('focus',function(){ if(!ta.value) ta.style.height='38px'; });
+    ta.addEventListener('keydown',function(e){
+      if(e.isComposing||e.keyCode===229) return;
+      if(e.key==='Enter'&&!e.shiftKey){ e.preventDefault(); var nx=wrap._pin?addBlank():null; if(nx) nx._ta.focus(); else ta.blur(); }
+      else if(e.key==='Backspace'&&ta.value===''&&wrap._pin){ e.preventDefault(); var prev=wrap.previousSibling; drop();
+        if(prev&&prev._ta){ var q=prev._ta; q.focus(); q.setSelectionRange(q.value.length,q.value.length); } }
+    });
+    ta.addEventListener('blur',function(){ if(!ta.value) autosize(ta);
+      if(wrap._pin&&!ta.value.trim()) setTimeout(function(){ if(document.activeElement!==ta) drop(); },0);
+      else if(!wrap._pin&&!ta.value.trim()&&live.length) setTimeout(function(){              /* an extra empty line that was left empty goes away again */
+        if(document.activeElement===ta||blank!==wrap||!live.length) return; if(wrap.parentNode) wrap.parentNode.removeChild(wrap); blank=null; },0); });
+    setTimeout(function(){autosize(ta);},0);
+    return wrap;
+  }
+  if(UI.pinUndo){ var was=UI.pinUndo,tx=String(was.pin.text); if(tx.length>22) tx=tx.slice(0,22)+'…';
+    undoEl=box.appendChild(el('p',{class:'pinundo',role:'status'},t('pinTaken',{text:tx}),el('button',{class:'link',type:'button',text:t('undo'),onclick:function(){ UI.pinUndo=null; pinRestore(was); render(); }}))); }
+  live.forEach(function(p){ box.insertBefore(rowEl(p),undoEl); }); sync();
+  return box;
+}
+function secBody(sec,key){
+  var v=secVal(key,sec.id);
+  if(sec.type==='flow'){
+    var both=v&&v.d&&v.d.t!=null&&periods().some(function(x){return v[x.key]&&v[x.key].t!=null;});
+    return shownPeriods(sec,[v],key).map(function(P){ var top=P.key==='d'?36:24;      /* a whole day can hold more hours than one part of it */
+      var p=(v&&v[P.key])||{t:null,i:null};
+      var hs=el('select',{class:'h','aria-label':t('hoursOf',{p:P.label})}); hs.append(el('option',{value:'',text:t('hours')}));
+      for(var x=0;x<=top;x++) hs.append(el('option',{value:String(x/2),text:t('hUnit',{n:fmt(x/2)})}));
+      hs.value=p.t==null?'':String(p.t);
+      var ps=el('select',{class:'p','aria-label':t('intensityOf',{p:P.label}),disabled:p.t==null||p.t===0}); ps.append(el('option',{value:'',text:'%'}));
+      for(var y=100;y>=0;y-=5) ps.append(el('option',{value:String(y),text:y+'%'}));
+      ps.value=(p.t==null||p.i==null)?'':String(p.i);
+      function write(np){ var cur=Object.assign({},secVal(key,sec.id)||{}); if(np.t==null) delete cur[P.key]; else cur[P.key]=np;
+        setVal(key,sec.id,Object.keys(cur).length?cur:undefined); render(); }
+      hs.addEventListener('change',function(){ var tt=hs.value===''?null:Number(hs.value);
+        if(tt==null) return write({t:null}); write({t:tt,i:tt===0?0:(p.i>0?p.i:DB.settings.lastIntensity)}); });
+      ps.addEventListener('change',function(){ if(ps.value==='') return; var i=Number(ps.value); if(i>0) DB.settings.lastIntensity=i; write({t:p.t,i:i}); });
+      return el('div',{class:'kid'},el('div',{class:'line'},el('span',{class:'label'},P.label,P.range?el('small',{text:P.range}):null),el('span',{class:'picks'},hs,ps)));
+    }).concat(both?[el('div',{class:'kid'},el('span',{class:'muted',text:t('flowBoth')}))]:[]);
+  }
+  if(sec.type==='checks'){
+    if(!(sec.items||[]).length) return [el('div',{class:'kid'},el('span',{class:'muted',text:t('noChecks')}))];
+    return sec.items.map(function(it){ var on=!!(v&&v[it.id]);
+      return el('div',{class:'kid'},el('button',{class:'habit',type:'button','aria-pressed':String(on),onclick:function(){
+        var cur=Object.assign({},secVal(key,sec.id)||{}); if(on) delete cur[it.id]; else cur[it.id]=true;
+        setVal(key,sec.id,Object.keys(cur).length?cur:undefined); render(); }},checkSvg(el('span',{class:'check'})),it.name)); });
+  }
+  if(sec.type==='numbers'){
+    if(!(sec.items||[]).length) return [el('div',{class:'kid'},el('span',{class:'muted',text:t('noNumbers')}))];
+    return sec.items.map(function(it){ var val=v&&v[it.id]!=null?v[it.id]:null, ctl;
+      function write(n){ var cur=Object.assign({},secVal(key,sec.id)||{}); if(n==null||isNaN(n)) delete cur[it.id]; else cur[it.id]=n;
+        setVal(key,sec.id,Object.keys(cur).length?cur:undefined); }
+      if(it.pick){ ctl=el('select',{class:'h','aria-label':it.name}); ctl.append(el('option',{value:'',text:t('none')}));
+        for(var x=0;x<=Math.round(it.max/it.step);x++){ var n=+(x*it.step).toFixed(2); ctl.append(el('option',{value:String(n),text:withUnit(n,it.unit)})); }
+        ctl.value=val==null?'':String(val); ctl.addEventListener('change',function(){write(ctl.value===''?null:Number(ctl.value));});
+        return el('div',{class:'kid'},el('div',{class:'line'},el('span',{class:'label',text:it.name}),ctl)); }
+      ctl=el('input',{class:'num',type:'number',inputmode:'decimal',step:'any','aria-label':it.name,placeholder:'—'}); ctl.value=val==null?'':String(val);
+      ctl.addEventListener('input',function(){write(ctl.value===''?null:Number(ctl.value));});
+      return el('div',{class:'kid'},el('div',{class:'line'},el('span',{class:'label',text:it.name}),el('span',{class:'picks'},ctl,el('span',{class:'unit',text:it.unit||''})))); });
+  }
+  return [];
+}
+function installCard(){
+  if(!INSTALLABLE||installed||standalone()) return null;
+  if(INAPP){
+    var cp=el('button',{class:'link',type:'button',text:t('inCopy'),onclick:function(){
+      var u=location.href.split('#')[0]; function ok(){cp.textContent=t('inCopied');}
+      function old(){ try{ var x=el('textarea',{style:'position:fixed;opacity:0'}); x.value=u; document.body.appendChild(x); x.select(); if(document.execCommand('copy')) ok(); x.remove(); }catch(_){} }
+      try{ if(navigator.clipboard&&navigator.clipboard.writeText) navigator.clipboard.writeText(u).then(ok,old); else old(); }catch(_){ old(); } }});
+    return el('div',{class:'notice install'},el('span',{class:'ttl',text:t('inTitle')}),t('inBody'),
+      el('div',{class:'actions'},el('a',{class:'solid',href:externalUrl(),text:t('inOpen')}),cp));
+  }
+  var later=DB.settings.installLater; if(later&&Date.now()-later<7*864e5) return null;
+  var skip=el('button',{class:'link',type:'button',text:t('later'),onclick:function(){DB.settings.installLater=Date.now();save();render();}});
+  if(IOS){
+    var ico=el('span',{class:'ico'}); ico.innerHTML=SHARE;
+    return el('div',{class:'notice install'},el('span',{class:'ttl',text:t('iosTitle')}),t('iosBody'),
+      el('ol',null,el('li',null,t(/CriOS|FxiOS|EdgiOS/.test(UA)?'iosStep1b':'iosStep1'),ico),el('li',{text:t('iosStep2')}),el('li',{text:t('iosStep3')})),
+      el('div',{class:'actions'},skip));
+  }
+  if(ANDROID){
+    var go=installEvt?el('button',{class:'solid',type:'button',text:t('andInstall'),onclick:function(){
+      var e=installEvt; if(!e) return; installEvt=null;
+      try{ e.prompt(); (e.userChoice||Promise.resolve({})).then(function(r){ if(r&&r.outcome==='accepted') installed=true; render(); },function(){render();}); }catch(_){ render(); } }}):null;
+    return el('div',{class:'notice install'},el('span',{class:'ttl',text:t('andTitle')}),t('andBody'),go?null:el('div',{style:'margin-top:6px',text:t('andManual')}),
+      el('div',{class:'actions'},go,skip));
+  }
+  return null;
+}
+function screenDay(){
+  var d=UI.date,key=keyOf(d),td=today(),diff=daysBetween(d,td);
+  if(diff===0) dayRec(key,true);                         /* today's page exists as soon as the app opens */
+  var pick=el('input',{type:'date',class:'datepick','aria-label':t('pickDate')}); pick.value=key;
+  pick.addEventListener('change',function(){ if(pick.value) goDay(parseKey(pick.value)); });
+  var rel=diff===0?t('today'):diff===-1?t('yesterday'):diff===1?t('tomorrow'):diff<0?t('daysAgo',{n:-diff}):t('inDays',{n:diff});
+  var dn=dayNo(d);
+  var sub=el('p',null,rel,dn?el('b',{text:t('dayNo',{n:dn})}):null,diff!==0?el('button',{class:'link',type:'button',text:t('goToday'),onclick:function(){goDay(td);}}):null,pick);
+  var head=el('header',{class:'top'},
+    el('div',{class:'bar'},el('p',{class:'status',id:'status','aria-live':'polite'}),el('button',{class:'link',type:'button',text:t('settings'),onclick:function(){go('settings');}})),
+    el('div',{class:'datenav'},
+      el('button',{class:'icon-btn',type:'button','aria-label':t('prevDay'),text:'‹',onclick:function(){pageTurn(-1);}}),
+      el('div',{class:'when'},el('h1',{text:dayTitle(d)}),sub),
+      el('button',{class:'icon-btn',type:'button','aria-label':t('nextDay'),text:'›',onclick:function(){pageTurn(1);}})));
+  var intro=DB.settings.introSeen?null:el('div',{class:'notice'},t('intro'),
+    el('div',{class:'actions'},el('button',{class:'link',type:'button',text:t('gotIt'),onclick:function(){DB.settings.introSeen=true;save();render();}})));
+  var warn=storageOk?null:el('div',{class:'notice bad'},t('warnStorage'));
+  var secs=DB.template.map(function(sec){
+    var sumEl=el('span',{class:'sum',text:secSum(sec,key)});
+    var isTodo=sec.type==='todo';
+    var headBtn=el('button',{class:'sec',type:'button','aria-label':t(isTodo?'openListAria':'openSummary',{name:sec.name}),onclick:function(){go('summary',{sec:sec.id,anchor:sod(d),lastDone:null});}},
+      el('span',{class:'t',text:sec.name}),sumEl,el('span',{class:'go',text:t(isTodo?'openList':'summary')}));
+    if(sec.type==='list'||sec.type==='todo') return el('section',{class:'node'},el('span',{class:'dot'}),headBtn,listEditor(sec,key,sumEl));
+    var kids=secBody(sec,key); if(memoOn(sec)) kids=kids.concat([listEditor(memoSec(sec),key,el('span'))]);
+    return node(headBtn,kids);
+  });
+  if(!DB.template.length) secs=[el('div',{class:'notice'},t('noSections'))];
+  var copy=el('p',{style:'margin:4px 0 0 24px'},el('button',{class:'link',type:'button',text:t('copyWeek'),onclick:function(){go('export',{anchor:sod(d),exportText:null});}}));
+  var rt=reportTitle(d,true),club=rt?el('p',{class:'club'},el('b',{text:rt.head}),' ('+rt.sub+')')
+    :DB.settings.startDate?null:el('p',{class:'club empty'},el('button',{class:'link',type:'button',text:t('reportSet'),onclick:function(){
+      go('settings'); var n=document.getElementById('report'); if(n) n.scrollIntoView({block:'start'}); }}));
+  var inst=installCard();
+  return [head,warn,inst,inst?null:intro,club,topMemoOn()?memoBlock(d):null].concat(secs,[copy]);
+}
+
+/* ---------- summaries ---------- */
+function periodDates(mode,anchor){ return mode==='week'?range(weekStartOf(anchor),7):monthDays(anchor); }
+function prevAnchor(mode,anchor){ return mode==='week'?addDays(anchor,-7):new Date(anchor.getFullYear(),anchor.getMonth()-1,1); }
+function calendar(dates,cellFn){
+  var g=el('div',{class:'cal7'}),ws=DB.settings.weekStart,i;
+  for(i=0;i<7;i++) g.append(el('span',{class:'wd',text:DOWS[lang()][(ws+i)%7]}));
+  for(i=0;i<(dates[0].getDay()-ws+7)%7;i++) g.append(el('span'));
+  dates.forEach(function(d){g.append(cellFn(d));});
+  return g;
+}
+function depthAlpha(i){ var x=Math.max(0,Math.min(1,((i||0)-40)/60)); return (0.10+0.90*Math.pow(x,1.7)).toFixed(2); }
+function flowCell(d,total,avgI,label,cal,wholeDay){      /* a bar is full at 6 h for one part of the day, at 12 h for a whole day */
+  var td=today(); if(total==null) return el('button',{class:'cell none'+(cal?' cal':'')+(sameDay(d,td)?' today':''),type:'button','aria-label':t('open',{date:md(d)}),onclick:function(){goDay(d);}},cal?el('span',{class:'v'},el('em',{text:String(d.getDate())})):null);
+  var fill=el('i'); fill.style.height=(Math.min(1,total/((cal||wholeDay)?12:6))*100)+'%'; fill.style.background='rgba(var(--water-rgb),'+depthAlpha(avgI)+')';
+  return el('button',{class:'cell'+(cal?' cal':'')+(sameDay(d,td)?' today':''),type:'button','aria-label':md(d)+' '+label,onclick:function(){goDay(d);}},
+    el('span',{class:'v'},cal?el('em',{text:String(d.getDate())}):null,fmt(total)),el('div',{class:'bar'},fill));
+}
+function depthKey(){ return el('div',{class:'scale','aria-hidden':'true'},[60,70,80,90,100].map(function(v){ var sw=el('i'); sw.style.background='rgba(var(--water-rgb),'+depthAlpha(v)+')'; return el('span',null,sw,v+'%'); })); }
+function sumFlow(sec,mode,dates,prevDates){
+  var s=flowRange(dates,sec.id),p=flowRange(prevDates,sec.id),td=today(),out=[],W=mode==='week';
+  out.push(el('p',{class:'lead',text:s.time?t('flowLead',{h:fmt(s.time),p:Math.round(s.avg)}):t('noRecords')}));
+  out.push(el('p',{class:'sub',text:(s.time?t('flowSub',{d:s.days,a:fmt(+(s.time/s.days).toFixed(1))}):'')+
+    (p.time?t(W?'prevW':'prevM',{h:fmt(p.time),p:Math.round(p.avg)}):t(W?'noPrevW':'noPrevM'))}));
+  if(W){
+    var g=el('div',{class:'depth'}); g.append(el('span'));
+    dates.forEach(function(d){ g.append(el('button',{class:'dayhead'+(sameDay(d,td)?' today':''),type:'button','aria-label':t('open',{date:md(d)}),onclick:function(){goDay(d);}},dow(d),el('b',{text:String(d.getDate())}))); });
+    shownPeriods(sec,dates.map(function(d){return secVal(keyOf(d),sec.id);}),keyOf(dates[dates.length-1])).forEach(function(P){ g.append(el('span',{class:'axis',text:P.short}));
+      dates.forEach(function(d){ var f=secVal(keyOf(d),sec.id),x=f&&f[P.key];
+        if(P.key==='d'){ var tot=flowDay(keyOf(d),sec.id); x=tot.total==null?null:{t:tot.total,i:tot.avg}; }
+        g.append(flowCell(d,x&&x.t!=null?x.t:null,x?x.i:null,P.label+(x&&x.t!=null?' '+t('hUnit',{n:fmt(x.t)})+' '+Math.round(x.i||0)+'%':''),false,P.key==='d')); }); });
+    g.append(el('span'));
+    dates.forEach(function(d){ var f=flowDay(keyOf(d),sec.id); g.append(el('div',{class:'foot'},el('b',{text:f.total==null?'—':fmt(f.total)+'h'}),f.avg==null?'':Math.round(f.avg)+'%')); });
+    out.push(g,el('p',{class:'legend',text:t('legendW')}),depthKey());
+  }else{
+    out.push(calendar(dates,function(d){ var f=flowDay(keyOf(d),sec.id); return flowCell(d,f.total,f.avg,f.total==null?'':t('hUnit',{n:fmt(f.total)}),true); }));
+    out.push(el('p',{class:'legend',text:t('legendM')}),depthKey());
+    var rows=el('div',{class:'rows'}),seen={};
+    dates.forEach(function(d){ var ws=weekStartOf(d),k=keyOf(ws); if(seen[k]) return; seen[k]=1;
+      var wd=range(ws,7).filter(function(x){return x.getMonth()===d.getMonth();}),w=flowRange(wd,sec.id);
+      rows.append(el('div',{class:'r'},el('span',{text:md(wd[0])+' – '+md(wd[wd.length-1])}),el('span',{text:w.time?t('weekRow',{h:fmt(w.time),p:Math.round(w.avg)}):'—'}))); });
+    out.push(rows);
+  }
+  return out;
+}
+function sumChecks(sec,mode,dates,prevDates){
+  var td=today(),items=sec.items||[]; if(!items.length) return [el('p',{class:'sub',text:t('noChecks')})];
+  return items.map(function(it){
+    var n=checkCount(dates,sec.id,it.id),pn=checkCount(prevDates,sec.id,it.id);
+    return el('div',{class:'kid block'},el('div',{class:'line'},el('span',{class:'label',text:it.name}),
+      el('span',{class:'muted',text:t('checkLine',{n:n,d:dates.length,prev:t(mode==='week'?'wWord':'mWord'),pn:pn})})),
+      calendar(dates,function(d){ var v=secVal(keyOf(d),sec.id),on=!!(v&&v[it.id]);
+        return el('button',{class:'pipc'+(sameDay(d,td)?' today':''),type:'button','aria-label':md(d)+' '+t(on?'didIt':'didNot'),onclick:function(){goDay(d);}},el('div',{class:'pip'+(on?' on':'')}),String(d.getDate())); }));
+  });
+}
+function sumNumbers(sec,mode,dates,prevDates){
+  var items=sec.items||[]; if(!items.length) return [el('p',{class:'sub',text:t('noNumbers')})];
+  return items.map(function(it){
+    var vals=numVals(dates,sec.id,it.id),a=avg(vals),pa=avg(numVals(prevDates,sec.id,it.id)),have=vals.filter(function(v){return v!=null;});
+    var mx=Math.max.apply(null,have.concat([1e-9]));
+    var bars=el('div',{class:'bars'},dates.map(function(d,i){ var v=vals[i],b=el('i',{class:v==null?'none':''}); if(v!=null) b.style.height=Math.max(3,(v/mx)*100)+'%';
+      return el('button',{type:'button','aria-label':md(d)+' '+valText(v,it),onclick:function(){goDay(d);}},b); }));
+    var labels=el('div',{class:'barlabels'},dates.map(function(d,i){ if(mode==='week') return el('span',null,el('b',{text:vals[i]==null?'—':fmt(vals[i])}),dow(d));
+      return el('span',{text:(d.getDate()%7===1)?String(d.getDate()):''}); }));
+    var detail=have.length?t('numDetail',{n:have.length,a:valText(Math.min.apply(null,have),it),b:valText(Math.max.apply(null,have),it)}):t('noRecords');
+    return el('div',{class:'kid block'},el('div',{class:'line'},el('span',{class:'label',text:it.name}),el('span',{class:'muted',text:a==null?'':t('avg',{v:valText(a,it)})})),
+      bars,labels,el('p',{class:'muted',style:'margin:8px 0 0',text:detail+(pa==null?'':t('numPrev',{w:t(mode==='week'?'wWord':'mWord'),v:valText(pa,it)}))}));
+  });
+}
+function sumList(sec,mode,dates){
+  /* the Notes summary also gathers the note lines written under Immersion and Habits; once those are in the mix, every line says where it came from */
+  var out=[],extra=sec.id==='notes'?DB.template.filter(memoOn):[],mixed=false;
+  dates.forEach(function(d){ extra.forEach(function(x){ if(memoRows(x,keyOf(d)).length) mixed=true; }); });
+  function row(d,text,tag){ return el('div',{class:'kid'},el('button',{class:'entry',type:'button',onclick:function(){goDay(d);}},el('span',{class:'d',text:md(d)+' '+dow(d)}),
+    el('span',null,tag?el('span',{class:'muted',text:'('+tag+') '}):null,text))); }
+  dates.forEach(function(d){ var k=keyOf(d);
+    if(mixed) extra.forEach(function(x){ memoRows(x,k).forEach(function(r){ out.push(row(d,r.text,x.name)); }); });
+    (secVal(k,sec.id)||[]).forEach(function(r){ out.push(row(d,r.text,mixed?sec.name:null)); }); });
+  return out.length?out:[el('div',{class:'kid'},el('span',{class:'muted',text:t(mode==='week'?'nothingW':'nothingM')}))];
+}
+/* To-do page: like a Roam TODO page. Every unfinished item from every day, newest first, grouped by week. */
+function screenTodo(sec){
+  var td=today(),ws=weekStartOf(td),we=addDays(ws,7),pws=addDays(ws,-7),all=[];
+  Object.keys(DB.days).forEach(function(k){ (secVal(k,sec.id)||[]).forEach(function(r,i){ if(!r.done&&r.text) all.push({key:k,date:parseKey(k),row:r,order:i}); }); });
+  all.sort(function(x,y){return (y.date-x.date)||(x.order-y.order);});
+  function setDone(key,id,val){ var rows=(secVal(key,sec.id)||[]).map(function(r){ if(r.id!==id) return r; var o={id:r.id,text:r.text}; if(val) o.done=true; return o; }); setVal(key,sec.id,rows); }
+  function group(title,subtitle,list){
+    var kids=list.length?list.map(function(it){
+      return el('div',{class:'kid todo'},checkSvg(el('button',{class:'tcheck',type:'button','aria-label':t('markDone'),'aria-pressed':'false',onclick:function(){
+          setDone(it.key,it.row.id,true); UI.lastDone={key:it.key,id:it.row.id,text:it.row.text}; render(); }})),
+        el('button',{class:'entry',type:'button',style:'padding:7px 0',onclick:function(){goDay(it.date);}},el('span',{class:'d',text:md(it.date)+' '+dow(it.date)}),el('span',{text:it.row.text}))); })
+      :[el('div',{class:'kid'},el('span',{class:'muted',text:t('noneOpen')}))];
+    return node(el('div',null,el('h2',{text:title,style:'margin:0;font:600 17px/1.6 var(--ui);padding:3px 0 0'}),el('p',{class:'muted',style:'margin:0 0 4px',text:subtitle})),kids);
+  }
+  var up=all.filter(function(i){return i.date>=we;}),cur=all.filter(function(i){return i.date>=ws&&i.date<we;}),
+      prev=all.filter(function(i){return i.date>=pws&&i.date<ws;}),old=all.filter(function(i){return i.date<pws;});
+  var head=el('header',{class:'top'},
+    el('div',{class:'bar'},el('button',{class:'link',type:'button',text:t('back'),onclick:function(){go('day',{lastDone:null});}}),el('p',{class:'status',id:'status'})),
+    el('div',{class:'datenav'},el('div',{class:'when'},el('h1',{text:sec.name}),el('p',null,t('openTodos')+' '+all.length))));
+  var undo=UI.lastDone?el('div',{class:'notice'},t('markedDone',{text:UI.lastDone.text}),el('div',{class:'actions'},el('button',{class:'link',type:'button',text:t('undo'),onclick:function(){
+    var l=UI.lastDone; UI.lastDone=null; setDone(l.key,l.id,false); render(); }}))):null;
+  var out=[head,undo];
+  if(up.length) out.push(group(t('upcoming'),sameDay(up[0].date,up[up.length-1].date)?md(up[0].date):md(up[up.length-1].date)+' – '+md(up[0].date),up));
+  out.push(group(t('thisWeek'),md(ws)+' – '+md(addDays(we,-1)),cur));
+  out.push(group(t('lastWeek'),md(pws)+' – '+md(addDays(ws,-1)),prev));
+  if(old.length) out.push(group(t('earlier'),t('since',{date:md(old[old.length-1].date)}),old));
+  return out;
+}
+function screenSummary(){
+  var sec=DB.template.filter(function(s){return s.id===UI.sec;})[0]; if(!sec){ UI.screen='day'; return screenDay(); }
+  if(sec.type==='todo') return screenTodo(sec);
+  var mode=UI.mode,a=UI.anchor,dates=periodDates(mode,a),prev=periodDates(mode,prevAnchor(mode,a)),td=today(),title,sub,now;
+  if(mode==='week'){ var w=Math.round(daysBetween(dates[0],weekStartOf(td))/7); now=w===0;
+    title=lang()==='ko'?md(dates[0])+' '+dow(dates[0])+' – '+md(dates[6])+' '+dow(dates[6]):md(dates[0])+' – '+md(dates[6]);
+    sub=w===0?t('thisWeek'):w===-1?t('lastWeek'):w<0?t('weeksAgo',{n:-w}):t('inWeeks',{n:w}); }
+  else{ var m=(a.getFullYear()-td.getFullYear())*12+a.getMonth()-td.getMonth(); now=m===0;
+    title=lang()==='ko'?a.getFullYear()+'년 '+(a.getMonth()+1)+'월':MONL[a.getMonth()]+' '+a.getFullYear();
+    sub=m===0?t('thisMonth'):m===-1?t('lastMonth'):m<0?t('monthsAgo',{n:-m}):t('inMonths',{n:m}); }
+  function shift(n){ UI.anchor=mode==='week'?addDays(a,7*n):new Date(a.getFullYear(),a.getMonth()+n,1); render(); }
+  var head=el('header',{class:'top'},
+    el('div',{class:'bar'},el('button',{class:'link',type:'button',text:t('back'),onclick:function(){go('day');}}),el('span',{class:'muted',text:t('sumOf',{name:sec.name})})),
+    el('div',{class:'datenav'},el('button',{class:'icon-btn',type:'button','aria-label':t(mode==='week'?'prevWeek':'prevMonth'),text:'‹',onclick:function(){pageTurn(-1);}}),
+      el('div',{class:'when'},el('h1',{text:title}),el('p',null,sub,now?null:el('button',{class:'link',type:'button',text:t(mode==='week'?'toThisWeek':'toThisMonth'),onclick:function(){UI.anchor=td;render();}}))),
+      el('button',{class:'icon-btn',type:'button','aria-label':t(mode==='week'?'nextWeek':'nextMonth'),text:'›',onclick:function(){pageTurn(1);}})),
+    el('div',{class:'seg',role:'group','aria-label':t('unitAria')},['week','month'].map(function(k){
+      return el('button',{type:'button','aria-pressed':String(mode===k),text:t(k),onclick:function(){UI.mode=k;render();}});})));
+  var body=sec.type==='flow'?sumFlow(sec,mode,dates,prev):sec.type==='checks'?sumChecks(sec,mode,dates,prev):sec.type==='numbers'?sumNumbers(sec,mode,dates,prev):sumList(sec,mode,dates);
+  /* Notes written under this section stay folded away so the charts keep the page to themselves. One link says how many there are; a tap unfolds exactly those notes, right here, and another tap folds them again. */
+  var memoLink=null;
+  if(memoOn(sec)){ var mem=[]; dates.forEach(function(d){ memoRows(sec,keyOf(d)).forEach(function(r){ mem.push({d:d,r:r}); }); });
+    if(mem.length){ var open=UI.memoOpen===sec.id;
+      memoLink=el('div',{style:'margin:4px 0 0 24px'},
+        el('button',{class:'link',type:'button','aria-expanded':String(open),text:t(open?'memoHide':'memoLink',{n:mem.length,name:sec.name}),onclick:function(){UI.memoOpen=open?null:sec.id;render();}}),
+        open?el('div',{class:'kids',style:'margin-top:4px;margin-bottom:10px'},mem.map(function(m){ return el('div',{class:'kid'},el('button',{class:'entry',type:'button',onclick:function(){goDay(m.d);}},el('span',{class:'d',text:md(m.d)+' '+dow(m.d)}),el('span',{text:m.r.text}))); })):null); } }
+  var wrap=sec.type==='flow'?el('section',{class:'node'},el('span',{class:'dot'}),el('h2',{text:sec.name}),body):node(el('h2',{text:sec.name}),body);
+  var copy=mode==='week'?el('p',{style:'margin:4px 0 0 24px'},el('button',{class:'link',type:'button',text:t('copyWeek'),onclick:function(){go('export',{exportText:null});}})):null;
+  return [head,wrap,memoLink,copy];
+}
+
+/* ---------- one week as plain text (for an email to a coach) ---------- */
+function dayHas(k){ var d=DB.days[k]; return !!(d&&d.s&&Object.keys(d.s).some(function(id){ var v=d.s[id]; return Array.isArray(v)?v.length:(v&&Object.keys(v).length); })); }
+/* One day written out as plain lines: its title, then every section that holds something. */
+function dayLines(d,P,L,withYear){      /* records that span years say which year each day belongs to */
+  var k=keyOf(d),dn=dayNo(d),ttl=withYear?(lang()==='ko'?d.getFullYear()+'년 '+dayTitle(d):dayTitle(d)+', '+d.getFullYear()):dayTitle(d);
+  L.push(ttl+(dn?' ('+t('dayNo',{n:dn})+')':''));
+  if(!dayHas(k)){ L.push('- '+t('noRecordsDay')); return; }
+  DB.template.forEach(function(sec){
+    var v=secVal(k,sec.id);
+    var ms=memoRows(sec,k),named=false;
+    if(sec.type==='flow'){ var f=flowDay(k,sec.id); if(f.total!=null){ named=true;
+      L.push('- '+sec.name+': '+(f.avg==null?t('daySumNoAvg',{h:fmt(f.total)}):t('daySum',{h:fmt(f.total),p:Math.round(f.avg)})));
+      var used=P.filter(function(pp){ var x=v&&v[pp.key]; return x&&x.t!=null; });
+      if(!(used.length===1&&used[0].key==='d')) used.forEach(function(pp){ var x=v[pp.key]; L.push('  - '+pp.label+(pp.range?' ('+pp.range+')':'')+': '+t('hUnit',{n:fmt(x.t)})+', '+Math.round(x.i||0)+'%'); }); } }
+    else if(sec.type==='checks'){ if((sec.items||[]).length){ named=true; L.push('- '+sec.name+': '+sec.items.map(function(it){return it.name+' '+(v&&v[it.id]?'✓':'–');}).join(', ')); } }
+    else if(sec.type==='numbers'){ var ps=(sec.items||[]).filter(function(it){return v&&v[it.id]!=null;}).map(function(it){return it.name+' '+valText(v[it.id],it);}); if(ps.length){ named=true; L.push('- '+sec.name+': '+ps.join(', ')); } }
+    else if(v&&v.length){ L.push('- '+sec.name); v.forEach(function(r){ L.push('  - '+(sec.type==='todo'?(r.done?'[x] ':'[ ] '):'')+r.text); }); }
+    if(ms.length){ if(!named) L.push('- '+sec.name); ms.forEach(function(r){ L.push('  - '+t('memo')+': '+r.text); }); }
+  });
+}
+/* Everything ever recorded, as text a person can read without this app (a JSON backup needs the app; this does not). Days with nothing in them are left out. */
+function allText(){
+  var keys=Object.keys(DB.days).filter(dayHas).sort(),L=[],P=allPeriods();
+  L.push(t('appName')+': '+t('allRecords')); 
+  if(keys.length) L.push(t('allSpan',{a:keys[0],b:keys[keys.length-1],n:keys.length}));
+  var s0=DB.settings.startDate,g=(DB.settings.goal||'').trim(); if(s0) L.push(t('allStart',{d:s0})+(g?', '+t('allGoal',{g:g}):''));
+  var pa=pinsBetween('0000-00-00',FOREVER); if(pa.length){ L.push(''); L.push(t('topMemo')); pa.forEach(function(p){ L.push('- '+String(p.text).trim()+' ('+p.from+' ~ '+(p.to===FOREVER?'':p.to)+')'); }); }
+  keys.forEach(function(k){ L.push(''); dayLines(parseKey(k),P,L,true); });
+  if(!keys.length){ L.push(''); L.push(t('noRecords')); }
+  return L.join('\n');
+}
+/* Hand a text file to the person. An iPhone (above all the Home Screen app) ignores download links, so there it goes through the share sheet. kinds: [[ext,mime],...] tried in order. */
+function saveFileSmart(base,text,kinds,fallback){
+  function viaLink(){ var blob=new Blob([text],{type:kinds[0][1]}),a=document.createElement('a');
+    a.href=URL.createObjectURL(blob); a.download=base+'.'+kinds[0][0]; document.body.appendChild(a); a.click();
+    setTimeout(function(){URL.revokeObjectURL(a.href);a.remove();},1500); }
+  if(IOS){
+    try{ if(navigator.share&&navigator.canShare&&window.File){
+      for(var i=0;i<kinds.length;i++){ var f=new File([text],base+'.'+kinds[i][0],{type:kinds[i][1]});
+        if(navigator.canShare({files:[f]})){ navigator.share({files:[f]}).catch(function(e){ if(!e||e.name!=='AbortError') fallback(); }); return; } } } }catch(_){}
+    if(standalone()){ fallback(); return; }
+  }
+  viaLink();
+}
+function weekText(anchor){
+  var dates=range(weekStartOf(anchor),7),L=[],P=allPeriods();
+  var rt=reportTitle(dates[6]); if(rt) L.push(rt);
+  var dns=dates.map(dayNo).filter(function(n){return n!=null;}),dr=!dns.length?'':dns.length===1?t('dayNo',{n:dns[0]}):t('dayRange',{a:dns[0],b:dns[dns.length-1]});
+  L.push(t('appName')+': '+mdw(dates[0])+' – '+mdw(dates[6])+(dr?' ('+dr+')':''));
+  if(topMemoOn()) pinsBetween(keyOf(dates[0]),keyOf(dates[6])).forEach(function(p){ L.push('- '+String(p.text).trim()); });      /* the memo under the title: once, right under the title, as on the page */
+  L.push(''); L.push(t('weeklySummary'));
+  DB.template.forEach(function(sec){
+    var line='—',a=0,b=0,n=0;
+    if(sec.type==='flow'){ var f=flowRange(dates,sec.id); if(f.time) line=t('sumFlowLine',{h:fmt(f.time),p:Math.round(f.avg),d:f.days}); }
+    else if(sec.type==='checks'){ if((sec.items||[]).length) line=sec.items.map(function(it){return it.name+' '+checkCount(dates,sec.id,it.id)+'/7';}).join(', '); }
+    else if(sec.type==='numbers'){ var parts=(sec.items||[]).map(function(it){ var v=avg(numVals(dates,sec.id,it.id)); return v==null?null:it.name+' '+t('avgShort')+' '+valText(v,it); }).filter(Boolean); if(parts.length) line=parts.join(', '); }
+    else if(sec.type==='todo'){ dates.forEach(function(d){(secVal(keyOf(d),sec.id)||[]).forEach(function(r){ if(r.done) a++; else b++; });}); if(a+b) line=t('sumTodoLine',{a:a,b:b}); }
+    else { dates.forEach(function(d){ n+=(secVal(keyOf(d),sec.id)||[]).length; }); if(n) line=(n===1&&lang()==='en')?'1 entry':t('sumListLine',{n:n}); }
+    L.push('- '+sec.name+': '+line);
+  });
+  dates.forEach(function(d){
+    var k=keyOf(d); L.push(''); dayLines(d,P,L);
+  });
+  return L.join('\n');
+}
+function screenExport(){
+  var a=UI.anchor,dates=range(weekStartOf(a),7),td=today(),w=Math.round(daysBetween(dates[0],weekStartOf(td))/7);
+  if(UI.exportText==null) UI.exportText=weekText(a);
+  function shift(n){ UI.anchor=addDays(a,7*n); UI.exportText=null; render(); }
+  var title=lang()==='ko'?md(dates[0])+' '+dow(dates[0])+' – '+md(dates[6])+' '+dow(dates[6]):md(dates[0])+' – '+md(dates[6]);
+  var sub=w===0?t('thisWeek'):w===-1?t('lastWeek'):w<0?t('weeksAgo',{n:-w}):t('inWeeks',{n:w});
+  var head=el('header',{class:'top'},
+    el('div',{class:'bar'},el('button',{class:'link',type:'button',text:t('back'),onclick:function(){go('day');}}),el('span',{class:'muted',text:t('weekText')})),
+    el('div',{class:'datenav'},el('button',{class:'icon-btn',type:'button','aria-label':t('prevWeek'),text:'‹',onclick:function(){pageTurn(-1);}}),
+      el('div',{class:'when'},el('h1',{text:title}),el('p',null,sub)),
+      el('button',{class:'icon-btn',type:'button','aria-label':t('nextWeek'),text:'›',onclick:function(){pageTurn(1);}})));
+  var ta=el('textarea',{class:'box tall','aria-label':t('weekTextAria'),spellcheck:'false'}); ta.value=UI.exportText; ta.addEventListener('input',function(){UI.exportText=ta.value;});
+  var copyBtn=el('button',{class:'solid',type:'button',text:t('copyText'),onclick:function(){
+    function ok(){copyBtn.textContent=t('copied');} ta.focus(); ta.select(); try{ta.setSelectionRange(0,ta.value.length);}catch(_){}
+    try{ if(navigator.clipboard&&navigator.clipboard.writeText) navigator.clipboard.writeText(ta.value).then(ok,function(){ try{ if(document.execCommand('copy')) ok(); }catch(_){} }); else if(document.execCommand('copy')) ok(); }catch(_){} }});
+  var shareBtn=(HOSTED&&navigator.share)?el('button',{class:'mini',type:'button',text:t('shareText'),onclick:function(){ try{ navigator.share({title:reportTitle(dates[6])||(t('appName')+' '+title),text:ta.value}).catch(function(){}); }catch(_){} }}):null;
+  return [head,el('p',{class:'muted',style:'margin:0 0 10px',text:t('weekTextSub')}),ta,el('div',{class:'rowf',style:'margin-top:10px;gap:10px'},copyBtn,shareBtn)];
+}
+
+/* Everything as readable text: to keep, print, or paste into another notebook. It cannot be loaded back in; the backup file is for that. */
+function screenAllText(){
+  if(UI.allText==null) UI.allText=allText();
+  var n=Object.keys(DB.days).filter(dayHas).length;
+  var head=el('header',{class:'top'},
+    el('div',{class:'bar'},el('button',{class:'link',type:'button',text:t('backSettings'),onclick:function(){go('settings');}}),el('span',{class:'muted',text:t('allRecords')})),
+    el('div',{class:'datenav'},el('div',{class:'when',style:'margin:0 auto'},el('h1',{text:t('allRecords')}),el('p',null,t('allDays',{n:n})))));
+  var ta=el('textarea',{class:'box tall','aria-label':t('allRecords'),spellcheck:'false',readonly:''}); ta.value=UI.allText;
+  var msg=el('p',{class:'muted',style:'margin:8px 0 0;color:var(--water)',role:'status'});
+  var copyBtn=el('button',{class:'solid',type:'button',text:t('copyText'),onclick:function(){
+    function ok(){copyBtn.textContent=t('copied');} ta.focus(); ta.select(); try{ta.setSelectionRange(0,ta.value.length);}catch(_){}
+    try{ if(navigator.clipboard&&navigator.clipboard.writeText) navigator.clipboard.writeText(ta.value).then(ok,function(){ try{ if(document.execCommand('copy')) ok(); }catch(_){} }); else if(document.execCommand('copy')) ok(); }catch(_){} }});
+  var fileBtn=INSTALLABLE?el('button',{class:'mini',type:'button',text:t('saveTxt'),onclick:function(){
+    saveFileSmart('molip-records-text-'+keyOf(today()),ta.value,[['txt','text/plain']],function(){ msg.textContent=t('saveTxtFail'); }); }}):null;
+  return [head,el('p',{class:'muted',style:'margin:0 0 10px',text:t('allTextSub')}),ta,el('div',{class:'rowf',style:'margin-top:10px;gap:10px'},copyBtn,fileBtn),msg];
+}
+
+/* ---------- settings ---------- */
+function twoStep(id,label,confirmLabel,fn,cls){
+  if(UI.confirm===id) return el('span',{class:'rowf'},el('button',{class:'link danger',type:'button',text:confirmLabel,onclick:function(){UI.confirm=null;fn();}}),
+    el('button',{class:'link',type:'button',text:t('cancel'),onclick:function(){UI.confirm=null;render();}}));
+  return el('button',{class:cls||'mini',type:'button',text:label,onclick:function(){UI.confirm=id;render();}});
+}
+function screenSettings(){
+  var T=DB.template,TYPE={list:t('tList'),todo:t('tTodo'),flow:t('tFlow'),checks:t('tChecks'),numbers:t('tNumbers')};
+  function changed(){ save(); render(); }
+  var head=el('header',{class:'top'},
+    el('div',{class:'bar'},el('button',{class:'link',type:'button',text:t('back'),onclick:function(){go('day');}}),el('p',{class:'status',id:'status'})),
+    el('div',{class:'datenav'},el('div',{class:'when'},el('h1',{text:t('setTitle')}),el('p',null,t('setSub')))));
+  var secs=T.map(function(sec,idx){
+    var name=el('input',{class:'field',type:'text','aria-label':t('secName'),value:sec.name}); name.addEventListener('input',function(){sec.name=name.value;save();});
+    var headRow=el('div',{class:'rowf',style:'margin-bottom:6px'},name,el('span',{class:'tools'},
+      el('button',{type:'button','aria-label':t('up'),disabled:idx===0,text:'↑',onclick:function(){T.splice(idx-1,0,T.splice(idx,1)[0]);changed();}}),
+      el('button',{type:'button','aria-label':t('down'),disabled:idx===T.length-1,text:'↓',onclick:function(){T.splice(idx+1,0,T.splice(idx,1)[0]);changed();}})));
+    var kids=[el('div',{class:'kid'},el('div',{class:'line'},el('span',{class:'muted'},t('type'),el('span',{class:'tag',text:TYPE[sec.type]||sec.type})),
+      twoStep('sec:'+sec.id,t('delSection'),t('delSectionSure'),function(){ var gone=T.splice(idx,1)[0]; gone._after=idx>0?T[idx-1].id:null; DB.trash=(DB.trash||[]).filter(function(x){return x.id!==gone.id;}); DB.trash.push(gone); changed(); },'link danger')))];
+    if(sec.type==='flow'){ var whole=sec.whole===true;
+      kids.push(el('div',{class:'kid'},el('div',{class:'chips',role:'group','aria-label':t('flowMode')},
+        [[true,t('flowWhole')],[false,t('flowSplit')]].map(function(a){ return el('button',{type:'button','aria-pressed':String(whole===a[0]),text:a[1],onclick:function(){ sec.whole=a[0]; changed(); }}); })))); }
+    if(sec.type==='flow'||sec.type==='checks'||sec.type==='numbers'){ var mOn=memoOn(sec);                 /* the note line can be switched off for this section */
+      kids.push(el('div',{class:'kid'},el('button',{class:'habit',type:'button','aria-pressed':String(mOn),onclick:function(){sec.memo=!mOn;changed();}},checkSvg(el('span',{class:'check'})),t('memoLine'),el('span',{class:'muted',style:'margin-left:8px;font-weight:400',text:memoEg(sec)}))));
+      var notesSec=T.filter(function(x){return x.id==='notes';})[0];                  /* once it is on, say where those notes can be read back */
+      if(mOn&&notesSec) kids.push(el('div',{class:'kid'},el('span',{class:'muted',text:t('memoWhere',{name:notesSec.name})}))); }
+    if(sec.type==='checks'||sec.type==='numbers'){
+      (sec.items=sec.items||[]).forEach(function(it,j){
+        var n=el('input',{class:'field',type:'text','aria-label':t('name'),value:it.name}); n.addEventListener('input',function(){it.name=n.value;save();});
+        var u=null; if(sec.type==='numbers'&&!it.pick){ u=el('input',{class:'field sm',type:'text','aria-label':t('unit'),placeholder:t('unit'),value:it.unit||''}); u.addEventListener('input',function(){it.unit=u.value;save();}); }
+        kids.push(el('div',{class:'kid'},el('div',{class:'rowf'},n,u,el('button',{class:'mini',type:'button','aria-label':t('del')+' '+it.name,text:t('del'),onclick:function(){sec.items.splice(j,1);changed();}}))));
+      });
+      kids.push(el('div',{class:'kid'},el('button',{class:'link',type:'button',text:t(sec.type==='checks'?'addCheck':'addNumber'),onclick:function(){
+        sec.items.push(sec.type==='checks'?{id:uid(),name:t('newHabit')}:{id:uid(),name:t('newNumber'),unit:''});changed();}})));
+    }
+    var n=node(headRow,kids); n.className='node edit'; return n;
+  });
+  var D=DEF[lang()];
+  /* Checkbox, Number and Text are for sections of one's own. A section that was deleted (built-in or not) comes back from ‘Bring back a deleted section’ below, under its old id, so its records show again. */
+  var adders=node(el('h2',{text:t('addSection')}),[el('div',{class:'kid'},el('span',{class:'muted'},t('addNote'),el('br'),t('addEg'))),el('div',{class:'kid'},el('div',{class:'chips'},
+    [['checks',t('tChecks'),t('newChecks')],['numbers',t('tNumbers'),t('newNumbers')],['list',t('tList'),t('newList')]].map(function(a){
+      return el('button',{type:'button',text:a[1],onclick:function(){ var s={id:uid(),type:a[0],name:a[2]}; if(a[0]==='checks'||a[0]==='numbers') s.items=[]; if(a[0]==='todo') s.hint=D.todoHint; if(a[0]==='flow') s.whole=true; T.push(s); changed(); }}); })))]);
+  var defIds=defaultTemplate(lang()).map(function(x){return x.id;});
+  function putBack(x){ var at=-1,a=x._after; delete x._after;
+    if(a===null) at=0; else if(a!==undefined) T.forEach(function(y,i){ if(y.id===a) at=i+1; });
+    if(at<0){ var di=defIds.indexOf(x.id); if(di>=0){ at=0; for(var k=di-1;k>=0&&at===0;k--) T.forEach(function(y,i){ if(y.id===defIds[k]) at=i+1; }); } }
+    T.splice(at<0?T.length:at,0,x); }
+  var back=(DB.trash||[]).filter(function(x){ return !T.some(function(y){return y.id===x.id;}); });
+  defaultTemplate(lang()).forEach(function(d0){ if(!T.some(function(y){return y.id===d0.id;})&&!back.some(function(y){return y.id===d0.id;})) back.push(d0); });
+  var restore=back.length?node(el('h2',{text:t('bringBack')}),[el('div',{class:'kid'},el('span',{class:'muted',text:t('bringBackNote')})),el('div',{class:'kid'},el('div',{class:'chips'},back.map(function(x){
+    return el('button',{type:'button',text:x.name,onclick:function(){ DB.trash=(DB.trash||[]).filter(function(y){return y.id!==x.id;}); putBack(x); changed(); }}); })))]):null;
+  var delNote=el('p',{class:'muted',style:'margin:-8px 0 24px 24px',text:t('delNote')});
+  var sd=el('input',{class:'field',type:'date','aria-label':t('startDate')}); sd.value=DB.settings.startDate||'';
+  var gl=el('input',{class:'field',type:'text','aria-label':t('goal'),placeholder:t('goalHint'),value:DB.settings.goal||''});
+  var pv=el('span',{class:'muted','aria-live':'polite'}); function showTitle(){ pv.textContent=reportTitle(today())||t('reportEmpty'); } showTitle();
+  sd.addEventListener('change',function(){DB.settings.startDate=sd.value||'';changed();});
+  gl.addEventListener('input',function(){DB.settings.goal=gl.value;save();showTitle();});
+  var report=node(el('h2',{text:t('report')}),[
+    el('div',{class:'kid'},el('span',{class:'muted',text:t('reportNote')})),
+    el('div',{class:'kid'},el('label',{class:'line form'},el('span',{class:'label',text:t('startDate')}),sd)),
+    el('div',{class:'kid'},el('label',{class:'line form'},el('span',{class:'label',text:t('goal')}),gl)),
+    el('div',{class:'kid'},pv),
+    el('div',{class:'kid'},el('button',{class:'habit',type:'button','aria-pressed':String(topMemoOn()),onclick:function(){ DB.settings.topMemo=!topMemoOn(); changed(); }},checkSvg(el('span',{class:'check'})),t('topMemoShow'))),
+    el('div',{class:'kid'},el('span',{class:'muted',text:t('topMemoNote',{n:PIN_MAX})})),
+    ]); report.id='report';
+  var week=node(el('h2',{text:t('weekStart')}),[el('div',{class:'kid'},el('div',{class:'chips week',role:'group','aria-label':t('weekStart')},[1,2,3,4,5,6,0].map(function(w){
+    return el('button',{type:'button','aria-pressed':String(DB.settings.weekStart===w),'aria-label':lang()==='ko'?DOWS.ko[w]+'요일':DOWL[w],text:DOWS[lang()][w],onclick:function(){DB.settings.weekStart=w;DB.settings.weekPicked=true;changed();}}); })))]);
+  var langs=node(el('h2',{text:t('language')}),[el('div',{class:'kid'},el('div',{class:'chips',role:'group'},[['ko','한국어'],['en','English']].map(function(l){
+    return el('button',{type:'button','aria-pressed':String(lang()===l[0]),text:l[1],onclick:function(){DB.settings.lang=l[0];DB.settings.langPicked=true;relabel(l[0]);applyLang();changed();}}); })))]);
+  var bk=[el('div',{class:'kid'},el('span',{class:'muted',text:t('backupNote')}))];
+  if(UI.backup!=null){ var ta=el('textarea',{class:'box',readonly:true,'aria-label':t('backupText')}); ta.value=UI.backup;
+    bk.push(el('div',{class:'kid block'},ta,el('div',{class:'rowf',style:'margin-top:8px'},el('button',{class:'solid',type:'button',text:t('copyBackup'),onclick:function(e){
+      var btn=e.currentTarget; function ok(){btn.textContent=t('copied');} ta.focus(); ta.select();
+      try{ if(navigator.clipboard&&navigator.clipboard.writeText) navigator.clipboard.writeText(ta.value).then(ok,function(){ try{document.execCommand('copy');ok();}catch(_){} }); else { document.execCommand('copy'); ok(); } }catch(_){}
+    }}),el('span',{class:'muted',text:t('copyHint')})))); }
+  else bk.push(el('div',{class:'kid'},el('button',{class:'link',type:'button',text:t('makeBackup'),onclick:function(){saveNow();UI.backup=JSON.stringify(DB);render();}})));
+  if(INSTALLABLE){
+    var fin=el('input',{type:'file',accept:'.json,application/json,text/plain',style:'display:none'});
+    fin.addEventListener('change',function(){ var f=fin.files&&fin.files[0]; if(!f) return; var rd=new FileReader();
+      rd.onload=function(){ var txt=String(rd.result||''),o=null;
+        try{ var i0=txt.indexOf('{'),i1=txt.lastIndexOf('}'); o=JSON.parse(i0>=0&&i1>i0?txt.slice(i0,i1+1):txt); }catch(e){ o=null; }
+        if(o&&Array.isArray(o.template)&&o.days&&typeof o.days==='object'){ UI.importText=txt; UI.importErr=''; UI.mergeMsg=t('fileRead',{n:Object.keys(o.days).length}); }
+        else { UI.importErr=t('fileBad'); UI.mergeMsg=null; }
+        render(); };
+      rd.onerror=function(){ UI.importErr=t('fileBad'); UI.mergeMsg=null; render(); };
+      rd.readAsText(f); fin.value=''; });
+    bk.push(el('div',{class:'kid'},el('div',{class:'rowf',style:'gap:18px;flex-wrap:wrap'},
+      el('button',{class:'link',type:'button',text:t('saveFile'),onclick:saveBackupFile}),
+      el('button',{class:'link',type:'button',text:t('pickFile'),onclick:function(){fin.click();}}),fin),
+      IOS?el('p',{class:'muted',style:'margin:4px 0 0;font-size:13px',text:t('saveIOS')}):null));
+  }
+  function needsBackup(id,label,sure,fn){            /* acts only once there is something to read; with `sure` it asks once more first */
+    if(sure&&UI.confirm===id) return twoStep(id,label,sure,fn,'link');
+    return el('button',{class:'link',type:'button',text:label,onclick:function(){
+      if(!String(UI.importText||'').trim()){ UI.mergeMsg=null; UI.importErr=t(INSTALLABLE?'importEmptyFile':'importEmpty'); render(); return; }
+      UI.importErr=''; if(sure){ UI.mergeMsg=null; UI.confirm=id; render(); } else fn(); }});
+  }
+  /* Saving a file. An iPhone (above all the Home Screen app) ignores download links, so there the file goes through the share sheet: 'Save to Files', mail, AirDrop. */
+  function saveBackupFile(){ saveNow();
+    var json=JSON.stringify(DB);
+    saveFileSmart('journal-backup-json-'+keyOf(today()),json,[['json','application/json'],['txt','text/plain']],function(){ UI.backup=json; UI.importErr=''; UI.mergeMsg=t('saveAsText'); render(); });
+  }
+  function readImport(){ var raw=UI.importText,i0=raw.indexOf('{'),i1=raw.lastIndexOf('}'); return JSON.parse(i0>=0&&i1>i0?raw.slice(i0,i1+1):raw); }
+  var imp=el('textarea',{class:'box','aria-label':t('importAria'),placeholder:t('pasteHere')}); imp.value=UI.importText; imp.addEventListener('input',function(){UI.importText=imp.value;});
+  bk.push(el('div',{class:'kid block'},imp,UI.importErr?el('p',{class:'muted',style:'color:var(--bad);margin:6px 0 0',text:UI.importErr}):null,
+    UI.mergeMsg?el('p',{class:'muted',style:'margin:6px 0 0;color:var(--water)',role:'status',text:UI.mergeMsg}):null,
+    UI.confirm==='import'?el('p',{class:'muted',style:'color:var(--bad);margin:6px 0 0',role:'alert',text:t('restoreWarn')}):null,
+    el('div',{class:'rowf',style:'margin-top:8px;gap:18px;flex-wrap:wrap'},
+      needsBackup('merge',t('merge'),null,function(){
+        try{ var r=mergeBackup(readImport()); UI.importText=''; UI.importErr=''; UI.backup=null;
+          UI.mergeMsg=((r.added||r.grew)?t('merged',{a:r.added,b:r.grew}):r.pins?t('mergedJust'):t('mergedNone'))+(r.pins?' '+t('mergedPins',{n:r.pins}):''); saveNow(); render(); }
+        catch(e){ UI.mergeMsg=null; UI.importErr=t('importErr'); render(); } }),
+      needsBackup('import',t('restore'),t('restoreSure'),function(){
+        try{ adopt(readImport()); UI.importText=''; UI.importErr=''; UI.backup=null; saveNow(); go('day'); }
+        catch(e){ UI.mergeMsg=null; UI.importErr=t('importErr'); render(); } })),
+    el('p',{class:'muted',style:'margin:8px 0 0;font-size:13px',text:t('mergeNote')})));
+  bk.push(el('div',{class:'kid'},el('button',{class:'link',type:'button',text:t('allTextOpen'),onclick:function(){go('alltext');}}),
+    el('p',{class:'muted',style:'margin:4px 0 0;font-size:13px',text:t('allTextHint',{btn:t(INSTALLABLE?'saveFile':'makeBackup')})})));
+  bk.push(el('div',{class:'kid'},twoStep('wipe',t('wipe'),t('wipeSure'),function(){ DB.days={}; DB.pins=[]; DB.trash=[]; DB.template=defaultTemplate(lang()); saveNow(); go('day'); },'link danger')));
+  var end=el('div',{class:'endbar'},el('button',{class:'solid',type:'button',text:t('back'),onclick:function(){go('day');}}),
+    el('p',{class:'muted',style:'margin:14px 0 0;text-align:center;font-size:12px',text:t('version')+' '+BUILD}));
+  return [head,report,delNote].concat(secs,[adders,restore,week,langs,node(el('h2',{text:t('backup')}),bk),end]);
+}
+
+/* ---------- boot ---------- */
+function applyLang(){ document.documentElement.lang=lang(); document.title=t('appName'); }
+function render(){ var root=$('#root'); root.replaceChildren.apply(root,(UI.screen==='summary'?screenSummary():UI.screen==='settings'?screenSettings():UI.screen==='export'?screenExport():UI.screen==='alltext'?screenAllText():screenDay()).filter(Boolean)); renderStatus(); }
+function rollover(){ var k=keyOf(today()); if(k===todayKeySeen) return; var was=todayKeySeen; todayKeySeen=k;
+  if(UI.screen==='day'&&keyOf(UI.date)===was&&!(document.activeElement&&document.activeElement.tagName==='TEXTAREA')){ UI.date=today(); render(); } }
+document.addEventListener('visibilitychange',function(){ if(document.visibilityState==='hidden'){ if(saveTimer) saveNow(); } else rollover(); });
+window.addEventListener('pagehide',function(){ if(saveTimer) saveNow(); });
+setInterval(rollover,60000);
+function softRender(){ var a=document.activeElement; if(UI.screen==='day'&&!(a&&/^(TEXTAREA|INPUT|SELECT)$/.test(a.tagName))) render(); }
+window.addEventListener('beforeinstallprompt',function(e){ e.preventDefault(); installEvt=e; softRender(); });
+window.addEventListener('appinstalled',function(){ installed=true; installEvt=null; softRender(); });
+load(); applyLang(); dayRec(keyOf(today()),true); render(); save();
+if(HOSTED&&'serviceWorker' in navigator&&(location.protocol==='https:'||location.hostname==='localhost')){ try{navigator.serviceWorker.register('sw.js');}catch(e){} }
+try{ if(HOSTED&&navigator.storage&&navigator.storage.persist) navigator.storage.persist(); }catch(e){}
+})();
+</script>
+</body>
+</html>
