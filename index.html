@@ -381,7 +381,7 @@ function el(tag,attrs){
   function add(x){ if(x==null||x===false) return; if(Array.isArray(x)){x.forEach(add);return;} n.appendChild(x.nodeType?x:document.createTextNode(String(x))); }
   return n;
 }
-var BUILD='9.20 12:37';   /* stamped by the build script */
+var BUILD='9.20 18:31';   /* stamped by the build script */
 function lang(){return STR[DB.settings.lang]?DB.settings.lang:'ko';}
 function t(k,vars){ var s=STR[lang()][k]; if(s==null) s=STR.en[k]!=null?STR.en[k]:k;
   return vars?s.replace(/\{(\w+)\}/g,function(m,a){return vars[a]!=null?vars[a]:'';}):s; }
@@ -540,10 +540,11 @@ function mergeBackup(o){
   normalize();
   return {added:added,grew:grew,pins:pinned};
 }
-function load(){ try{ var raw=localStorage.getItem(KEY); if(raw) adopt(JSON.parse(raw)); }catch(e){ if(e&&e.message!=='shape') storageOk=false; } }
+var lastRaw=null;   /* what this window last read from, or wrote to, storage */
+function load(){ try{ var raw=localStorage.getItem(KEY); if(raw){ adopt(JSON.parse(raw)); lastRaw=raw; } }catch(e){ if(e&&e.message!=='shape') storageOk=false; } }
 function saveNow(){
   clearTimeout(saveTimer); saveTimer=null;
-  try{ localStorage.setItem(KEY,JSON.stringify(DB)); storageOk=true; lastSaved=new Date(); }catch(e){ storageOk=false; }
+  try{ var s=JSON.stringify(DB); localStorage.setItem(KEY,s); lastRaw=s; storageOk=true; lastSaved=new Date(); }catch(e){ storageOk=false; }
   renderStatus();
 }
 function save(){ clearTimeout(saveTimer); saveTimer=setTimeout(saveNow,250); }
@@ -1191,12 +1192,47 @@ function applyLang(){ document.documentElement.lang=lang(); document.title=t('ap
 function render(){ var root=$('#root'); root.replaceChildren.apply(root,(UI.screen==='summary'?screenSummary():UI.screen==='settings'?screenSettings():UI.screen==='export'?screenExport():UI.screen==='alltext'?screenAllText():screenDay()).filter(Boolean)); renderStatus(); }
 function rollover(){ var k=keyOf(today()); if(k===todayKeySeen) return; var was=todayKeySeen; todayKeySeen=k;
   if(UI.screen==='day'&&keyOf(UI.date)===was&&!(document.activeElement&&document.activeElement.tagName==='TEXTAREA')){ UI.date=today(); render(); } }
-document.addEventListener('visibilitychange',function(){ if(document.visibilityState==='hidden'){ if(saveTimer) saveNow(); } else rollover(); });
+/* The same app may be open in another window (a browser tab and the installed app share one store). Each window saves its whole copy,
+   so before anything is written from here we read in what the other window saved. Skipped while this window still has something unsaved. */
+function resync(){
+  if(saveTimer||!storageOk) return;
+  var raw; try{ raw=localStorage.getItem(KEY); }catch(e){ return; }
+  if(!raw||raw===lastRaw) return;
+  try{ adopt(JSON.parse(raw)); }catch(e){ return; }
+  lastRaw=raw; UI.confirm=null; UI.pinUndo=null; UI.backup=null; applyLang();
+  if(UI.screen!=='export'&&UI.screen!=='alltext') render();
+}
+document.addEventListener('visibilitychange',function(){ if(document.visibilityState==='hidden'){ if(saveTimer) saveNow(); } else { resync(); rollover(); checkUpdate(); } });
+window.addEventListener('focus',resync);
+window.addEventListener('pageshow',function(e){ if(e.persisted) resync(); });
 window.addEventListener('pagehide',function(){ if(saveTimer) saveNow(); });
-setInterval(rollover,60000);
+setInterval(function(){ rollover(); if(Date.now()-lastCheck>3600000) checkUpdate(); },60000);
 function softRender(){ var a=document.activeElement; if(UI.screen==='day'&&!(a&&/^(TEXTAREA|INPUT|SELECT)$/.test(a.tagName))) render(); }
 window.addEventListener('beforeinstallprompt',function(e){ e.preventDefault(); installEvt=e; softRender(); });
 window.addEventListener('appinstalled',function(){ installed=true; installEvt=null; softRender(); });
+/* ---------- picking up a new version ----------
+   Coming back to the app (and a moment after opening it) we read the BUILD of the index.html that is on the site.
+   If it differs from ours, the page reloads itself. While someone is writing, or is away from today's page,
+   the reload waits and happens the instant they next come back to the app. */
+var lastAct=0,lastCheck=0,updPending='',UPD_KEY='molip-update-tried';
+['input','pointerdown','keydown'].forEach(function(n){ document.addEventListener(n,function(){ lastAct=Date.now(); },true); });
+function quietNow(){ return UI.screen==='day'&&keyOf(UI.date)===keyOf(today())&&Date.now()-lastAct>8000; }
+function applyUpdate(nb){ if(!quietNow()){ updPending=nb; return; }
+  try{ sessionStorage.setItem(UPD_KEY,nb+'|'+Date.now()); }catch(e){}   /* per window: one window updating must not hold the others back */
+  if(saveTimer) saveNow();   /* write only what is still unsaved here: another open window may hold newer records */
+  location.reload(); }
+function checkUpdate(){
+  if(updPending){ applyUpdate(updPending); return; }
+  if(!HOSTED||!('serviceWorker' in navigator)||!navigator.serviceWorker.controller) return;
+  var now=Date.now(); if(now-lastCheck<60000) return; lastCheck=now;
+  fetch(location.pathname+'?fresh=1',{cache:'no-cache'}).then(function(r){ return r.ok?r.text():''; }).then(function(txt){
+    var m=/var BUILD='([^']*)'/.exec(txt); if(!m||m[1]===BUILD) return;
+    var p=''; try{ p=sessionStorage.getItem(UPD_KEY)||''; }catch(e){} p=p.split('|');
+    if(p[0]===m[1]&&now-Number(p[1])<1800000) return;   /* already reloaded for this version a moment ago: never loop */
+    applyUpdate(m[1]);
+  }).catch(function(){});
+}
+setTimeout(checkUpdate,3000);
 load(); applyLang(); dayRec(keyOf(today()),true); render(); save();
 if(HOSTED&&'serviceWorker' in navigator&&(location.protocol==='https:'||location.hostname==='localhost')){ try{navigator.serviceWorker.register('sw.js');}catch(e){} }
 try{ if(HOSTED&&navigator.storage&&navigator.storage.persist) navigator.storage.persist(); }catch(e){}
