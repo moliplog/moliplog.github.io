@@ -154,7 +154,20 @@ select.h{min-width:96px} select.p{min-width:70px}
 /* larger text sizes: only the letters grow. The white space keeps the size it has at 'Normal' (about 26px between two memos, 9.6px between lines, as seen on screen) */
 .ts1 .kid.text{padding:6px 0} .ts1 .kid.text::before{top:22px} .ts1 .kid textarea{line-height:1.55}
 .ts2 .kid.text{padding:5px 0} .ts2 .kid.text::before{top:20.5px} .ts2 .kid textarea{line-height:1.5}
-.ts1 .tcheck,.ts2 .tcheck{margin-top:8px}
+.ts1 .tcheck,.ts2 .tcheck{margin-top:7px}
+/* a to-do row and a habit row are the same kind of row (a box, then letters), so they are the same height at every text size:
+   52px at 'Normal'; at the larger sizes the letters' 16px grow with the zoom and the 36px around them stay as they are on screen (row = 16px + 36px/zoom). */
+.ts1 .kid.text.todo{padding:calc((16px + 36px/1.1 - 37px)/2) 0;--minh:37} .ts1 .kid.text.todo::before{top:calc((16px + 36px/1.1 - 37px)/2 + 16px)}
+.ts2 .kid.text.todo{--minh:36}
+/* on the day's page the to-do's box sits where the habit's box sits: centred on the (first) line of letters */
+.kid.text.todo .tcheck{margin-top:7px} .ts1 .kid.text.todo .tcheck{margin-top:6.5px} .ts2 .kid.text.todo .tcheck{margin-top:6px}
+/* rows that hold letters only (every list but the to-dos): 40px from one row to the next at 'Normal', the same as the memo under the journal title.
+   At the first 52px these rows looked empty beside rows that carry a box (to-dos, habits): thin letters weigh far less than a box, so the same blank reads wider.
+   At the larger text sizes these rows are 'Normal' magnified: 40px x zoom (44px, 48px on screen). Holding the blank at its 'Normal' size on screen was tried
+   and looked cramped: the eye reads the blank between two rows against the size of the letters, so it has to grow with them. */
+.kid.text:not(.todo){padding:1px 0} .kid.text:not(.todo)::before{top:17px}
+.ts1 .kid.text:not(.todo){padding:1px 0} .ts1 .kid.text:not(.todo)::before{top:17px}
+.ts2 .kid.text:not(.todo){padding:1px 0} .ts2 .kid.text:not(.todo)::before{top:16.5px}
 /* larger text sizes, the rest of the page: the same rule as the written bullets above. Only the letters' share grows; rows with buttons, section titles and the blanks between sections keep the size they have at 'Normal' on screen (before this they all grew 1.1x / 1.2x with the zoom). 'Normal' is not touched: every rule here needs .ts1 or .ts2 */
 .ts1{--z:1.1} .ts2{--z:1.2}
 :is(.ts1,.ts2) .node{margin-bottom:calc(28px/var(--z))}
@@ -165,11 +178,11 @@ select.h{min-width:96px} select.p{min-width:70px}
 :is(.ts1,.ts2) .kid:not(.text)::before{transform:translateY(calc(7px/var(--z) - 7px))}   /* dots placed by a fixed top follow the smaller padding */
 :is(.ts1,.ts2) .kid:not(.block):has(>.line)::before,:is(.ts1,.ts2) .kid:has(>.habit)::before,:is(.ts1,.ts2) .kid:has(>.rowf>.field)::before,:is(.ts1,.ts2) .kid:has(>.mini)::before{transform:none}   /* dots centred on a control already follow it */
 :is(.ts1,.ts2) select,:is(.ts1,.ts2) .num{height:calc(16px + 24px/var(--z))}
-:is(.ts1,.ts2) .habit{min-height:calc(16px + 26px/var(--z))}
+:is(.ts1,.ts2) .habit{min-height:calc(16px + 22px/var(--z))}
 :is(.ts1,.ts2) .club,:is(.ts1,.ts2) .pins{margin-bottom:calc(24px/var(--z))}
 :is(.ts1,.ts2) .club:has(+.pins){margin-bottom:0}
 .kid textarea:focus::placeholder{color:transparent}
-.habit{display:flex;align-items:center;gap:12px;width:100%;min-height:42px;padding:2px 0;border:0;background:none;text-align:left;font-weight:500}
+.habit{display:flex;align-items:center;gap:10px;width:100%;min-height:38px;padding:2px 0;border:0;background:none;text-align:left;font-weight:500}
 .check{flex:none;width:24px;height:24px;border-radius:7px;border:1.5px solid var(--ink-2);display:grid;place-items:center}
 .check svg{width:14px;height:14px;opacity:0}
 .habit[aria-pressed="true"] .check{background:var(--water);border-color:var(--water);color:var(--on-water)}
@@ -246,8 +259,8 @@ input[type="date"].field.blank:focus::before{content:none}
 .tag{font-size:12px;color:var(--ink-2);border:1px solid var(--line);border-radius:6px;padding:1px 6px;margin-left:8px;font-weight:400}
 .kid.todo{display:flex;gap:10px;align-items:flex-start}
 .kid.todo textarea{flex:1;min-width:0}
-.tcheck{flex:none;width:22px;height:22px;margin-top:9px;border-radius:6px;border:1.5px solid var(--ink-2);background:none;padding:0;display:grid;place-items:center;color:var(--on-water)}
-.tcheck svg{width:13px;height:13px;opacity:0}
+.tcheck{flex:none;width:24px;height:24px;margin-top:8px;border-radius:7px;border:1.5px solid var(--ink-2);background:none;padding:0;display:grid;place-items:center;color:var(--on-water)}
+.tcheck svg{width:14px;height:14px;opacity:0}
 .tcheck[aria-pressed="true"]{background:var(--water);border-color:var(--water)} .tcheck[aria-pressed="true"] svg{opacity:1}
 .tcheck:disabled{opacity:.3}
 .kid.todo.done textarea{color:var(--ink-2);text-decoration:line-through}
@@ -400,7 +413,7 @@ function el(tag,attrs){
   function add(x){ if(x==null||x===false) return; if(Array.isArray(x)){x.forEach(add);return;} n.appendChild(x.nodeType?x:document.createTextNode(String(x))); }
   return n;
 }
-var BUILD='9.20 19:55';   /* stamped by the build script */
+var BUILD='9.20 20:54';   /* stamped by the build script */
 function lang(){return STR[DB.settings.lang]?DB.settings.lang:'ko';}
 function t(k,vars){ var s=STR[lang()][k]; if(s==null) s=STR.en[k]!=null?STR.en[k]:k;
   return vars?s.replace(/\{(\w+)\}/g,function(m,a){return vars[a]!=null?vars[a]:'';}):s; }
@@ -626,10 +639,11 @@ function pageTurn(n){
 function node(head,kids){ return el('section',{class:'node'},el('span',{class:'dot'}),head,el('div',{class:'kids'},kids)); }
 var CHECK='<svg viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><path d="M3 8.5l3.2 3.2L13 4.8"/></svg>';
 function checkSvg(n){ n.innerHTML=CHECK; return n; }
+function minH(ta){ var v=0; try{ v=parseFloat(getComputedStyle(ta).getPropertyValue('--minh')); }catch(e){} return v>0?v:38; }   /* 38px, unless the row's CSS says otherwise */
 function autosize(ta){
   var ph=!ta.value&&ta.placeholder&&document.activeElement!==ta;      /* measure the example text when that is all there is */
   if(ph) ta.value=ta.placeholder;
-  ta.style.height='auto'; ta.style.height=Math.max(ta.scrollHeight,38)+'px';
+  ta.style.height='auto'; ta.style.height=Math.max(ta.scrollHeight,minH(ta))+'px';
   if(ph) ta.value='';
 }
 
@@ -657,7 +671,7 @@ function listEditor(sec,key,sumEl){
   function insertAfter(wrap,text){ var nr={id:uid(),text:text||'',done:false}; rows.splice(rows.indexOf(wrap._row)+1,0,nr); var ne=rowEl(nr); box.insertBefore(ne,wrap.nextSibling); return ne; }
   function rowEl(r){
     var ta=el('textarea',{rows:'1','aria-label':t(r?'item':'newItem',{name:sec.name}),placeholder:r?'':(sec.hint||t('write')),enterkeyhint:'enter'});
-    ta.addEventListener('focus',function(){ if(!ta.value) ta.style.height='38px'; }); ta.addEventListener('blur',function(){ if(!ta.value) autosize(ta); });
+    ta.addEventListener('focus',function(){ if(!ta.value) ta.style.height=minH(ta)+'px'; }); ta.addEventListener('blur',function(){ if(!ta.value) autosize(ta); });
     var cb=todo?checkSvg(el('button',{class:'tcheck',type:'button','aria-label':t('markDone'),'aria-pressed':String(!!(r&&r.done)),disabled:!r})):null;
     var wrap=el('div',{class:'kid text'+(todo?' todo':'')+(r&&r.done?' done':'')},cb,ta); wrap._row=r||null; wrap._ta=ta; ta.value=r?r.text:'';
     if(cb) cb.addEventListener('click',function(){ if(!wrap._row) return; wrap._row.done=!wrap._row.done;
@@ -713,7 +727,7 @@ function memoBlock(d){
     }
     wrap._fill=function(text){ ta.value=text; typed(); };
     ta.addEventListener('input',typed);
-    ta.addEventListener('focus',function(){ if(!ta.value) ta.style.height='38px'; });
+    ta.addEventListener('focus',function(){ if(!ta.value) ta.style.height=minH(ta)+'px'; });
     ta.addEventListener('keydown',function(e){
       if(e.isComposing||e.keyCode===229) return;
       if(e.key==='Enter'&&!e.shiftKey){ e.preventDefault(); var nx=wrap._pin?addBlank():null; if(nx) nx._ta.focus(); else ta.blur(); }
