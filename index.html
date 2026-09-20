@@ -151,6 +151,10 @@ select.h{min-width:96px} select.p{min-width:70px}
 .kid textarea.box{border:1px solid var(--line);border-radius:10px;background:var(--surface);padding:10px 12px;overflow:auto;resize:vertical}
 .kid textarea.box:focus{border-color:var(--water)}
 .kid textarea::placeholder{color:var(--ink-2);opacity:.45}
+/* larger text sizes: only the letters grow. The white space keeps the size it has at 'Normal' (about 26px between two memos, 9.6px between lines, as seen on screen) */
+.ts1 .kid.text{padding:6px 0} .ts1 .kid.text::before{top:22px} .ts1 .kid textarea{line-height:1.55}
+.ts2 .kid.text{padding:5px 0} .ts2 .kid.text::before{top:20.5px} .ts2 .kid textarea{line-height:1.5}
+.ts1 .tcheck,.ts2 .tcheck{margin-top:8px}
 .kid textarea:focus::placeholder{color:transparent}
 .habit{display:flex;align-items:center;gap:12px;width:100%;min-height:42px;padding:2px 0;border:0;background:none;text-align:left;font-weight:500}
 .check{flex:none;width:24px;height:24px;border-radius:7px;border:1.5px solid var(--ink-2);display:grid;place-items:center}
@@ -383,7 +387,7 @@ function el(tag,attrs){
   function add(x){ if(x==null||x===false) return; if(Array.isArray(x)){x.forEach(add);return;} n.appendChild(x.nodeType?x:document.createTextNode(String(x))); }
   return n;
 }
-var BUILD='9.20 18:45';   /* stamped by the build script */
+var BUILD='9.20 19:18';   /* stamped by the build script */
 function lang(){return STR[DB.settings.lang]?DB.settings.lang:'ko';}
 function t(k,vars){ var s=STR[lang()][k]; if(s==null) s=STR.en[k]!=null?STR.en[k]:k;
   return vars?s.replace(/\{(\w+)\}/g,function(m,a){return vars[a]!=null?vars[a]:'';}):s; }
@@ -1194,7 +1198,7 @@ function screenSettings(){
 /* ---------- boot ---------- */
 function applyLang(){ document.documentElement.lang=lang(); document.title=t('appName'); }
 var TEXT_ZOOM=[1,1.1,1.2];   /* text size: the whole page grows by the same ratio, so nothing on the day page has to change */
-function applyTextSize(){ var z=TEXT_ZOOM[DB.settings.textSize|0]||1,r=$('#root'); r.style.zoom=z===1?'':String(z); r.classList.toggle('narrow',window.innerWidth/z<360); }
+function applyTextSize(){ var i=DB.settings.textSize|0,z=TEXT_ZOOM[i]||1,r=$('#root'); r.style.zoom=z===1?'':String(z); r.classList.toggle('narrow',window.innerWidth/z<360); r.classList.toggle('ts1',i===1); r.classList.toggle('ts2',i===2); }
 window.addEventListener('resize',applyTextSize);
 function render(){ var root=$('#root'); root.replaceChildren.apply(root,(UI.screen==='summary'?screenSummary():UI.screen==='settings'?screenSettings():UI.screen==='export'?screenExport():UI.screen==='alltext'?screenAllText():screenDay()).filter(Boolean)); renderStatus(); }
 function rollover(){ var k=keyOf(today()); if(k===todayKeySeen) return; var was=todayKeySeen; todayKeySeen=k;
