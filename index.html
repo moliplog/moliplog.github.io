@@ -267,7 +267,7 @@ en:{appName:'Immersion Journal',saved:'Saved on this device {t}',local:'Records 
  daysAgo:'{n} days ago',inDays:'in {n} days',goToday:'Go to today',pickDate:'Pick a date',
  pitch:'Molip is an immersion journal, one page a day. Log your focused hours and intensity once a day, and after a week your immersion pattern shows.',intro:'Write under each section, and tap ‘Summary’ beside a section to see its week and month. For other days use the arrows, or tap the small date under the title to open a calendar.',gotIt:'Got it',
  warnStorage:'This browser is blocking storage, so your records will disappear when you close this window. Turn off private browsing or open the app in another browser.',
- summary:'Summary',openSummary:'Open {name} summary',sumOf:'{name} summary',noSections:'There are no sections yet. Add some in ‘Sections & settings’.',
+ summary:'Summary',openSummary:'Open {name} summary',sumOf:'{name} summary',eventsPlain:'Events',noSections:'There are no sections yet. Add some in ‘Sections & settings’.',
  write:'Write here',newItem:'{name}: new item',item:'{name} item',entries:'{n}',hours:'Hours',hoursOf:'{p} hours',intensityOf:'{p} intensity',hUnit:'{n} h',
  daySum:'{h} h, avg {p}%',daySumNoAvg:'{h} h',noChecks:'Add things to check in Sections & settings.',noNumbers:'Add numbers to track in Sections & settings.',none:'Not recorded',
  copyWeek:'Copy the whole week’s records as text',weekText:'Week as text',weekTextSub:'Check it, then copy it into an email and delete what you don’t need',copyText:'Copy text',shareText:'Share',weekTextAria:'The week as text',weeklySummary:'Weekly summary',noRecordsDay:'no records',sumFlowLine:'{h} h, average intensity {p}%, {d} days recorded',sumTodoLine:'{a} done, {b} unfinished',sumListLine:'{n} entries',avgShort:'avg',
@@ -309,7 +309,7 @@ ko:{appName:'몰입 일지',saved:'이 기기에 저장됨 {t}',local:'기록은
  daysAgo:'{n}일 전',inDays:'{n}일 뒤',goToday:'오늘로 가기',pickDate:'날짜 고르기',
  pitch:'Molip은 매일 한 페이지씩 적는 몰입 일지예요. 하루 한 번 몰입 시간과 몰입도를 적으면, 일주일 뒤 내 몰입 패턴이 보여요.',intro:'각 항목 아래에 그날의 기록을 남기고, 항목 오른쪽의 ‘요약’을 누르면 주간·월간 기록을 모아 볼 수 있어요. 다른 날은 양옆의 화살표로 가거나, 제목 밑의 작은 날짜를 누르면 달력이 나와요.',gotIt:'알겠어요',
  warnStorage:'이 브라우저가 저장을 막고 있어서, 창을 닫으면 기록이 사라져요. 사생활 보호 모드를 끄거나 다른 브라우저로 열어 주세요.',
- summary:'요약',openSummary:'{name} 요약 열기',sumOf:'{name} 요약',noSections:'기록할 항목이 없어요. ‘항목과 설정’에서 항목을 추가하세요.',
+ summary:'요약',openSummary:'{name} 요약 열기',sumOf:'{name} 요약',eventsPlain:'이벤트',noSections:'기록할 항목이 없어요. ‘항목과 설정’에서 항목을 추가하세요.',
  write:'적기',newItem:'{name} 새 항목',item:'{name} 항목',entries:'{n}건',hours:'시간',hoursOf:'{p} 몰입 시간',intensityOf:'{p} 몰입도',hUnit:'{n}시간',
  daySum:'{h}시간, 평균 {p}%',daySumNoAvg:'{h}시간',noChecks:'항목과 설정에서 체크할 것을 추가하세요.',noNumbers:'항목과 설정에서 기록할 숫자를 추가하세요.',none:'기록 없음',
  copyWeek:'일주일치 전체 기록을 텍스트로 복사',weekText:'주간 텍스트',weekTextSub:'확인한 뒤 복사해서 이메일에 붙이고, 필요 없는 부분은 지우세요',copyText:'텍스트 복사',shareText:'공유',weekTextAria:'일주일치 텍스트',weeklySummary:'주간 요약',noRecordsDay:'기록 없음',sumFlowLine:'{h}시간, 평균 몰입도 {p}%, 기록한 날 {d}일',sumTodoLine:'완료 {a}개, 미완료 {b}개',sumListLine:'{n}건',avgShort:'평균',
@@ -381,7 +381,7 @@ function el(tag,attrs){
   function add(x){ if(x==null||x===false) return; if(Array.isArray(x)){x.forEach(add);return;} n.appendChild(x.nodeType?x:document.createTextNode(String(x))); }
   return n;
 }
-var BUILD='9.19 14:28';   /* stamped by the build script */
+var BUILD='9.20 11:20';   /* stamped by the build script */
 function lang(){return STR[DB.settings.lang]?DB.settings.lang:'ko';}
 function t(k,vars){ var s=STR[lang()][k]; if(s==null) s=STR.en[k]!=null?STR.en[k]:k;
   return vars?s.replace(/\{(\w+)\}/g,function(m,a){return vars[a]!=null?vars[a]:'';}):s; }
@@ -916,10 +916,13 @@ function screenTodo(sec){
   if(old.length) out.push(group(t('earlier'),t('since',{date:md(old[old.length-1].date)}),old));
   return out;
 }
+/* 'Today’s events' is right on a day page but reads oddly over a week or a month, so there the built-in name drops its 'today'. A name the person typed is kept as it is. */
+function sumName(sec){ return (sec.id==='events'&&(sec.name===DEF.ko.events||sec.name===DEF.en.events))?t('eventsPlain'):sec.name; }
 function screenSummary(){
   var sec=DB.template.filter(function(s){return s.id===UI.sec;})[0]; if(!sec){ UI.screen='day'; return screenDay(); }
   if(sec.type==='todo') return screenTodo(sec);
   var mode=UI.mode,a=UI.anchor,dates=periodDates(mode,a),prev=periodDates(mode,prevAnchor(mode,a)),td=today(),title,sub,now;
+  var plain=sumName(sec),renamed=plain!==sec.name,headName=renamed?t('sumOf',{name:plain}):sec.name;
   if(mode==='week'){ var w=Math.round(daysBetween(dates[0],weekStartOf(td))/7); now=w===0;
     title=lang()==='ko'?md(dates[0])+' '+dow(dates[0])+' – '+md(dates[6])+' '+dow(dates[6]):md(dates[0])+' – '+md(dates[6]);
     sub=w===0?t('thisWeek'):w===-1?t('lastWeek'):w<0?t('weeksAgo',{n:-w}):t('inWeeks',{n:w}); }
@@ -928,7 +931,7 @@ function screenSummary(){
     sub=m===0?t('thisMonth'):m===-1?t('lastMonth'):m<0?t('monthsAgo',{n:-m}):t('inMonths',{n:m}); }
   function shift(n){ UI.anchor=mode==='week'?addDays(a,7*n):new Date(a.getFullYear(),a.getMonth()+n,1); render(); }
   var head=el('header',{class:'top'},
-    el('div',{class:'bar'},el('button',{class:'link',type:'button',text:t('back'),onclick:function(){go('day');}}),el('span',{class:'muted',text:t('sumOf',{name:sec.name})})),
+    el('div',{class:'bar'},el('button',{class:'link',type:'button',text:t('back'),onclick:function(){go('day');}}),renamed?null:el('span',{class:'muted',text:t('sumOf',{name:sec.name})})),
     el('div',{class:'datenav'},el('button',{class:'icon-btn',type:'button','aria-label':t(mode==='week'?'prevWeek':'prevMonth'),text:'‹',onclick:function(){pageTurn(-1);}}),
       el('div',{class:'when'},el('h1',{text:title}),el('p',null,sub,now?null:el('button',{class:'link',type:'button',text:t(mode==='week'?'toThisWeek':'toThisMonth'),onclick:function(){UI.anchor=td;render();}}))),
       el('button',{class:'icon-btn',type:'button','aria-label':t(mode==='week'?'nextWeek':'nextMonth'),text:'›',onclick:function(){pageTurn(1);}})),
@@ -942,7 +945,7 @@ function screenSummary(){
       memoLink=el('div',{style:'margin:4px 0 0 24px'},
         el('button',{class:'link',type:'button','aria-expanded':String(open),text:t(open?'memoHide':'memoLink',{n:mem.length,name:sec.name}),onclick:function(){UI.memoOpen=open?null:sec.id;render();}}),
         open?el('div',{class:'kids',style:'margin-top:4px;margin-bottom:10px'},mem.map(function(m){ return el('div',{class:'kid'},el('button',{class:'entry',type:'button',onclick:function(){goDay(m.d);}},el('span',{class:'d',text:md(m.d)+' '+dow(m.d)}),el('span',{text:m.r.text}))); })):null); } }
-  var wrap=sec.type==='flow'?el('section',{class:'node'},el('span',{class:'dot'}),el('h2',{text:sec.name}),body):node(el('h2',{text:sec.name}),body);
+  var wrap=sec.type==='flow'?el('section',{class:'node'},el('span',{class:'dot'}),el('h2',{text:sec.name}),body):node(el('h2',{text:headName}),body);
   var copy=mode==='week'?el('p',{style:'margin:4px 0 0 24px'},el('button',{class:'link',type:'button',text:t('copyWeek'),onclick:function(){go('export',{exportText:null});}})):null;
   return [head,wrap,memoLink,copy];
 }
@@ -1005,7 +1008,7 @@ function weekText(anchor){
     else if(sec.type==='numbers'){ var parts=(sec.items||[]).map(function(it){ var v=avg(numVals(dates,sec.id,it.id)); return v==null?null:it.name+' '+t('avgShort')+' '+valText(v,it); }).filter(Boolean); if(parts.length) line=parts.join(', '); }
     else if(sec.type==='todo'){ dates.forEach(function(d){(secVal(keyOf(d),sec.id)||[]).forEach(function(r){ if(r.done) a++; else b++; });}); if(a+b) line=t('sumTodoLine',{a:a,b:b}); }
     else { dates.forEach(function(d){ n+=(secVal(keyOf(d),sec.id)||[]).length; }); if(n) line=(n===1&&lang()==='en')?'1 entry':t('sumListLine',{n:n}); }
-    L.push('- '+sec.name+': '+line);
+    L.push('- '+sumName(sec)+': '+line);
   });
   dates.forEach(function(d){
     var k=keyOf(d); L.push(''); dayLines(d,P,L);
