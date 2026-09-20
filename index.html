@@ -420,7 +420,7 @@ function el(tag,attrs){
   function add(x){ if(x==null||x===false) return; if(Array.isArray(x)){x.forEach(add);return;} n.appendChild(x.nodeType?x:document.createTextNode(String(x))); }
   return n;
 }
-var BUILD='9.20 23:27';   /* stamped by the build script */
+var BUILD='9.21 07:42';   /* stamped by the build script */
 function lang(){return STR[DB.settings.lang]?DB.settings.lang:'ko';}
 function t(k,vars){ var s=STR[lang()][k]; if(s==null) s=STR.en[k]!=null?STR.en[k]:k;
   return vars?s.replace(/\{(\w+)\}/g,function(m,a){return vars[a]!=null?vars[a]:'';}):s; }
@@ -704,8 +704,9 @@ function listEditor(sec,key,sumEl){
         if(!wrap._row){ ta.blur(); return; }
         var nxt=wrap.nextSibling; if(nxt&&nxt._ta&&!nxt._row){ nxt._ta.focus(); return; }
         insertAfter(wrap,'')._ta.focus(); }
-      else if(e.key==='Backspace'&&ta.value===''&&wrap._row){ e.preventDefault(); var prev=wrap.previousSibling; removeRow(wrap);
-        if(prev&&prev._ta){ var p=prev._ta; p.focus(); p.setSelectionRange(p.value.length,p.value.length); } }
+      else if(e.key==='Backspace'&&ta.value===''&&wrap._row){ e.preventDefault(); var prev=wrap.previousSibling,next=wrap.nextSibling; removeRow(wrap);
+        if(prev&&prev._ta){ var p=prev._ta; p.focus(); p.setSelectionRange(p.value.length,p.value.length); }
+        else if(next&&next._ta){ next._ta.focus(); next._ta.setSelectionRange(0,0); } }          /* the first line has no line above it: the cursor stays where it was, at the start of what is now the first line */
       else if(e.key==='Backspace'&&ta.value===''&&!wrap._row){ var up=wrap.previousSibling;          /* the empty new line at the bottom: nothing to delete, the cursor just goes up to the line before */
         if(up&&up._ta){ e.preventDefault(); up._ta.focus(); up._ta.setSelectionRange(up._ta.value.length,up._ta.value.length); } }
     });
@@ -744,8 +745,10 @@ function memoBlock(d){
     ta.addEventListener('keydown',function(e){
       if(e.isComposing||e.keyCode===229) return;
       if(e.key==='Enter'&&!e.shiftKey){ e.preventDefault(); var nx=wrap._pin?addBlank():null; if(nx) nx._ta.focus(); else ta.blur(); }
-      else if(e.key==='Backspace'&&ta.value===''&&wrap._pin){ e.preventDefault(); var prev=wrap.previousSibling; drop();
-        if(prev&&prev._ta){ var q=prev._ta; q.focus(); q.setSelectionRange(q.value.length,q.value.length); } }
+      else if(e.key==='Backspace'&&ta.value===''&&wrap._pin){ e.preventDefault(); var prev=wrap.previousSibling,next=wrap.nextSibling; drop();
+        var to=(next&&next._ta&&next.parentNode)?next:blank;                                  /* the first line: stay there, on the line that is first now (the empty one, when that was the last memo) */
+        if(prev&&prev._ta){ var q=prev._ta; q.focus(); q.setSelectionRange(q.value.length,q.value.length); }
+        else if(to&&to._ta){ to._ta.focus(); to._ta.setSelectionRange(0,0); } }
       else if(e.key==='Backspace'&&ta.value===''&&!wrap._pin){ var up=wrap.previousSibling;          /* the same for an empty extra line here (left empty, it goes away by itself) */
         if(up&&up._ta){ e.preventDefault(); up._ta.focus(); up._ta.setSelectionRange(up._ta.value.length,up._ta.value.length); } }
     });
