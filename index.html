@@ -381,7 +381,7 @@ function el(tag,attrs){
   function add(x){ if(x==null||x===false) return; if(Array.isArray(x)){x.forEach(add);return;} n.appendChild(x.nodeType?x:document.createTextNode(String(x))); }
   return n;
 }
-var BUILD='9.20 11:28';   /* stamped by the build script */
+var BUILD='9.20 12:25';   /* stamped by the build script */
 function lang(){return STR[DB.settings.lang]?DB.settings.lang:'ko';}
 function t(k,vars){ var s=STR[lang()][k]; if(s==null) s=STR.en[k]!=null?STR.en[k]:k;
   return vars?s.replace(/\{(\w+)\}/g,function(m,a){return vars[a]!=null?vars[a]:'';}):s; }
@@ -585,13 +585,21 @@ function pageTurn(n){
   var r=$('#root'); r.classList.remove('turn-l','turn-r'); void r.offsetWidth; r.classList.add(n>0?'turn-l':'turn-r');
   return true;
 }
-(function(){ var sx=0,sy=0,st=0,ok=false;
-  document.addEventListener('touchstart',function(e){ ok=false; if(e.touches.length!==1) return;
-    var tg=e.target; if(tg&&tg.closest&&tg.closest('textarea,input,select')) return;      /* never while writing, picking a value or moving a cursor */
+(function(){ var sx=0,sy=0,st=0,ok=false,moved=false;
+  function busy(tg){ if(!tg||!tg.closest) return false;
+    if(tg.closest('select,input[type=range]')) return true;
+    var f=tg.closest('textarea,input'); return !!(f&&f===document.activeElement); }      /* only the box being written in is off limits; a box at rest is part of the page */
+  document.addEventListener('touchstart',function(e){ ok=false; moved=false; if(e.touches.length!==1) return;
+    if(window.visualViewport&&window.visualViewport.scale>1.05) return;                  /* zoomed in: sideways is for looking around */
+    if(busy(e.target)) return;
     sx=e.touches[0].clientX; sy=e.touches[0].clientY; st=Date.now(); ok=true; },{passive:true});
+  document.addEventListener('touchmove',function(e){ if(!ok||moved) return; if(e.touches.length!==1){ ok=false; return; }
+    var c=e.touches[0]; if(Math.abs(c.clientX-sx)<10&&Math.abs(c.clientY-sy)<10) return;
+    moved=true; if(Date.now()-st>450) ok=false; },{passive:true});                       /* a finger that rested first is picking text, not turning the page */
+  document.addEventListener('touchcancel',function(){ ok=false; },{passive:true});
   document.addEventListener('touchend',function(e){ if(!ok) return; ok=false; var c=e.changedTouches[0],dx=c.clientX-sx,dy=c.clientY-sy;
-    if(Date.now()-st>700) return;                                   /* a slow drag is not a swipe */
-    if(Math.abs(dx)<70||Math.abs(dx)<2.2*Math.abs(dy)) return;      /* clearly sideways, not a scroll */
+    if(Date.now()-st>1000) return;                                  /* a slow drag is not a swipe */
+    if(Math.abs(dx)<40||Math.abs(dx)<1.3*Math.abs(dy)) return;      /* a short flick counts, and a thumb's arc is allowed; a scroll is still a scroll */
     var sel=window.getSelection&&String(window.getSelection()); if(sel) return;
     pageTurn(dx<0?1:-1); },{passive:true});
 })();
