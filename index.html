@@ -151,24 +151,24 @@ select.h{min-width:96px} select.p{min-width:70px}
 .kid textarea.box{border:1px solid var(--line);border-radius:10px;background:var(--surface);padding:10px 12px;overflow:auto;resize:vertical}
 .kid textarea.box:focus{border-color:var(--water)}
 .kid textarea::placeholder{color:var(--ink-2);opacity:.45}
-/* larger text sizes: only the letters grow. The white space keeps the size it has at 'Normal' (about 26px between two memos, 9.6px between lines, as seen on screen) */
+/* larger text sizes: only the letters grow. The white space keeps the size it has at 'Small' (16px) (about 26px between two memos, 9.6px between lines, as seen on screen) */
 .ts1 .kid.text{padding:6px 0} .ts1 .kid.text::before{top:22px} .ts1 .kid textarea{line-height:1.55}
 .ts2 .kid.text{padding:5px 0} .ts2 .kid.text::before{top:20.5px} .ts2 .kid textarea{line-height:1.5}
 .ts1 .tcheck,.ts2 .tcheck{margin-top:7px}
 /* a to-do row and a habit row are the same kind of row (a box, then letters), so they are the same height at every text size:
-   52px at 'Normal'; at the larger sizes the letters' 16px grow with the zoom and the 36px around them stay as they are on screen (row = 16px + 36px/zoom). */
+   52px at 'Small' (16px); at the larger sizes the letters' 16px grow with the zoom and the 36px around them stay as they are on screen (row = 16px + 36px/zoom). */
 .ts1 .kid.text.todo{padding:calc((16px + 36px/1.1 - 37px)/2) 0;--minh:37} .ts1 .kid.text.todo::before{top:calc((16px + 36px/1.1 - 37px)/2 + 16px)}
 .ts2 .kid.text.todo{--minh:36}
 /* on the day's page the to-do's box sits where the habit's box sits: centred on the (first) line of letters */
 .kid.text.todo .tcheck{margin-top:7px} .ts1 .kid.text.todo .tcheck{margin-top:6.5px} .ts2 .kid.text.todo .tcheck{margin-top:6px}
-/* rows that hold letters only (every list but the to-dos): 40px from one row to the next at 'Normal', the same as the memo under the journal title.
+/* rows that hold letters only (every list but the to-dos): 40px from one row to the next at 'Small' (16px), the same as the memo under the journal title.
    At the first 52px these rows looked empty beside rows that carry a box (to-dos, habits): thin letters weigh far less than a box, so the same blank reads wider.
-   At the larger text sizes these rows are 'Normal' magnified: 40px x zoom (44px, 48px on screen). Holding the blank at its 'Normal' size on screen was tried
+   At the larger text sizes these rows are 'Small' (16px) magnified: 40px x zoom (44px, 48px on screen). Holding the blank at its 'Small' (16px) size on screen was tried
    and looked cramped: the eye reads the blank between two rows against the size of the letters, so it has to grow with them. */
 .kid.text:not(.todo){padding:1px 0} .kid.text:not(.todo)::before{top:17px}
 .ts1 .kid.text:not(.todo){padding:1px 0} .ts1 .kid.text:not(.todo)::before{top:17px}
 .ts2 .kid.text:not(.todo){padding:1px 0} .ts2 .kid.text:not(.todo)::before{top:16.5px}
-/* larger text sizes, the rest of the page: the same rule as the written bullets above. Only the letters' share grows; rows with buttons, section titles and the blanks between sections keep the size they have at 'Normal' on screen (before this they all grew 1.1x / 1.2x with the zoom). 'Normal' is not touched: every rule here needs .ts1 or .ts2 */
+/* larger text sizes, the rest of the page: the same rule as the written bullets above. Only the letters' share grows; rows with buttons, section titles and the blanks between sections keep the size they have at 'Small' (16px) on screen (before this they all grew 1.1x / 1.2x with the zoom). 'Small' (16px) is not touched: every rule here needs .ts1 or .ts2 */
 .ts1{--z:1.1} .ts2{--z:1.2}
 :is(.ts1,.ts2) .node{margin-bottom:calc(28px/var(--z))}
 :is(.ts1,.ts2) .sec,:is(.ts1,.ts2) .node>h2{padding:calc(3px/var(--z)) 0;margin-bottom:calc(4px/var(--z))}
@@ -330,7 +330,7 @@ en:{appName:'Molip Journal',saved:'Saved on this device {t}',local:'Records stay
  setTitle:'Sections & settings',setSub:'Each day’s new page is built from these sections',secName:'Section name',up:'Move up',down:'Move down',type:'Type',
  tList:'Text',tTodo:'To-do',tFlow:'Molip',tChecks:'Checkbox',tNumbers:'Number',delSection:'Delete section',delSectionSure:'Really delete (records are kept)',cancel:'Cancel',
  name:'Name',unit:'unit',del:'Delete',addCheck:'Add a checkbox',addNumber:'Add a number',newHabit:'New habit',newNumber:'New number',delNote:'Built-in sections you don’t need can be deleted, and brought back later from ‘Bring back a deleted section’ further down. Deleting keeps what you recorded; it shows again once the section is back.',bringBack:'Bring back a deleted section',purge:'Delete ‘{name}’ for good',purgeSure:'Really delete ‘{name}’ for good (its records too)',purgeNote:'A section you made yourself can also be deleted for good. Everything written in it goes too, and this can’t be undone. Built-in sections always stay here to bring back.',bringBackNote:'A tap puts it back where it was, and what you recorded in it shows again.',addSection:'Add a section',addNote:'Make sections of your own.',addEg:'For example: mood, reading, gratitude, prayer',
- newChecks:'New checklist',newNumbers:'New numbers',newList:'New notes',weekStart:'Week starts on',language:'Language',textSize:'Text size',sizeNormal:'Normal',sizeLarge:'Large',sizeLarger:'Larger',
+ newChecks:'New checklist',newNumbers:'New numbers',newList:'New notes',weekStart:'Week starts on',language:'Language',textSize:'Text size',sizeSmall:'Small',sizeNormal:'Normal',sizeLarge:'Large',
  backup:'Backup',backupNote:'Your records live only in this browser on this device. Make a backup before you switch devices or clear browser data.',
  makeBackup:'Make a backup',backupText:'Backup text',copyBackup:'Copy backup',copied:'Copied',copyHint:'Paste it into a note or an email to yourself.',
  merge:'Merge with backup',mergeNote:'Merge keeps everything on this device and adds what only the backup has. Replace swaps everything here for the backup.',merged:'Merged. {a} new days came in, {b} days gained something.',mergedNone:'Merged. Nothing new was in the backup.',
@@ -372,7 +372,7 @@ ko:{appName:'몰입 일지',saved:'이 기기에 저장됨 {t}',local:'기록은
  setTitle:'항목과 설정',setSub:'매일 새 페이지가 이 항목들로 만들어져요',secName:'항목 이름',up:'위로',down:'아래로',type:'종류',
  tList:'텍스트',tTodo:'할 일',tFlow:'몰입도',tChecks:'체크',tNumbers:'숫자',delSection:'항목 삭제',delSectionSure:'정말 삭제 (기록은 남아요)',cancel:'취소',
  name:'이름',unit:'단위',del:'삭제',addCheck:'체크할 것 추가',addNumber:'숫자 추가',newHabit:'새 습관',newNumber:'새 숫자',delNote:'필요 없는 기본 항목은 ‘항목 삭제’로 지울 수 있고, 필요하면 아래쪽 ‘지운 항목 되살리기’에서 되살릴 수 있어요. 지워도 적어 둔 기록은 그대로 있어서, 되살리면 다시 보여요.',bringBack:'지운 항목 되살리기',purge:'‘{name}’ 영구 삭제',purgeSure:'정말 ‘{name}’ 영구 삭제 (기록도 지워져요)',purgeNote:'직접 만든 항목은 영구 삭제할 수도 있어요. 그 항목에 적은 기록까지 지워지고 되돌릴 수 없어요. 기본 항목은 언제든 되살릴 수 있게 남겨 둡니다.',bringBackNote:'누르면 원래 있던 자리에 다시 생기고, 예전에 적은 기록도 다시 보여요.',addSection:'항목 추가',addNote:'필요한 기록을 직접 만들 수 있어요.',addEg:'예: 기분, 독서, 감사, 기도',
- newChecks:'새 체크 항목',newNumbers:'새 숫자 항목',newList:'새 메모',weekStart:'한 주의 시작',language:'언어',textSize:'글자 크기',sizeNormal:'보통',sizeLarge:'크게',sizeLarger:'더 크게',
+ newChecks:'새 체크 항목',newNumbers:'새 숫자 항목',newList:'새 메모',weekStart:'한 주의 시작',language:'언어',textSize:'글자 크기',sizeSmall:'작게',sizeNormal:'보통',sizeLarge:'크게',
  backup:'백업',backupNote:'기록은 이 기기의 이 브라우저에만 저장돼요. 기기를 바꾸거나 브라우저 데이터를 지우기 전에 백업을 만들어 두세요.',
  makeBackup:'백업 만들기',backupText:'백업 내용',copyBackup:'백업 복사',copied:'복사됨',copyHint:'복사해서 메모장이나 메일에 붙여 두세요.',
  merge:'백업과 합치기',mergeNote:'합치기는 이 기기의 기록을 그대로 두고, 백업에만 있는 날짜와 글을 더해요. 바꾸기는 이 기기의 기록을 백업으로 통째로 바꿔요.',merged:'합쳤어요. 새로 들어온 날 {a}일, 내용이 더해진 날 {b}일.',mergedNone:'합쳤어요. 백업에 새로운 내용은 없었어요.',
@@ -397,7 +397,7 @@ function defaultTemplate(lang){ var D=DEF[lang]||DEF.en; return [
   {id:'sleep',type:'numbers',name:D.sleep,items:[{id:'hours',name:D.sleepHours,unit:D.uH,kind:'hours',step:0.5,max:16,pick:true},{id:'light',name:D.light,unit:D.uX,step:1,max:10,pick:true}]},
   {id:'notes',type:'list',name:D.notes,hint:D.notesHint}
 ];}
-var DB={v:5,template:defaultTemplate('ko'),days:{},pins:[],trash:[],settings:{weekStart:1,defWeek:1,weekPicked:false,lastIntensity:90,introSeen:false,lang:'ko',defLang:'ko',langPicked:false,textSize:0,startDate:'',goal:''}};
+var DB={v:6,template:defaultTemplate('ko'),days:{},pins:[],trash:[],settings:{weekStart:1,defWeek:1,weekPicked:false,lastIntensity:90,introSeen:false,lang:'ko',defLang:'ko',langPicked:false,textSize:1,startDate:'',goal:''}};
 var UI={mergeMsg:null,exportText:null,lastDone:null,screen:'day',date:sod(new Date()),sec:null,mode:'week',anchor:sod(new Date()),confirm:null,backup:null,importText:'',importErr:''};
 var storageOk=true,lastSaved=null,saveTimer=null,todayKeySeen=keyOf(sod(new Date()));
 
@@ -413,7 +413,7 @@ function el(tag,attrs){
   function add(x){ if(x==null||x===false) return; if(Array.isArray(x)){x.forEach(add);return;} n.appendChild(x.nodeType?x:document.createTextNode(String(x))); }
   return n;
 }
-var BUILD='9.20 21:58';   /* stamped by the build script */
+var BUILD='9.20 22:17';   /* stamped by the build script */
 function lang(){return STR[DB.settings.lang]?DB.settings.lang:'ko';}
 function t(k,vars){ var s=STR[lang()][k]; if(s==null) s=STR.en[k]!=null?STR.en[k]:k;
   return vars?s.replace(/\{(\w+)\}/g,function(m,a){return vars[a]!=null?vars[a]:'';}):s; }
@@ -514,6 +514,9 @@ function normalize(){
   delete DB.settings.pins;
   if(!(DB.v>=4)){ DB.template.forEach(function(x){ if(x.id==='events'&&(x.name==='이벤트'||x.name==='Events')) x.name=(DEF[DB.settings.lang]||DEF.ko).events; }); DB.v=4; }   /* renamed once; a name the person typed is never touched again */
   if(!(DB.v>=5)) DB.v=5;
+  /* v6: the middle size (17.6px) became the default and the three sizes were renamed Small / Normal / Large (they were Normal / Large / Larger).
+     The numbers 0,1,2 mean the same sizes as before. Anyone still at 0 (16px) is moved up to the new default once; after that, choosing Small stays Small. */
+  if(!(DB.v>=6)){ if(!(DB.settings.textSize>=1)) DB.settings.textSize=1; DB.v=6; }
   DB.trash=(Array.isArray(DB.trash)?DB.trash:[]).filter(function(x){ return x&&x.id&&x.type&&x.type!=='pins'&&!DB.template.some(function(y){return y.id===x.id;}); });
   relabel(lang());
 }
@@ -1178,7 +1181,7 @@ function screenSettings(){
     return el('button',{type:'button','aria-pressed':String(DB.settings.weekStart===w),'aria-label':lang()==='ko'?DOWS.ko[w]+'요일':DOWL[w],text:DOWS[lang()][w],onclick:function(){DB.settings.weekStart=w;DB.settings.weekPicked=true;changed();}}); })))]);
   var langs=node(el('h2',{text:t('language')}),[el('div',{class:'kid'},el('div',{class:'chips',role:'group'},[['ko','한국어'],['en','English']].map(function(l){
     return el('button',{type:'button','aria-pressed':String(lang()===l[0]),text:l[1],onclick:function(){DB.settings.lang=l[0];DB.settings.langPicked=true;relabel(l[0]);applyLang();changed();}}); })))]);
-  var sizes=node(el('h2',{text:t('textSize')}),[el('div',{class:'kid'},el('div',{class:'chips',role:'group','aria-label':t('textSize')},['sizeNormal','sizeLarge','sizeLarger'].map(function(k,i){
+  var sizes=node(el('h2',{text:t('textSize')}),[el('div',{class:'kid'},el('div',{class:'chips',role:'group','aria-label':t('textSize')},['sizeSmall','sizeNormal','sizeLarge'].map(function(k,i){
     return el('button',{type:'button','aria-pressed':String((DB.settings.textSize|0)===i),text:t(k),onclick:function(){DB.settings.textSize=i;applyTextSize();changed();}}); })))]);
   var bk=[el('div',{class:'kid'},el('span',{class:'muted',text:t('backupNote')}))];
   if(UI.backup!=null){ var ta=el('textarea',{class:'box',readonly:true,'aria-label':t('backupText')}); ta.value=UI.backup;
@@ -1237,7 +1240,7 @@ function screenSettings(){
 
 /* ---------- boot ---------- */
 function applyLang(){ document.documentElement.lang=lang(); document.title=t('appName'); }
-var TEXT_ZOOM=[1,1.1,1.2];   /* text size: the whole page grows by the same ratio, so nothing on the day page has to change */
+var TEXT_ZOOM=[1,1.1,1.2];   /* Small 16px, Normal 17.6px (the default), Large 19.2px. Text size: the whole page grows by the same ratio, so nothing on the day page has to change */
 function applyTextSize(){ var i=DB.settings.textSize|0,z=TEXT_ZOOM[i]||1,r=$('#root'); r.style.zoom=z===1?'':String(z); r.classList.toggle('narrow',window.innerWidth/z<360); r.classList.toggle('ts1',i===1); r.classList.toggle('ts2',i===2); }
 window.addEventListener('resize',applyTextSize);
 function render(){ var root=$('#root'); root.replaceChildren.apply(root,(UI.screen==='summary'?screenSummary():UI.screen==='settings'?screenSettings():UI.screen==='export'?screenExport():UI.screen==='alltext'?screenAllText():screenDay()).filter(Boolean)); renderStatus(); }
