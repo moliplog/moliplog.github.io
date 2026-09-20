@@ -155,6 +155,19 @@ select.h{min-width:96px} select.p{min-width:70px}
 .ts1 .kid.text{padding:6px 0} .ts1 .kid.text::before{top:22px} .ts1 .kid textarea{line-height:1.55}
 .ts2 .kid.text{padding:5px 0} .ts2 .kid.text::before{top:20.5px} .ts2 .kid textarea{line-height:1.5}
 .ts1 .tcheck,.ts2 .tcheck{margin-top:8px}
+/* larger text sizes, the rest of the page: the same rule as the written bullets above. Only the letters' share grows; rows with buttons, section titles and the blanks between sections keep the size they have at 'Normal' on screen (before this they all grew 1.1x / 1.2x with the zoom). 'Normal' is not touched: every rule here needs .ts1 or .ts2 */
+.ts1{--z:1.1} .ts2{--z:1.2}
+:is(.ts1,.ts2) .node{margin-bottom:calc(28px/var(--z))}
+:is(.ts1,.ts2) .sec,:is(.ts1,.ts2) .node>h2{padding:calc(3px/var(--z)) 0;margin-bottom:calc(4px/var(--z))}
+:is(.ts1,.ts2) .sec .t,:is(.ts1,.ts2) .node>h2{line-height:calc(17px + 10.2px/var(--z))}
+:is(.ts1,.ts2) .node:not(.edit)>.dot{top:calc(4.9px + 8.1px/var(--z))}
+:is(.ts1,.ts2) .kid:not(.text){padding:calc(7px/var(--z)) 0}
+:is(.ts1,.ts2) .kid:not(.text)::before{transform:translateY(calc(7px/var(--z) - 7px))}   /* dots placed by a fixed top follow the smaller padding */
+:is(.ts1,.ts2) .kid:not(.block):has(>.line)::before,:is(.ts1,.ts2) .kid:has(>.habit)::before,:is(.ts1,.ts2) .kid:has(>.rowf>.field)::before,:is(.ts1,.ts2) .kid:has(>.mini)::before{transform:none}   /* dots centred on a control already follow it */
+:is(.ts1,.ts2) select,:is(.ts1,.ts2) .num{height:calc(16px + 24px/var(--z))}
+:is(.ts1,.ts2) .habit{min-height:calc(16px + 26px/var(--z))}
+:is(.ts1,.ts2) .club,:is(.ts1,.ts2) .pins{margin-bottom:calc(24px/var(--z))}
+:is(.ts1,.ts2) .club:has(+.pins){margin-bottom:0}
 .kid textarea:focus::placeholder{color:transparent}
 .habit{display:flex;align-items:center;gap:12px;width:100%;min-height:42px;padding:2px 0;border:0;background:none;text-align:left;font-weight:500}
 .check{flex:none;width:24px;height:24px;border-radius:7px;border:1.5px solid var(--ink-2);display:grid;place-items:center}
@@ -387,7 +400,7 @@ function el(tag,attrs){
   function add(x){ if(x==null||x===false) return; if(Array.isArray(x)){x.forEach(add);return;} n.appendChild(x.nodeType?x:document.createTextNode(String(x))); }
   return n;
 }
-var BUILD='9.20 19:18';   /* stamped by the build script */
+var BUILD='9.20 19:55';   /* stamped by the build script */
 function lang(){return STR[DB.settings.lang]?DB.settings.lang:'ko';}
 function t(k,vars){ var s=STR[lang()][k]; if(s==null) s=STR.en[k]!=null?STR.en[k]:k;
   return vars?s.replace(/\{(\w+)\}/g,function(m,a){return vars[a]!=null?vars[a]:'';}):s; }
