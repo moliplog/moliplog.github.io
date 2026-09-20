@@ -231,6 +231,13 @@ select.h{min-width:96px} select.p{min-width:70px}
 .rows .r span:last-child{font-weight:600}
 .entry{display:flex;gap:10px;align-items:baseline;width:100%;border:0;background:none;padding:0;text-align:left}
 .entry .d{flex:none;width:76px;font-weight:600;font-size:14px;color:var(--sun)}
+/* Summaries of written lines (events, notes, the notes unfolded under a chart) are pages for looking over many lines at once, while the day's page is for writing.
+   So these rows are set closer than the day's page: smaller letters, less blank between rows, and a date column only as wide as the longest date in the list (the width is set on each row by dateW). */
+.kids>.kid.sum{padding:4px 0}
+.kids>.kid.sum::before{top:13px;transform:none}
+.kids>.kid.sum .entry{font-size:15px;line-height:1.5;gap:8px}
+.kids>.kid.sum .entry .d{font-size:12.5px}
+.kids>.kid.sum.pick{padding:2px 0 6px}.kids>.kid.sum.pick::before{display:none}.kid.sum.pick .link{padding:4px 0;font-size:14px}
 
 /* settings */
 .field{display:block;width:100%;height:42px;padding:0 12px;border:1px solid var(--line);border-radius:10px;background:var(--surface)}
@@ -322,7 +329,7 @@ en:{appName:'Molip Journal',saved:'Saved on this device {t}',local:'Records stay
  flowMode:'How to record',flowSplit:'Morning · Noon · Evening',flowWhole:'Whole day in one',
  version:'Version',allRecords:'All records',allSpan:'{a} to {b}, {n} days with records',allStart:'Molip start {d}',allGoal:'purpose {g}',allDays:'{n} days with records',backSettings:'Back to settings',
  allTextOpen:'Save all records as text',allTextHint:'For reading only. It can be read anywhere without this app, but it cannot be loaded back in. To move to another device, use “{btn}” above.',allTextSub:'For reading. Copy it or save it as a file and keep it in a note, an email or a document. It is not a backup the app can restore.',saveTxt:'Save as a file',saveTxtFail:'This phone can’t hand over a file here. Use “Copy text” instead.',
- memo:'Note',memoLine:'Show a note line',memoLink:'See this period’s {name} notes ({n})',memoHide:'Hide the {name} notes',memoWhere:'Notes written here are gathered, day by day, in the summary of ‘{name}’.',memoEgFlow:'e.g. 2+4+2+4',memoEgChecks:'e.g. Exercise 1 h 30 min',memoHint:'Add a note ({eg})',memoEgSleep:'e.g. Woke up twice before dawn',
+ memo:'Note',memoLine:'Show a note line',memoLink:'See this period’s {name} notes ({n})',memoHide:'Hide the {name} notes',notesAll:'Also show the {names} notes ({n})',notesAllMany:'Also show notes written under sections ({n})',notesOnly:'Show {name} only',memoWhere:'Notes written here are gathered, day by day, in the summary of ‘{name}’.',memoEgFlow:'e.g. 2+4+2+4',memoEgChecks:'e.g. Exercise 1 h 30 min',memoHint:'Add a note ({eg})',memoEgSleep:'e.g. Woke up twice before dawn',
  topMemo:'Extra note',topMemoShow:'Show an extra note line under the title',topMemoNote:'Other notes stay on their own day’s page; what you write here (e.g. monthly goal) shows on every day’s page until you remove it with its ×. Enter makes the next line, up to {n} lines.',pinWrite:'Extra note (e.g. monthly goal)',pinItem:'Extra note',pinNew:'New extra note',pinTake:'Remove this note',pinTaken:'Removed: {text}',
  mergedJust:'Merged.',mergedPins:'{n} extra notes came in.',
  dayNo:'Day {n}',dayRange:'days {a}–{b}',
@@ -364,7 +371,7 @@ ko:{appName:'몰입 일지',saved:'이 기기에 저장됨 {t}',local:'기록은
  flowMode:'기록 방식',flowSplit:'아침·점심·저녁',flowWhole:'하루 통으로',
  version:'버전',allRecords:'전체 기록',allSpan:'{a} ~ {b}, 기록한 날 {n}일',allStart:'몰입 시작일 {d}',allGoal:'목적 {g}',allDays:'기록한 날 {n}일',backSettings:'설정으로 돌아가기',
  allTextOpen:'전체 기록을 텍스트로 저장',allTextHint:'읽기용 텍스트예요. 이 앱 없이도 어디서나 읽을 수 있지만, 앱으로 다시 불러올 수는 없어요. 기기를 옮길 때는 위의 ‘{btn}’ 버튼을 쓰세요.',allTextSub:'읽기용 텍스트예요. 복사하거나 파일로 저장해서 메모장, 메일, 문서에 보관하세요. 앱으로 되돌리는 백업은 아니에요.',saveTxt:'파일로 저장',saveTxtFail:'이 폰에서는 파일로 내보낼 수 없어요. ‘텍스트 복사’를 써 주세요.',
- memo:'메모',memoLine:'메모 칸 보이기',memoLink:'이 기간의 {name} 메모 {n}건 보기',memoHide:'{name} 메모 접기',memoWhere:'여기에 적은 메모는 ‘{name}’ 항목의 요약에서 날짜별로 모아 볼 수 있어요.',memoEgFlow:'예: 2+4+2+4',memoEgChecks:'예: 운동 1시간 30분',memoHint:'메모 ({eg})',memoEgSleep:'예: 새벽에 두 번 깼다',
+ memo:'메모',memoLine:'메모 칸 보이기',memoLink:'이 기간의 {name} 메모 {n}건 보기',memoHide:'{name} 메모 접기',notesAll:'{names} 메모 {n}건도 함께 보기',notesAllMany:'항목 아래 메모 {n}건도 함께 보기',notesOnly:'{name}만 보기',memoWhere:'여기에 적은 메모는 ‘{name}’ 항목의 요약에서 날짜별로 모아 볼 수 있어요.',memoEgFlow:'예: 2+4+2+4',memoEgChecks:'예: 운동 1시간 30분',memoHint:'메모 ({eg})',memoEgSleep:'예: 새벽에 두 번 깼다',
  topMemo:'추가 메모',topMemoShow:'제목 아래 추가 메모 칸 보이기',topMemoNote:'다른 메모는 그날 페이지에만 남지만, 이 칸에 적은 것(예: 포커싱 포인트, 이달 목표)은 ×⁠로 지울 때까지 매일 페이지에 보여요. Enter를 치면 다음 줄이 생기고, {n}줄까지 적을 수 있어요.',pinWrite:'추가 메모 (예: 포커싱 포인트, 이달 목표)',pinItem:'추가 메모',pinNew:'새 추가 메모',pinTake:'이 메모 지우기',pinTaken:'지웠어요: {text}',
  mergedJust:'합쳤어요.',mergedPins:'추가 메모 {n}개가 들어왔어요.',
  dayNo:'{n}일차',dayRange:'{a}–{b}일차',
@@ -413,7 +420,7 @@ function el(tag,attrs){
   function add(x){ if(x==null||x===false) return; if(Array.isArray(x)){x.forEach(add);return;} n.appendChild(x.nodeType?x:document.createTextNode(String(x))); }
   return n;
 }
-var BUILD='9.20 22:17';   /* stamped by the build script */
+var BUILD='9.20 22:50';   /* stamped by the build script */
 function lang(){return STR[DB.settings.lang]?DB.settings.lang:'ko';}
 function t(k,vars){ var s=STR[lang()][k]; if(s==null) s=STR.en[k]!=null?STR.en[k]:k;
   return vars?s.replace(/\{(\w+)\}/g,function(m,a){return vars[a]!=null?vars[a]:'';}):s; }
@@ -927,16 +934,25 @@ function sumNumbers(sec,mode,dates,prevDates){
       bars,labels,el('p',{class:'muted',style:'margin:8px 0 0',text:detail+(pa==null?'':t('numPrev',{w:t(mode==='week'?'wWord':'mWord'),v:valText(pa,it)}))}));
   });
 }
+/* the width of the date column in a list summary: just enough for the longest date shown (letters 12.5px, see .kid.sum). An estimate per kind of letter, a little generous, so nothing depends on the web font having arrived. */
+function dateW(labels){ var m=0; labels.forEach(function(s){ var w=0,i,c; for(i=0;i<s.length;i++){ c=s.charAt(i); w+=/[0-9]/.test(c)?0.6:c==='/'?0.4:c===' '?0.25:/[\uAC00-\uD7A3]/.test(c)?0.95:/[A-Z]/.test(c)?0.78:0.58; } if(w>m) m=w; }); return Math.ceil(m*12.5)+3; }
+function sumRow(d,text,tag,w){ return el('div',{class:'kid sum'},el('button',{class:'entry',type:'button',onclick:function(){goDay(d);}},el('span',{class:'d',style:'width:'+w+'px',text:md(d)+' '+dow(d)}),
+  el('span',null,tag?el('span',{class:'muted',text:'('+tag+') '}):null,text))); }
 function sumList(sec,mode,dates){
-  /* the Notes summary also gathers the note lines written under Immersion and Habits; once those are in the mix, every line says where it came from */
-  var out=[],extra=sec.id==='notes'?DB.template.filter(memoOn):[],mixed=false;
-  dates.forEach(function(d){ extra.forEach(function(x){ if(memoRows(x,keyOf(d)).length) mixed=true; }); });
-  function row(d,text,tag){ return el('div',{class:'kid'},el('button',{class:'entry',type:'button',onclick:function(){goDay(d);}},el('span',{class:'d',text:md(d)+' '+dow(d)}),
-    el('span',null,tag?el('span',{class:'muted',text:'('+tag+') '}):null,text))); }
+  /* The Notes summary shows the Notes section alone. When note lines were also written under Immersion or Habits in this period, one link at the top brings them in
+     (then every line says where it came from) and the same link takes them out again. The choice is remembered. Those notes have their own home as well: the link under their section's summary. */
+  var rows=[],extra=sec.id==='notes'?DB.template.filter(memoOn):[],n=0,names=[];
+  extra.forEach(function(x){ var c=0; dates.forEach(function(d){ c+=memoRows(x,keyOf(d)).length; }); if(c){ n+=c; names.push(x.name); } });
+  var all=n>0&&DB.settings.notesAll===true;
   dates.forEach(function(d){ var k=keyOf(d);
-    if(mixed) extra.forEach(function(x){ memoRows(x,k).forEach(function(r){ out.push(row(d,r.text,x.name)); }); });
-    (secVal(k,sec.id)||[]).forEach(function(r){ out.push(row(d,r.text,mixed?sec.name:null)); }); });
-  return out.length?out:[el('div',{class:'kid'},el('span',{class:'muted',text:t(mode==='week'?'nothingW':'nothingM')}))];
+    if(all) extra.forEach(function(x){ memoRows(x,k).forEach(function(r){ rows.push({d:d,text:r.text,tag:x.name}); }); });
+    (secVal(k,sec.id)||[]).forEach(function(r){ rows.push({d:d,text:r.text,tag:all?sec.name:null}); }); });
+  var w=dateW(rows.map(function(r){return md(r.d)+' '+dow(r.d);})),out=rows.map(function(r){ return sumRow(r.d,r.text,r.tag,w); });
+  if(!out.length) out=[el('div',{class:'kid'},el('span',{class:'muted',text:t(mode==='week'?'nothingW':'nothingM')}))];
+  if(n>0) out.unshift(el('div',{class:'kid sum pick'},el('button',{class:'link',type:'button','aria-pressed':String(all),
+    text:all?t('notesOnly',{name:sec.name}):names.length<=2?t('notesAll',{names:names.join('\u00B7'),n:n}):t('notesAllMany',{n:n}),
+    onclick:function(){ DB.settings.notesAll=!all; save(); render(); }})));
+  return out;
 }
 /* To-do page: like a Roam TODO page. Every unfinished item from every day, newest first, grouped by week. */
 function screenTodo(sec){
@@ -994,7 +1010,7 @@ function screenSummary(){
     if(mem.length){ var open=UI.memoOpen===sec.id;
       memoLink=el('div',{style:'margin:4px 0 0 24px'},
         el('button',{class:'link',type:'button','aria-expanded':String(open),text:t(open?'memoHide':'memoLink',{n:mem.length,name:sec.name}),onclick:function(){UI.memoOpen=open?null:sec.id;render();}}),
-        open?el('div',{class:'kids',style:'margin-top:4px;margin-bottom:10px'},mem.map(function(m){ return el('div',{class:'kid'},el('button',{class:'entry',type:'button',onclick:function(){goDay(m.d);}},el('span',{class:'d',text:md(m.d)+' '+dow(m.d)}),el('span',{text:m.r.text}))); })):null); } }
+        open?el('div',{class:'kids',style:'margin-top:4px;margin-bottom:10px'},(function(){ var w=dateW(mem.map(function(m){return md(m.d)+' '+dow(m.d);})); return mem.map(function(m){ return sumRow(m.d,m.r.text,null,w); }); })()):null); } }
   var wrap=sec.type==='flow'?el('section',{class:'node'},el('span',{class:'dot'}),el('h2',{text:headName}),body):node(el('h2',{text:headName}),body);
   var copy=mode==='week'?el('p',{style:'margin:4px 0 0 24px'},el('button',{class:'link',type:'button',text:t('copyWeek'),onclick:function(){go('export',{exportText:null});}})):null;
   return [head,wrap,memoLink,copy];
