@@ -420,7 +420,7 @@ function el(tag,attrs){
   function add(x){ if(x==null||x===false) return; if(Array.isArray(x)){x.forEach(add);return;} n.appendChild(x.nodeType?x:document.createTextNode(String(x))); }
   return n;
 }
-var BUILD='9.20 23:01';   /* stamped by the build script */
+var BUILD='9.20 23:27';   /* stamped by the build script */
 function lang(){return STR[DB.settings.lang]?DB.settings.lang:'ko';}
 function t(k,vars){ var s=STR[lang()][k]; if(s==null) s=STR.en[k]!=null?STR.en[k]:k;
   return vars?s.replace(/\{(\w+)\}/g,function(m,a){return vars[a]!=null?vars[a]:'';}):s; }
@@ -615,7 +615,7 @@ function renderStatus(){
   s.className='status'+(storageOk?'':' bad');
   s.replaceChildren(el('i'),storageOk?(lastSaved?t('saved',{t:hm(lastSaved)}):t('local')):t('blocked'));
 }
-function go(screen,opts){ UI.screen=screen; UI.confirm=null; UI.pinUndo=null; UI.memoOpen=null; UI.allText=null; UI.mergeMsg=null; if(opts) for(var k in opts) UI[k]=opts[k]; render(); window.scrollTo(0,0); }
+function go(screen,opts){ UI.screen=screen; UI.confirm=null; UI.pinUndo=null; UI.memoOpen=null; UI.notesAll=false; UI.allText=null; UI.mergeMsg=null; if(opts) for(var k in opts) UI[k]=opts[k]; render(); window.scrollTo(0,0); }
 function goDay(d){ go('day',{date:sod(d)}); }
 /* Turning the page with a sideways swipe: next/previous day on the day page, next/previous week or month in a summary, next/previous week in the week text. The arrow buttons stay. */
 function pageTurn(n){
@@ -940,10 +940,10 @@ function sumRow(d,text,tag,w){ return el('div',{class:'kid sum'},el('button',{cl
   el('span',null,tag?el('span',{class:'muted',text:'('+tag+') '}):null,text))); }
 function sumList(sec,mode,dates){
   /* The Notes summary shows the Notes section alone. When note lines were also written under Immersion or Habits in this period, one link at the top brings them in
-     (then every line says where it came from) and the same link takes them out again. The choice is remembered. Those notes have their own home as well: the link under their section's summary. */
+     (then every line says where it came from) and the same link takes them out again. The choice is not kept: every visit to this summary starts with the Notes section alone (it lasts while moving between weeks and months here), so the page never looks different from last time for no visible reason. Those notes have their own home as well: the link under their section's summary. */
   var rows=[],extra=sec.id==='notes'?DB.template.filter(memoOn):[],n=0,names=[];
   extra.forEach(function(x){ var c=0; dates.forEach(function(d){ c+=memoRows(x,keyOf(d)).length; }); if(c){ n+=c; names.push(x.name); } });
-  var all=n>0&&DB.settings.notesAll===true;
+  var all=n>0&&UI.notesAll===true;
   dates.forEach(function(d){ var k=keyOf(d);
     if(all) extra.forEach(function(x){ memoRows(x,k).forEach(function(r){ rows.push({d:d,text:r.text,tag:x.name}); }); });
     (secVal(k,sec.id)||[]).forEach(function(r){ rows.push({d:d,text:r.text,tag:all?sec.name:null}); }); });
@@ -951,7 +951,7 @@ function sumList(sec,mode,dates){
   if(!out.length) out=[el('div',{class:'kid'},el('span',{class:'muted',text:t(mode==='week'?'nothingW':'nothingM')}))];
   if(n>0) out.unshift(el('div',{class:'kid sum pick'},el('button',{class:'link',type:'button','aria-pressed':String(all),
     text:all?t('notesOnly',{name:sec.name}):names.length<=2?t('notesAll',{names:names.join('\u00B7'),n:n}):t('notesAllMany',{n:n}),
-    onclick:function(){ DB.settings.notesAll=!all; save(); render(); }})));
+    onclick:function(){ UI.notesAll=!all; render(); }})));
   return out;
 }
 /* To-do page: like a Roam TODO page. Every unfinished item from every day, newest first, grouped by week. */

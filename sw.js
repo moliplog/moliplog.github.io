@@ -3,7 +3,15 @@
 const VERSION = 'journal-v6';
 const SHELL = ['./', 'index.html', 'manifest.webmanifest', 'icons/icon-192.png', 'icons/icon-512.png'];
 self.addEventListener('install', e => { e.waitUntil(caches.open(VERSION).then(c => c.addAll(SHELL)).then(() => self.skipWaiting())); });
-self.addEventListener('activate', e => { e.waitUntil(caches.keys().then(ks => Promise.all(ks.filter(k => k !== VERSION).map(k => caches.delete(k)))).then(() => self.clients.claim())); });
+/* A phone coming from journal-v5 or earlier has an app open that cannot update itself (that came with v6), and it would stay old for as long as its window is never closed.
+   So, that one time, the open windows are reloaded into the new app. The old app saves as it goes and again on leaving the page, so nothing written is lost.
+   The reload waits until this worker is fully active: a page load asked for during activation waits for the activation, which would be waiting for the page load. */
+self.addEventListener('activate', e => {
+  let old = false;
+  const done = caches.keys().then(ks => { old = ks.some(k => /^journal-v[1-5]$/.test(k)); return Promise.all(ks.filter(k => k !== VERSION).map(k => caches.delete(k))); }).then(() => self.clients.claim());
+  e.waitUntil(done);
+  done.then(() => { if (old) setTimeout(() => { self.clients.matchAll({ type: 'window' }).then(cs => cs.forEach(c => { if (c.navigate) c.navigate(c.url).catch(() => {}); })); }, 1000); });
+});
 self.addEventListener('fetch', e => {
   if (e.request.method !== 'GET') return;
   const u = new URL(e.request.url);
