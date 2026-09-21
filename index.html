@@ -420,7 +420,7 @@ function el(tag,attrs){
   function add(x){ if(x==null||x===false) return; if(Array.isArray(x)){x.forEach(add);return;} n.appendChild(x.nodeType?x:document.createTextNode(String(x))); }
   return n;
 }
-var BUILD='9.21 16:48';   /* stamped by the build script */
+var BUILD='9.21 17:07';   /* stamped by the build script */
 function lang(){return STR[DB.settings.lang]?DB.settings.lang:'ko';}
 function t(k,vars){ var s=STR[lang()][k]; if(s==null) s=STR.en[k]!=null?STR.en[k]:k;
   return vars?s.replace(/\{(\w+)\}/g,function(m,a){return vars[a]!=null?vars[a]:'';}):s; }
@@ -696,11 +696,15 @@ function listEditor(sec,key,sumEl){
       cb.setAttribute('aria-pressed',String(wrap._row.done)); wrap.classList.toggle('done',wrap._row.done); commit(); });
     function promote(){ var nr={id:uid(),text:ta.value,done:false}; rows.push(nr); wrap._row=nr; ta.placeholder=''; if(cb) cb.disabled=false; box.appendChild(rowEl(null)); }
     ta.addEventListener('input',function(){
-      if(ta.value.indexOf('\n')>=0){               /* Enter from an IME, or pasted lines */
-        var parts=ta.value.split('\n'), first=parts.shift(), rest=parts.join(' ').trim();
+      if(ta.value.indexOf('\n')>=0){               /* Enter from an IME, or pasted lines: every line becomes a bullet of its own, empty lines are passed over */
+        var parts=ta.value.split('\n'), first=parts.shift(), more=parts.map(function(x){return x.trim();}).filter(Boolean);
+        if(!first.trim()&&more.length) first=more.shift();          /* pasted text that begins with an empty line */
         ta.value=first;
         if(!wrap._row&&first.trim()) promote();
-        if(wrap._row){ wrap._row.text=first; var ne=(rest||first.trim())?insertAfter(wrap,rest):null; autosize(ta); commit(); if(ne) ne._ta.focus(); return; }
+        if(wrap._row){ wrap._row.text=first; var at=wrap,ne=null;
+          more.forEach(function(x){ ne=at=insertAfter(at,x); });
+          if(!ne&&first.trim()) ne=insertAfter(wrap,'');              /* a plain Enter at the end of a line: an empty line to go on in */
+          autosize(ta); commit(); if(ne) ne._ta.focus(); return; }
       }
       if(!wrap._row){ if(ta.value.trim()) promote(); } else wrap._row.text=ta.value;
       autosize(ta); commit();
