@@ -120,7 +120,7 @@ a.solid{display:inline-flex;align-items:center;text-decoration:none}
 .sec .t{font:600 17px/1.6 var(--ui)}
 .sec .sum{flex:1;text-align:right;font-size:14px;color:var(--ink-2)}
 .sec .go{flex:none;font-size:13px;color:var(--water);text-decoration:underline;text-underline-offset:3px}
-.node.edit>.dot{top:17px} .typeline{min-height:26px;margin:0 0 6px} .node.edit.typed>.dot{display:none} .headwrap{position:relative} .headwrap>.dot2{position:absolute;left:-21px;top:17px;width:8px;height:8px;border-radius:50%;background:var(--ink)}   /* the bullet belongs to the title row, wherever the line above it ends (on a small phone 'Really delete' takes a second line) */
+.node.edit>.dot{top:17px} .typeline{min-height:26px;margin:0 0 6px} .typeline>.muted{white-space:nowrap} .node.edit.typed>.dot{display:none} .headwrap{position:relative} .headwrap>.dot2{position:absolute;left:-21px;top:17px;width:8px;height:8px;border-radius:50%;background:var(--ink)}   /* the bullet belongs to the title row, wherever the line above it ends (on a small phone 'Really delete' takes a second line) */
 .node>h2{margin:0 0 4px;font:600 17px/1.6 var(--ui);padding:3px 0}
 .kids{margin-left:-17px;padding-left:22px;border-left:1px solid var(--line)}
 .kid{position:relative;padding:7px 0}
@@ -334,7 +334,7 @@ en:{appName:'Molip Journal',saved:'Saved on this device {t}',local:'Records stay
  mergedJust:'Merged.',mergedPins:'{n} extra notes came in.',
  dayNo:'Day {n}',dayRange:'days {a}–{b}',
  report:'Enter your Molip start date and purpose',reportNote:'Once entered, the week number shows as a title at the top of the day page and as the first line of the week text. Leave the start date empty to hide it.',startDate:'Start date',goal:'Purpose',startEg:'e.g. {d}',goalHint:'e.g. Thesis writing',reportEmpty:'No title yet. Choose a start date.',
- setTitle:'Sections & settings',setSub:'Each day’s new page is built from these sections',secName:'Section name',secHint:'Title ({eg})',secEgChecks:'e.g. Mornings',secEgNumbers:'e.g. Reading',secEgList:'e.g. Gratitude',itemHintCheck:'e.g. Drink water',itemHintNumber:'e.g. Read today',unitHint:'e.g. pages',hoursTip:'To record time, type ‘h’ as the unit: 1.5 then shows as 1h 30m in the summary.',up:'Move up',down:'Move down',type:'Type',
+ setTitle:'Sections & settings',setSub:'Each day’s new page is built from these sections',secName:'Section name',secEgChecks:'e.g. Mornings',secEgNumbers:'e.g. Reading',secEgList:'e.g. Gratitude',itemEgCheck:'e.g. Drink water',itemEgNumber:'e.g. Pages',unitHint:'unit (e.g. pages)',hoursTip:'To record time, type ‘h’ as the unit: 1.5 then shows as 1h 30m in the summary.',up:'Move up',down:'Move down',type:'Section type',
  tList:'Text',tTodo:'To-do',tFlow:'Molip',tChecks:'Checkbox',tNumbers:'Number',delSection:'Delete section',delSectionSure:'Really delete (records are kept)',cancel:'Cancel',
  name:'Name',unit:'unit',del:'Delete',addCheck:'Add a checkbox',addNumber:'Add a number',newHabit:'New checkbox',newNumber:'Level',delNote:'Built-in sections you don’t need can be deleted, and brought back later from ‘Bring back a deleted section’ further down. Deleting keeps what you recorded; it shows again once the section is back.',bringBack:'Bring back a deleted section',purge:'Delete ‘{name}’ for good',purgeSure:'Really delete ‘{name}’ for good (its records too)',purgeNote:'A section you made yourself can also be deleted for good. Everything written in it goes too, and this can’t be undone. Built-in sections always stay here to bring back.',bringBackNote:'A tap puts it back where it was, and what you recorded in it shows again.',addSection:'Add a section',addNote:'Add sections of your own (e.g. mood, reading, gratitude, prayer).',addPick:'Choose a type: Checkbox, Number or Text.',
  newChecks:'New checklist',newNumbers:'New numbers',newList:'New notes',weekStart:'Week starts on',language:'Language',textSize:'Text size',sizeSmall:'Small',sizeNormal:'Normal',sizeLarge:'Large',
@@ -376,7 +376,7 @@ ko:{appName:'몰입 일지',saved:'이 기기에 저장됨 {t}',local:'기록은
  mergedJust:'합쳤어요.',mergedPins:'추가 메모 {n}개가 들어왔어요.',
  dayNo:'{n}일차',dayRange:'{a}–{b}일차',
  report:'몰입 시작일과 목적 입력하기',reportNote:'입력해 두면 몇 주차인지가 하루 기록 맨 위와 주간 텍스트 첫 줄에 제목으로 나와요. 몰입 시작일을 비워 두면 나오지 않아요.',startDate:'몰입 시작일',goal:'몰입 목적',startEg:'예: {d}',goalHint:'예: 공기업 입사준비',reportEmpty:'아직 제목이 없어요. 몰입 시작일을 골라 주세요.',
- setTitle:'항목과 설정',setSub:'매일 새 페이지가 이 항목들로 만들어져요',secName:'항목 이름',secHint:'항목 제목 ({eg})',secEgChecks:'예: 아침 루틴',secEgNumbers:'예: 독서',secEgList:'예: 감사',itemHintCheck:'체크할 것 (예: 물 마시기)',itemHintNumber:'이름 (예: 쪽수)',unitHint:'단위 (예: 쪽)',hoursTip:'시간을 기록할 때는 단위에 ‘시간’이라고 적으세요. 1.5라고 적으면 요약에 1시간 30분으로 나와요.',up:'위로',down:'아래로',type:'종류',
+ setTitle:'항목과 설정',setSub:'매일 새 페이지가 이 항목들로 만들어져요',secName:'항목 이름',secEgChecks:'예: 아침 루틴',secEgNumbers:'예: 독서',secEgList:'예: 감사',itemEgCheck:'예: 물 마시기',itemEgNumber:'예: 쪽수',unitHint:'단위 (예: 쪽)',hoursTip:'시간을 기록할 때는 단위에 ‘시간’이라고 적으세요. 1.5라고 적으면 요약에 1시간 30분으로 나와요.',up:'위로',down:'아래로',type:'항목 종류',
  tList:'텍스트',tTodo:'할 일',tFlow:'몰입도',tChecks:'체크',tNumbers:'숫자',delSection:'항목 삭제',delSectionSure:'정말 삭제 (기록은 남아요)',cancel:'취소',
  name:'이름',unit:'단위',del:'삭제',addCheck:'체크할 것 추가',addNumber:'숫자 추가',newHabit:'체크할 것',newNumber:'레벨',delNote:'필요 없는 기본 항목은 ‘항목 삭제’로 지울 수 있고, 필요하면 아래쪽 ‘지운 항목 되살리기’에서 되살릴 수 있어요. 지워도 적어 둔 기록은 그대로 있어서, 되살리면 다시 보여요.',bringBack:'지운 항목 되살리기',purge:'‘{name}’ 영구 삭제',purgeSure:'정말 ‘{name}’ 영구 삭제 (기록도 지워져요)',purgeNote:'직접 만든 항목은 영구 삭제할 수도 있어요. 그 항목에 적은 기록까지 지워지고 되돌릴 수 없어요. 기본 항목은 언제든 되살릴 수 있게 남겨 둡니다.',bringBackNote:'누르면 원래 있던 자리에 다시 생기고, 예전에 적은 기록도 다시 보여요.',addSection:'항목 추가',addNote:'필요한 항목을 추가할 수 있어요(예: 기분, 독서, 감사, 기도).',addPick:'체크·숫자·텍스트 중 종류를 고르세요.',
  newChecks:'새 체크 항목',newNumbers:'새 숫자 항목',newList:'새 메모',weekStart:'한 주의 시작',language:'언어',textSize:'글자 크기',sizeSmall:'작게',sizeNormal:'보통',sizeLarge:'크게',
@@ -420,7 +420,7 @@ function el(tag,attrs){
   function add(x){ if(x==null||x===false) return; if(Array.isArray(x)){x.forEach(add);return;} n.appendChild(x.nodeType?x:document.createTextNode(String(x))); }
   return n;
 }
-var BUILD='9.21 09:08';   /* stamped by the build script */
+var BUILD='9.21 09:20';   /* stamped by the build script */
 function lang(){return STR[DB.settings.lang]?DB.settings.lang:'ko';}
 function t(k,vars){ var s=STR[lang()][k]; if(s==null) s=STR.en[k]!=null?STR.en[k]:k;
   return vars?s.replace(/\{(\w+)\}/g,function(m,a){return vars[a]!=null?vars[a]:'';}):s; }
@@ -1140,10 +1140,10 @@ function screenSettings(){
     el('div',{class:'datenav'},el('div',{class:'when'},el('h1',{text:t('setTitle')}),el('p',null,t('setSub')))));
   var secs=T.map(function(sec,idx){
     /* A section that was just added still carries its stock name ('새 체크 항목'). Written in the box it looked finished, and nobody knew a title was wanted there:
-       so the box stays empty, a grey hint says what goes in it, and the cursor is put there. Until a title is typed, the day page keeps showing the stock name. */
+       so the box stays empty and the cursor is put there. The grey hint is the stock name itself plus an example ('새 체크 항목 (예: 아침 루틴)'): what the hint says is exactly what the day page shows while nothing is typed, so the result can be foreseen. */
     var sk=sec.type==='checks'?'Checks':sec.type==='numbers'?'Numbers':sec.type==='list'?'List':'';
     var secStock=!!sk&&(sec.stock===true||stockName(sec.name,['newChecks','newNumbers','newList']));
-    var name=el('input',{class:'field',type:'text','aria-label':t('secName'),'data-focus':sec.id,placeholder:sk?t('secHint',{eg:t('secEg'+sk)}):null,value:secStock?'':sec.name});
+    var name=el('input',{class:'field',type:'text','aria-label':t('secName'),'data-focus':sec.id,placeholder:sk?t('new'+sk)+' ('+t('secEg'+sk)+')':null,'data-short':sk?t('new'+sk):null,value:secStock?'':sec.name});
     name.addEventListener('input',function(){ if(name.value.trim()||!sk){ sec.name=name.value; delete sec.stock; } else { sec.name=t('new'+sk); sec.stock=true; } save(); });
     var headRow=el('div',{class:'rowf',style:'margin-bottom:6px'},name,el('span',{class:'tools'},
       el('button',{type:'button','aria-label':t('up'),disabled:idx===0,text:'↑',onclick:function(){T.splice(idx-1,0,T.splice(idx,1)[0]);changed();}}),
@@ -1163,9 +1163,9 @@ function screenSettings(){
     if(sec.type==='checks'||sec.type==='numbers'){
       (sec.items=sec.items||[]).forEach(function(it,j){
         var ik=sec.type==='checks'?'newHabit':'newNumber';
-        var n=el('input',{class:'field',type:'text','aria-label':t('name'),'data-focus':it.id,placeholder:t(sec.type==='checks'?'itemHintCheck':'itemHintNumber'),value:(it.stock===true||OLD_STOCK.indexOf(it.name)>=0)?'':it.name});
+        var n=el('input',{class:'field',type:'text','aria-label':t('name'),'data-focus':it.id,placeholder:t(ik)+' ('+t(sec.type==='checks'?'itemEgCheck':'itemEgNumber')+')','data-short':t(ik),value:(it.stock===true||OLD_STOCK.indexOf(it.name)>=0)?'':it.name});
         n.addEventListener('input',function(){ if(n.value.trim()){ it.name=n.value; delete it.stock; } else { it.name=t(ik); it.stock=true; } save(); });
-        var u=null; if(sec.type==='numbers'&&!it.pick){ u=el('input',{class:'field sm',type:'text','aria-label':t('unit'),placeholder:t('unitHint'),value:it.unit||''}); u.addEventListener('input',function(){it.unit=u.value;save();}); }
+        var u=null; if(sec.type==='numbers'&&!it.pick){ u=el('input',{class:'field sm',type:'text','aria-label':t('unit'),placeholder:t('unitHint'),'data-short':t('unit'),value:it.unit||''}); u.addEventListener('input',function(){it.unit=u.value;save();}); }
         kids.push(el('div',{class:'kid'},el('div',{class:'rowf'},n,u,el('button',{class:'mini',type:'button','aria-label':t('del')+' '+it.name,text:t('del'),onclick:function(){sec.items.splice(j,1);changed();}}))));
       });
       /* time is what people count most: say, right under the unit box, that the unit ‘시간’ (‘h’) is understood. Shown while a unit is still to be decided or is hours; once every unit is something else the line would only be clutter */
@@ -1281,7 +1281,12 @@ function applyLang(){ document.documentElement.lang=lang(); document.title=t('ap
 var TEXT_ZOOM=[1,1.1,1.2];   /* Small 16px, Normal 17.6px (the default), Large 19.2px. Text size: the whole page grows by the same ratio, so nothing on the day page has to change */
 function applyTextSize(){ var i=DB.settings.textSize|0,z=TEXT_ZOOM[i]||1,r=$('#root'); r.style.zoom=z===1?'':String(z); r.classList.toggle('narrow',window.innerWidth/z<360); r.classList.toggle('ts1',i===1); r.classList.toggle('ts2',i===2); }
 window.addEventListener('resize',applyTextSize);
-function render(){ var root=$('#root'); root.replaceChildren.apply(root,(UI.screen==='summary'?screenSummary():UI.screen==='settings'?screenSettings():UI.screen==='export'?screenExport():UI.screen==='alltext'?screenAllText():screenDay()).filter(Boolean)); renderStatus(); }
+function render(){ var root=$('#root'); root.replaceChildren.apply(root,(UI.screen==='summary'?screenSummary():UI.screen==='settings'?screenSettings():UI.screen==='export'?screenExport():UI.screen==='alltext'?screenAllText():screenDay()).filter(Boolean)); renderStatus(); fitHints(); }
+/* A hint with its example ('새 숫자 항목 (예: 독서)') may be wider than its box on a small phone or with large text. Rather than show it cut off, the example is dropped and the stock name stands alone. */
+function fitHints(){ var boxes=document.querySelectorAll('input[data-short]'); if(!boxes.length) return;
+  var c=fitHints.c||(fitHints.c=document.createElement('canvas').getContext('2d'));
+  [].forEach.call(boxes,function(i){ try{ var cs=getComputedStyle(i),room=i.clientWidth-parseFloat(cs.paddingLeft)-parseFloat(cs.paddingRight); c.font=cs.fontStyle+' '+cs.fontWeight+' '+cs.fontSize+' '+cs.fontFamily;
+    if(room>0&&c.measureText(i.placeholder).width+2>room) i.placeholder=i.getAttribute('data-short'); }catch(e){} }); }
 function rollover(){ var k=keyOf(today()); if(k===todayKeySeen) return; var was=todayKeySeen; todayKeySeen=k;
   if(UI.screen==='day'&&keyOf(UI.date)===was&&!(document.activeElement&&document.activeElement.tagName==='TEXTAREA')){ UI.date=today(); render(); } }
 /* The same app may be open in another window (a browser tab and the installed app share one store). Each window saves its whole copy,
