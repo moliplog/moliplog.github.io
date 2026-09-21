@@ -95,7 +95,7 @@ button:disabled,select:disabled,input:disabled{cursor:default;opacity:.45}
 .pinundo{margin:2px 0 6px;padding-left:13px;font-size:13px;color:var(--ink-2)}
 .pinundo .link{padding:0 0 0 8px;font-size:13px}
 #report{scroll-margin-top:140px}
-.endbar{margin:8px 0 0 24px}
+.endbar{margin:-9px 0 0 24px}
 .endbar .solid{width:100%;height:48px}
 
 /* notices */
@@ -120,7 +120,7 @@ a.solid{display:inline-flex;align-items:center;text-decoration:none}
 .sec .t{font:600 17px/1.6 var(--ui)}
 .sec .sum{flex:1;text-align:right;font-size:14px;color:var(--ink-2)}
 .sec .go{flex:none;font-size:13px;color:var(--water);text-decoration:underline;text-underline-offset:3px}
-.node.edit>.dot{top:17px} .wordmark{margin:14px 0 0;text-align:center;font-size:13px;letter-spacing:.06em;color:var(--ink-2);-webkit-user-select:all;user-select:all} .wipebox{margin:28px 0 -40px;padding-top:16px;border-top:1px solid var(--line);text-align:left;font-size:13px} .wipebox button{display:block;margin:0 auto 0 0;font-size:13px} .wipebox .quiet{color:var(--ink-2)} .wipebox.ask{display:flex;align-items:baseline;gap:12px} .wipebox.ask button{margin:0} .wipebox.ask .wide{flex:1;text-align:left} .wipebox.ask .danger{flex:none}   /* a quiet footer under a thin line: grey and to the left. Only the real button of the second step is red */ .typeline{min-height:26px;margin:0 0 6px} .typeline>.muted{white-space:nowrap} .node.edit.typed>.dot{display:none} .headwrap{position:relative} .headwrap>.dot2{position:absolute;left:-21px;top:17px;width:8px;height:8px;border-radius:50%;background:var(--ink)}   /* the bullet belongs to the title row, wherever the line above it ends (on a small phone 'Really delete' takes a second line) */
+.node.edit>.dot{top:17px} .wordmark{margin:23px 0 0;text-align:center;font-size:13px;letter-spacing:.06em;color:var(--ink-2);-webkit-user-select:all;user-select:all} .wipebox{margin:20px 0 -40px;padding-top:19px;border-top:1px solid var(--line);text-align:left;font-size:13px} .wipebox button{display:block;margin:0 auto 0 0;font-size:13px} .wipebox .quiet{color:var(--ink-2)} .wipebox.ask{display:flex;align-items:baseline;gap:12px} .wipebox.ask button{margin:0} .wipebox.ask .wide{flex:1;text-align:left} .wipebox.ask .danger{flex:none}   /* a quiet footer under a thin line: grey and to the left. Only the real button of the second step is red */ .typeline{min-height:26px;margin:0 0 6px} .typeline>.muted{white-space:nowrap} .node.edit.typed>.dot{display:none} .headwrap{position:relative} .headwrap>.dot2{position:absolute;left:-21px;top:17px;width:8px;height:8px;border-radius:50%;background:var(--ink)}   /* the bullet belongs to the title row, wherever the line above it ends (on a small phone 'Really delete' takes a second line) */
 .node>h2{margin:0 0 4px;font:600 17px/1.6 var(--ui);padding:3px 0}
 .kids{margin-left:-17px;padding-left:22px;border-left:1px solid var(--line)}
 .kid{position:relative;padding:7px 0}
@@ -142,8 +142,8 @@ select,.num{height:40px;padding:0 10px;border:1px solid var(--line);border-radiu
 select.h{min-width:96px} select.p{min-width:70px}
 .line{flex-wrap:nowrap}.line .label{min-width:0;white-space:nowrap}
 /* the same narrow-screen rules, for when a larger text size leaves less than 360px of room (see applyTextSize) */
-.narrow select.h{min-width:84px;padding:0 6px} .narrow select.p{min-width:62px;padding:0 6px} .narrow .label small{display:none}
-@media (max-width:359px){select.h{min-width:84px;padding:0 6px} select.p{min-width:62px;padding:0 6px} .label small{display:none}}
+.narrow select.h{min-width:84px;padding:0 6px} .narrow select.p{min-width:62px;padding:0 6px} .noranges .label small{display:none}   /* the hours beside Morning/Noon/Evening (09–12 …) are hidden only where they really do not fit: see fitRanges. They used to vanish at the default text size on every phone, though the Korean labels have room to spare */
+@media (max-width:359px){select.h{min-width:84px;padding:0 6px} select.p{min-width:62px;padding:0 6px}}
 .num{width:96px}
 .unit{font-size:14px;color:var(--ink-2)}
 .kid textarea{display:block;width:100%;border:0;background:none;resize:none;overflow:hidden;padding:6px 0;line-height:1.6;outline:none;border-bottom:1px solid transparent;border-radius:0}
@@ -420,7 +420,7 @@ function el(tag,attrs){
   function add(x){ if(x==null||x===false) return; if(Array.isArray(x)){x.forEach(add);return;} n.appendChild(x.nodeType?x:document.createTextNode(String(x))); }
   return n;
 }
-var BUILD='9.21 10:00';   /* stamped by the build script */
+var BUILD='9.21 10:09';   /* stamped by the build script */
 function lang(){return STR[DB.settings.lang]?DB.settings.lang:'ko';}
 function t(k,vars){ var s=STR[lang()][k]; if(s==null) s=STR.en[k]!=null?STR.en[k]:k;
   return vars?s.replace(/\{(\w+)\}/g,function(m,a){return vars[a]!=null?vars[a]:'';}):s; }
@@ -1292,7 +1292,12 @@ var TEXT_ZOOM=[1,1.1,1.2];   /* Small 16px, Normal 17.6px (the default), Large 1
 function applyTextSize(){ var i=DB.settings.textSize|0,z=TEXT_ZOOM[i]||1,r=$('#root'); r.style.zoom=z===1?'':String(z); r.classList.toggle('narrow',window.innerWidth/z<360); r.classList.toggle('ts1',i===1); r.classList.toggle('ts2',i===2); }
 window.addEventListener('resize',applyTextSize);
 function render(){ var root=$('#root'),keepY=window.scrollY;   /* Chrome (Android, desktop) gives a tapped button the focus, and when that button is replaced by the redraw the page jumps towards the top. Safari does not focus buttons, so an iPhone never showed it. The page stays where it was; go() still starts a new screen at the top. */
-  root.replaceChildren.apply(root,(UI.screen==='summary'?screenSummary():UI.screen==='settings'?screenSettings():UI.screen==='export'?screenExport():UI.screen==='alltext'?screenAllText():screenDay()).filter(Boolean)); renderStatus(); fitHints(); if(window.scrollY!==keepY) window.scrollTo(0,keepY); }
+  root.replaceChildren.apply(root,(UI.screen==='summary'?screenSummary():UI.screen==='settings'?screenSettings():UI.screen==='export'?screenExport():UI.screen==='alltext'?screenAllText():screenDay()).filter(Boolean)); renderStatus(); fitHints(); fitRanges(); if(window.scrollY!==keepY) window.scrollTo(0,keepY); }
+/* Morning 09–12, Noon 12–18, Evening 18–24: the hours say which slot a stretch of work belongs to, so they stay whenever the row has room for them. If any of the three rows is too tight, all three drop them together. */
+function fitRanges(){ [].forEach.call(document.querySelectorAll('section.node'),function(sec){ if(!sec.querySelector('.label small')) return;
+  sec.classList.remove('noranges');
+  var tight=[].some.call(sec.querySelectorAll('.line'),function(l){ var lab=l.querySelector('.label'); return (lab&&lab.scrollWidth>lab.clientWidth+1)||l.scrollWidth>l.clientWidth+1; });
+  if(tight) sec.classList.add('noranges'); }); }
 /* A hint with its example ('새 숫자 항목 (예: 독서)') may be wider than its box on a small phone or with large text. Rather than show it cut off, the example is dropped and the stock name stands alone. */
 function fitHints(){ var boxes=document.querySelectorAll('input[data-short]'); if(!boxes.length) return;
   var c=fitHints.c||(fitHints.c=document.createElement('canvas').getContext('2d'));
