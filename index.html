@@ -418,7 +418,7 @@ function el(tag,attrs){
   function add(x){ if(x==null||x===false) return; if(Array.isArray(x)){x.forEach(add);return;} n.appendChild(x.nodeType?x:document.createTextNode(String(x))); }
   return n;
 }
-var BUILD='9.21 12:42';   /* stamped by the build script */
+var BUILD='9.21 12:44';   /* stamped by the build script */
 function lang(){return STR[DB.settings.lang]?DB.settings.lang:'ko';}
 function t(k,vars){ var s=STR[lang()][k]; if(s==null) s=STR.en[k]!=null?STR.en[k]:k;
   return vars?s.replace(/\{(\w+)\}/g,function(m,a){return vars[a]!=null?vars[a]:'';}):s; }
@@ -1333,17 +1333,18 @@ document.addEventListener('visibilitychange',function(){ if(document.visibilityS
 window.addEventListener('focus',resync);
 window.addEventListener('pageshow',function(e){ if(e.persisted) resync(); });
 window.addEventListener('pagehide',function(){ if(saveTimer) saveNow(); });
-setInterval(function(){ rollover(); if(Date.now()-lastCheck>3600000) checkUpdate(); },60000);
+setInterval(function(){ rollover(); if(updPending||Date.now()-lastCheck>3600000) checkUpdate(); },60000);   /* an update that had to wait is tried again every minute, not only on the next return to the app */
 function softRender(){ var a=document.activeElement; if(UI.screen==='day'&&!(a&&/^(TEXTAREA|INPUT|SELECT)$/.test(a.tagName))) render(); }
 window.addEventListener('beforeinstallprompt',function(e){ e.preventDefault(); installEvt=e; softRender(); });
 window.addEventListener('appinstalled',function(){ installed=true; installEvt=null; softRender(); });
 /* ---------- picking up a new version ----------
    Coming back to the app (and a moment after opening it) we read the BUILD of the index.html that is on the site.
    If it differs from ours, the page reloads itself. While someone is writing, or is away from today's page,
-   the reload waits and happens the instant they next come back to the app. */
+   the reload waits: it is tried again every minute, and the instant they next come back to the app. */
 var lastAct=0,lastCheck=0,updPending='',UPD_KEY='molip-update-tried';
 ['input','pointerdown','keydown'].forEach(function(n){ document.addEventListener(n,function(){ lastAct=Date.now(); },true); });
-function quietNow(){ return UI.screen==='day'&&keyOf(UI.date)===keyOf(today())&&Date.now()-lastAct>8000; }
+function quietNow(){ var a=document.activeElement,inField=a&&/^(TEXTAREA|INPUT|SELECT)$/.test(a.tagName);   /* with the cursor in a field, eight seconds may be a pause for thought in the middle of a sentence: the minute-by-minute retry would reload under it and shut the keyboard. There it waits for five minutes of nothing. */
+  return UI.screen==='day'&&keyOf(UI.date)===keyOf(today())&&Date.now()-lastAct>(inField?300000:8000); }
 function applyUpdate(nb){ if(!quietNow()){ updPending=nb; return; }
   try{ sessionStorage.setItem(UPD_KEY,nb+'|'+Date.now()); }catch(e){}   /* per window: one window updating must not hold the others back */
   if(saveTimer) saveNow();   /* write only what is still unsaved here: another open window may hold newer records */
