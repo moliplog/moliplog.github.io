@@ -418,7 +418,7 @@ function el(tag,attrs){
   function add(x){ if(x==null||x===false) return; if(Array.isArray(x)){x.forEach(add);return;} n.appendChild(x.nodeType?x:document.createTextNode(String(x))); }
   return n;
 }
-var BUILD='9.21 12:41';   /* stamped by the build script */
+var BUILD='9.21 12:42';   /* stamped by the build script */
 function lang(){return STR[DB.settings.lang]?DB.settings.lang:'ko';}
 function t(k,vars){ var s=STR[lang()][k]; if(s==null) s=STR.en[k]!=null?STR.en[k]:k;
   return vars?s.replace(/\{(\w+)\}/g,function(m,a){return vars[a]!=null?vars[a]:'';}):s; }
@@ -839,7 +839,8 @@ function screenDay(){
   var d=UI.date,key=keyOf(d),td=today(),diff=daysBetween(d,td);
   if(diff===0) dayRec(key,true);                         /* today's page exists as soon as the app opens */
   var pick=el('input',{type:'date',class:'datepick','aria-label':t('pickDate')}); pick.value=key;
-  pick.addEventListener('change',function(){ if(pick.value) goDay(parseKey(pick.value)); });
+  pick.addEventListener('change',function(){ if(pick.value) goDay(parseKey(pick.value));
+    else if(window.matchMedia&&matchMedia('(pointer:coarse)').matches) goDay(td); });   /* a phone's calendar has a button that empties the date (iPhone 'Reset', Android 'Clear'); it used to do nothing here, which read as a dead button. Now it goes back to today. Not with a mouse and keyboard: there an empty value is only someone halfway through typing a date. */
   var rel=diff===0?t('today'):diff===-1?t('yesterday'):diff===1?t('tomorrow'):diff<0?t('daysAgo',{n:-diff}):t('inDays',{n:diff});
   var dn=dayNo(d);
   var sub=el('p',null,rel,dn?el('b',{text:t('dayNo',{n:dn})}):null,diff!==0?el('button',{class:'link',type:'button',text:t('goToday'),onclick:function(){goDay(td);}}):null,pick);
