@@ -420,7 +420,7 @@ function el(tag,attrs){
   function add(x){ if(x==null||x===false) return; if(Array.isArray(x)){x.forEach(add);return;} n.appendChild(x.nodeType?x:document.createTextNode(String(x))); }
   return n;
 }
-var BUILD='9.21 15:12';   /* stamped by the build script */
+var BUILD='9.21 16:48';   /* stamped by the build script */
 function lang(){return STR[DB.settings.lang]?DB.settings.lang:'ko';}
 function t(k,vars){ var s=STR[lang()][k]; if(s==null) s=STR.en[k]!=null?STR.en[k]:k;
   return vars?s.replace(/\{(\w+)\}/g,function(m,a){return vars[a]!=null?vars[a]:'';}):s; }
@@ -683,6 +683,10 @@ function listEditor(sec,key,sumEl){
     setVal(key,sec.id,clean.length?clean:undefined); sumEl.textContent=listSum(sec,clean); }
   function removeRow(wrap){ var i=rows.indexOf(wrap._row); if(i>=0) rows.splice(i,1); if(wrap.parentNode) wrap.parentNode.removeChild(wrap); commit(); }
   function insertAfter(wrap,text){ var nr={id:uid(),text:text||'',done:false}; rows.splice(rows.indexOf(wrap._row)+1,0,nr); var ne=rowEl(nr); box.insertBefore(ne,wrap.nextSibling); return ne; }
+  function joinUp(wrap){          /* Backspace at the very start of a line that has text: the text goes up onto the end of the line before, the cursor at the seam (as in Roam, and any editor). The first line has nowhere to go and stays. */
+    var ta=wrap._ta,up=wrap.previousSibling;
+    if(!wrap._row||ta.value===''||ta.selectionStart!==0||ta.selectionEnd!==0||!up||!up._ta||!up._row) return false;
+    var q=up._ta,at=q.value.length; q.value+=ta.value; up._row.text=q.value; removeRow(wrap); autosize(q); q.focus(); q.setSelectionRange(at,at); return true; }
   function rowEl(r){
     var ta=el('textarea',{rows:'1','aria-label':t(r?'item':'newItem',{name:sec.name}),placeholder:r?'':(sec.hint||t('write')),enterkeyhint:'enter'});
     ta.addEventListener('focus',function(){ if(!ta.value) ta.style.height=minH(ta)+'px'; }); ta.addEventListener('blur',function(){ if(!ta.value) autosize(ta); });
@@ -712,7 +716,9 @@ function listEditor(sec,key,sumEl){
         else if(next&&next._ta){ next._ta.focus(); next._ta.setSelectionRange(0,0); } }          /* the first line has no line above it: the cursor stays where it was, at the start of what is now the first line */
       else if(e.key==='Backspace'&&ta.value===''&&!wrap._row){ var up=wrap.previousSibling;          /* the empty new line at the bottom: nothing to delete, the cursor just goes up to the line before */
         if(up&&up._ta){ e.preventDefault(); up._ta.focus(); up._ta.setSelectionRange(up._ta.value.length,up._ta.value.length); } }
+      else if(e.key==='Backspace'&&joinUp(wrap)) e.preventDefault();
     });
+    ta.addEventListener('beforeinput',function(e){ if(e.inputType==='deleteContentBackward'&&!e.isComposing&&joinUp(wrap)) e.preventDefault(); });   /* the same, for keyboards (Android) whose Backspace arrives without a key name */
     ta.addEventListener('blur',function(){ if(wrap._row&&!ta.value.trim()) setTimeout(function(){ if(document.activeElement!==ta) removeRow(wrap); },0); });
     setTimeout(function(){autosize(ta);},0);
     return wrap;
