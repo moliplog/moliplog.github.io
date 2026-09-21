@@ -140,6 +140,8 @@ a.solid{display:inline-flex;align-items:center;text-decoration:none}
 .picks{display:flex;gap:6px;align-items:center}
 select,.num{height:40px;padding:0 10px;border:1px solid var(--line);border-radius:10px;background:var(--surface);font-weight:600;text-align:center;text-align-last:center;appearance:none;-webkit-appearance:none}
 select.h{min-width:96px} select.p{min-width:70px}
+.line.form.wraps{flex-wrap:wrap;row-gap:6px} .ymd{flex:1 1 calc(8.1em + 54px);min-width:0;display:flex;gap:6px} .ymd select{flex:1 1 calc(2.3em + 14px);min-width:0;height:42px;padding:0 4px;font-weight:400} .ymd select.y{flex-basis:calc(3.5em + 14px)}   /* each box starts from the room its longest choice needs ('2025년' is about 3.5em, '12월' 2.3em, plus padding) and they share what is left; where that much does not fit beside the label (a narrow phone with large text), the three take the line below it */
+ .ymd select.blank{color:var(--ink-2);color:color-mix(in srgb,var(--ink-2) 45%,transparent)}
 .line{flex-wrap:nowrap}.line .label{min-width:0;white-space:nowrap}
 /* the same narrow-screen rules, for when a larger text size leaves less than 360px of room (see applyTextSize) */
 .narrow select.h{min-width:84px;padding:0 6px} .narrow select.p{min-width:62px;padding:0 6px} .noranges .label small{display:none}   /* the hours beside Morning/Noon/Evening (06–12 …) are hidden only where they really do not fit: see fitRanges. They used to vanish at the default text size on every phone, though the Korean labels have room to spare */
@@ -177,6 +179,7 @@ select.h{min-width:96px} select.p{min-width:70px}
 :is(.ts1,.ts2) .kid:not(.text){padding:calc(7px/var(--z)) 0}
 :is(.ts1,.ts2) .kid:not(.text)::before{transform:translateY(calc(7px/var(--z) - 7px))}   /* dots placed by a fixed top follow the smaller padding */
 :is(.ts1,.ts2) .kid:not(.block):has(>.line)::before,:is(.ts1,.ts2) .kid:has(>.habit)::before,:is(.ts1,.ts2) .kid:has(>.rowf>.field)::before,:is(.ts1,.ts2) .kid:has(>.mini)::before{transform:none}   /* dots centred on a control already follow it */
+.kid.wrapped:not(.block):has(>.line)::before{top:17px;margin-top:0} :is(.ts1,.ts2) .kid.wrapped:not(.block):has(>.line)::before{transform:translateY(calc(7px/var(--z) - 7px))}   /* the start date whose three boxes went to the line below (see fitYmd): the dot stays beside the first line, the name */
 :is(.ts1,.ts2) select,:is(.ts1,.ts2) .num{height:calc(16px + 24px/var(--z))}
 :is(.ts1,.ts2) .habit{min-height:calc(16px + 22px/var(--z))}
 :is(.ts1,.ts2) .club,:is(.ts1,.ts2) .pins{margin-bottom:calc(24px/var(--z))}
@@ -247,11 +250,6 @@ select.h{min-width:96px} select.p{min-width:70px}
 input[type="date"].field{-webkit-appearance:none;appearance:none;text-align:left;line-height:40px;padding-top:0;padding-bottom:0}
 input[type="date"].field::-webkit-date-and-time-value{text-align:left;margin:0;line-height:40px}
 .field::placeholder{color:var(--ink-2);opacity:.45}
-input[type="date"].field.blank{position:relative}
-input[type="date"].field.blank::before{content:attr(data-eg);position:absolute;left:12px;top:0;line-height:40px;color:var(--ink-2);opacity:.45;pointer-events:none;white-space:nowrap}
-input[type="date"].field.blank:not(:focus)::-webkit-datetime-edit{color:transparent}
-input[type="date"].field.blank:not(:focus)::-webkit-date-and-time-value{color:transparent}
-input[type="date"].field.blank:focus::before{content:none}
 .tools{display:flex;gap:6px;flex:none}
 .tools button,.mini{flex:none;white-space:nowrap;height:42px;min-width:42px;padding:0 10px;border:1px solid var(--line);border-radius:10px;background:var(--surface);font-size:14px}
 .rowf{display:flex;gap:6px;align-items:center}
@@ -307,7 +305,7 @@ en:{appName:'Molip Journal',saved:'Saved on this device {t}',local:'Records stay
  pitch:'Molip (Immersion) Journal, one page a day. Log your focused hours and intensity once a day, and after a week your Molip pattern shows.',intro:'Write under each section, and tap ‘Summary’ beside a section to see its week and month. For other days use the arrows, or tap the small date under the title to open a calendar.',gotIt:'Got it',
  warnStorage:'This browser is blocking storage, so your records will disappear when you close this window. Turn off private browsing or open the app in another browser.',
  summary:'Summary',openSummary:'Open {name} summary',sumOf:'{name} summary',eventsPlain:'Events',noSections:'There are no sections yet. Add some in ‘Sections & settings’.',
- write:'Write freely',newItem:'{name}: new item',item:'{name} item',entries:'{n}',hours:'Hours',hoursOf:'{p} hours',intensityOf:'{p} intensity',hUnit:'{n} h',
+ write:'Write freely',newItem:'{name}: new item',item:'{name} item',entries:'{n}',hours:'Hours',hoursOf:'{p} hours',intensityOf:'{p} intensity',hUnit:'{n} h',ymdY:'Year',ymdM:'Month',ymdD:'Day',
  daySum:'{h} h, avg {p}%',daySumNoAvg:'{h} h',noChecks:'Add things to check in Sections & settings.',noNumbers:'Add numbers to track in Sections & settings.',none:'Not recorded',
  copyWeek:'Copy the whole week’s records as text',weekText:'Week as text',weekTextSub:'Check it, then copy it into an email and delete what you don’t need',copyText:'Copy text',shareText:'Share',weekTextAria:'The week as text',weeklySummary:'Weekly summary',noRecordsDay:'no records',sumFlowLine:'{h} h, average intensity {p}%, {d} days recorded',sumTodoLine:'{a} done, {b} unfinished',sumListLine:'{n} entries',avgShort:'avg',
  markDone:'Mark as done',openList:'Open list',openListAria:'Open the list of unfinished {name} items',openTodos:'Unfinished to-dos',upcoming:'Upcoming',earlier:'Earlier',since:'since {date}',noneOpen:'Nothing unfinished',markedDone:'Marked done: {text}',undo:'Undo',
@@ -333,7 +331,7 @@ en:{appName:'Molip Journal',saved:'Saved on this device {t}',local:'Records stay
  topMemo:'Extra note',topMemoShow:'Show an extra note line under the title',topMemoNote:'Other notes stay on their own day’s page; what you write here (e.g. monthly goal) shows on every day’s page until you remove it with its ×. Enter makes the next line, up to {n} lines.',pinWrite:'Extra note (e.g. monthly goal)',pinItem:'Extra note',pinNew:'New extra note',pinTake:'Remove this note',pinTaken:'Removed: {text}',
  mergedJust:'Merged.',mergedPins:'{n} extra notes came in.',
  dayNo:'Day {n}',dayRange:'days {a}–{b}',
- report:'Enter your Molip start date and purpose',reportNote:'Once entered, the week number shows as a title at the top of the day page and as the first line of the week text. Leave the start date empty to hide it.',startDate:'Start date',goal:'Purpose',startEg:'e.g. {d}',goalHint:'e.g. Thesis writing',reportEmpty:'No title yet. Choose a start date.',
+ report:'Enter your Molip start date and purpose',reportNote:'Once entered, the week number shows as a title at the top of the day page and as the first line of the week text. Leave the start date empty to hide it.',startDate:'Start date',goal:'Purpose',goalHint:'e.g. Thesis writing',reportEmpty:'No title yet. Choose a start date.',
  setTitle:'Sections & settings',setSub:'Each day’s new page is built from these sections',secName:'Section name',secEgChecks:'e.g. Mornings',secEgNumbers:'e.g. Reading',secEgList:'e.g. Gratitude',itemEgCheck:'e.g. Drink water',itemEgNumber:'e.g. Pages',unitHint:'unit (e.g. pages)',hoursTip:'To record time, type ‘h’ as the unit: 1.5 then shows as 1h 30m in the summary.',up:'Move up',down:'Move down',type:'Section type',
  tList:'Text',tTodo:'To-do',tFlow:'Molip',tChecks:'Checkbox',tNumbers:'Number',delSection:'Delete section',delSectionSure:'Really delete (records are kept)',cancel:'Cancel',
  name:'Name',unit:'unit',del:'Delete',addCheck:'Add a checkbox',addNumber:'Add a number',newHabit:'New checkbox',newNumber:'Level',delNote:'Built-in sections you don’t need can be deleted, and brought back later from ‘Bring back a deleted section’ further down. Deleting keeps what you recorded; it shows again once the section is back.',bringBack:'Bring back a deleted section',purge:'Delete ‘{name}’ for good',purgeSure:'Really delete ‘{name}’ for good (its records too)',purgeNote:'A section you made yourself can also be deleted for good. Everything written in it goes too, and this can’t be undone. Built-in sections always stay here to bring back.',bringBackNote:'A tap puts it back where it was, and what you recorded in it shows again.',addSection:'Add a section',addNote:'Add sections of your own (e.g. mood, reading, gratitude, prayer).',addPick:'Choose a type: Checkbox, Number or Text.',
@@ -349,7 +347,7 @@ ko:{appName:'몰입 일지',saved:'이 기기에 저장됨 {t}',local:'기록은
  pitch:'Molip은 매일 한 페이지씩 적는 몰입 일지예요. 하루 한 번 몰입 시간과 몰입도를 적으면, 일주일 뒤 내 몰입 패턴이 보여요.',intro:'각 항목 아래에 그날의 기록을 남기고, 항목 오른쪽의 ‘요약’을 누르면 주간·월간 기록을 모아 볼 수 있어요. 다른 날은 양옆의 화살표로 가거나, 제목 밑의 작은 날짜를 누르면 달력이 나와요.',gotIt:'알겠어요',
  warnStorage:'이 브라우저가 저장을 막고 있어서, 창을 닫으면 기록이 사라져요. 사생활 보호 모드를 끄거나 다른 브라우저로 열어 주세요.',
  summary:'요약',openSummary:'{name} 요약 열기',sumOf:'{name} 요약',eventsPlain:'이벤트',noSections:'기록할 항목이 없어요. ‘항목과 설정’에서 항목을 추가하세요.',
- write:'자유롭게 적기',newItem:'{name} 새 항목',item:'{name} 항목',entries:'{n}건',hours:'시간',hoursOf:'{p} 몰입 시간',intensityOf:'{p} 몰입도',hUnit:'{n}시간',
+ write:'자유롭게 적기',newItem:'{name} 새 항목',item:'{name} 항목',entries:'{n}건',hours:'시간',hoursOf:'{p} 몰입 시간',intensityOf:'{p} 몰입도',hUnit:'{n}시간',ymdY:'년',ymdM:'월',ymdD:'일',
  daySum:'{h}시간, 평균 {p}%',daySumNoAvg:'{h}시간',noChecks:'항목과 설정에서 체크할 것을 추가하세요.',noNumbers:'항목과 설정에서 기록할 숫자를 추가하세요.',none:'기록 없음',
  copyWeek:'일주일치 전체 기록을 텍스트로 복사',weekText:'주간 텍스트',weekTextSub:'확인한 뒤 복사해서 이메일에 붙이고, 필요 없는 부분은 지우세요',copyText:'텍스트 복사',shareText:'공유',weekTextAria:'일주일치 텍스트',weeklySummary:'주간 요약',noRecordsDay:'기록 없음',sumFlowLine:'{h}시간, 평균 몰입도 {p}%, 기록한 날 {d}일',sumTodoLine:'완료 {a}개, 미완료 {b}개',sumListLine:'{n}건',avgShort:'평균',
  markDone:'완료 표시',openList:'미완료 목록',openListAria:'{name} 미완료 목록 열기',openTodos:'미완료 할 일',upcoming:'다가오는 할 일',earlier:'이전 미완료',since:'{date} 이후',noneOpen:'미완료 없음',markedDone:'완료로 표시: {text}',undo:'되돌리기',
@@ -375,7 +373,7 @@ ko:{appName:'몰입 일지',saved:'이 기기에 저장됨 {t}',local:'기록은
  topMemo:'추가 메모',topMemoShow:'제목 아래 추가 메모 칸 보이기',topMemoNote:'다른 메모는 그날 페이지에만 남지만, 이 칸에 적은 것(예: 포커싱 포인트, 이달 목표)은 ×⁠로 지울 때까지 매일 페이지에 보여요. Enter를 치면 다음 줄이 생기고, {n}줄까지 적을 수 있어요.',pinWrite:'추가 메모 (예: 포커싱 포인트, 이달 목표)',pinItem:'추가 메모',pinNew:'새 추가 메모',pinTake:'이 메모 지우기',pinTaken:'지웠어요: {text}',
  mergedJust:'합쳤어요.',mergedPins:'추가 메모 {n}개가 들어왔어요.',
  dayNo:'{n}일차',dayRange:'{a}–{b}일차',
- report:'몰입 시작일과 목적 입력하기',reportNote:'입력해 두면 몇 주차인지가 하루 기록 맨 위와 주간 텍스트 첫 줄에 제목으로 나와요. 몰입 시작일을 비워 두면 나오지 않아요.',startDate:'몰입 시작일',goal:'몰입 목적',startEg:'예: {d}',goalHint:'예: 공기업 입사준비',reportEmpty:'아직 제목이 없어요. 몰입 시작일을 골라 주세요.',
+ report:'몰입 시작일과 목적 입력하기',reportNote:'입력해 두면 몇 주차인지가 하루 기록 맨 위와 주간 텍스트 첫 줄에 제목으로 나와요. 몰입 시작일을 비워 두면 나오지 않아요.',startDate:'몰입 시작일',goal:'몰입 목적',goalHint:'예: 공기업 입사준비',reportEmpty:'아직 제목이 없어요. 몰입 시작일을 골라 주세요.',
  setTitle:'항목과 설정',setSub:'매일 새 페이지가 이 항목들로 만들어져요',secName:'항목 이름',secEgChecks:'예: 아침 루틴',secEgNumbers:'예: 독서',secEgList:'예: 감사',itemEgCheck:'예: 물 마시기',itemEgNumber:'예: 쪽수',unitHint:'단위 (예: 쪽)',hoursTip:'시간을 기록할 때는 단위에 ‘시간’이라고 적으세요. 1.5라고 적으면 요약에 1시간 30분으로 나와요.',up:'위로',down:'아래로',type:'항목 종류',
  tList:'텍스트',tTodo:'할 일',tFlow:'몰입도',tChecks:'체크',tNumbers:'숫자',delSection:'항목 삭제',delSectionSure:'정말 삭제 (기록은 남아요)',cancel:'취소',
  name:'이름',unit:'단위',del:'삭제',addCheck:'체크할 것 추가',addNumber:'숫자 추가',newHabit:'체크할 것',newNumber:'레벨',delNote:'필요 없는 기본 항목은 ‘항목 삭제’로 지울 수 있고, 필요하면 아래쪽 ‘지운 항목 되살리기’에서 되살릴 수 있어요. 지워도 적어 둔 기록은 그대로 있어서, 되살리면 다시 보여요.',bringBack:'지운 항목 되살리기',purge:'‘{name}’ 영구 삭제',purgeSure:'정말 ‘{name}’ 영구 삭제 (기록도 지워져요)',purgeNote:'직접 만든 항목은 영구 삭제할 수도 있어요. 그 항목에 적은 기록까지 지워지고 되돌릴 수 없어요. 기본 항목은 언제든 되살릴 수 있게 남겨 둡니다.',bringBackNote:'누르면 원래 있던 자리에 다시 생기고, 예전에 적은 기록도 다시 보여요.',addSection:'항목 추가',addNote:'필요한 항목을 추가할 수 있어요(예: 기분, 독서, 감사, 기도).',addPick:'체크·숫자·텍스트 중 종류를 고르세요.',
@@ -420,7 +418,7 @@ function el(tag,attrs){
   function add(x){ if(x==null||x===false) return; if(Array.isArray(x)){x.forEach(add);return;} n.appendChild(x.nodeType?x:document.createTextNode(String(x))); }
   return n;
 }
-var BUILD='9.21 12:12';   /* stamped by the build script */
+var BUILD='9.21 12:41';   /* stamped by the build script */
 function lang(){return STR[DB.settings.lang]?DB.settings.lang:'ko';}
 function t(k,vars){ var s=STR[lang()][k]; if(s==null) s=STR.en[k]!=null?STR.en[k]:k;
   return vars?s.replace(/\{(\w+)\}/g,function(m,a){return vars[a]!=null?vars[a]:'';}):s; }
@@ -1208,17 +1206,31 @@ function screenSettings(){
         Object.keys(DB.days).forEach(function(k){ var d=DB.days[k]; if(d&&d.s){ delete d.s[x.id]; delete d.s[x.id+':memo']; } });
         changed(); },'link danger')); })):[])):null;
   var delNote=el('p',{class:'muted',style:'margin:-8px 0 24px 24px',text:t('delNote')});
-  var sd=el('input',{class:'field',type:'date','aria-label':t('startDate')}); sd.value=DB.settings.startDate||'';
-  /* example date: the Monday four weeks before this week, so it always reads like a real start date */
-  (function(){var d=today();d=addDays(d,-((d.getDay()+6)%7)-28);sd.setAttribute('data-eg',t('startEg',{d:keyOf(d)}));})();
-  function egSync(){sd.classList.toggle('blank',!sd.value);} egSync(); sd.addEventListener('input',egSync); sd.addEventListener('change',egSync);
+  /* The start date is chosen with three boxes (year, month, day), the way the hours of Molip are chosen. A phone's own calendar stood here before:
+     an iPhone's gives the year and the month on wheels and the day on a separate grid, so a date far back could not be set in one go. Nothing is redrawn while choosing. */
+  var sd0=/^(\d{4})-(\d{2})-(\d{2})$/.exec(DB.settings.startDate||''),dr=UI.startDraft||{};
+  var ys=el('select',{class:'y','aria-label':t('ymdY')}),ms=el('select',{'aria-label':t('ymdM')}),ds=el('select',{'aria-label':t('ymdD')}),ko=lang()==='ko';
+  ys.append(el('option',{value:'',text:t('ymdY')})); ms.append(el('option',{value:'',text:t('ymdM')}));
+  (function(){ var top=today().getFullYear()+1,have=sd0?+sd0[1]:0,y;      /* next year too: a start may be set up ahead; this year is second from the top */
+    if(have>top) ys.append(el('option',{value:String(have),text:ko?have+'년':String(have)}));
+    for(y=top;y>=2005;y--) ys.append(el('option',{value:String(y),text:ko?y+'년':String(y)}));
+    if(have&&have<2005) ys.append(el('option',{value:String(have),text:ko?have+'년':String(have)}));
+    for(var m=1;m<=12;m++) ms.append(el('option',{value:String(m),text:ko?m+'월':MON[m-1]})); })();
+  function fillDays(){ var y=+ys.value||2000,m=+ms.value,n=m?new Date(y,m,0).getDate():31,d=Math.min(+ds.value||0,n);   /* a month not yet chosen allows 31; February without a year allows 29 */
+    ds.replaceChildren(el('option',{value:'',text:t('ymdD')})); for(var x=1;x<=n;x++) ds.append(el('option',{value:String(x),text:ko?x+'일':String(x)})); ds.value=d?String(d):''; }
+  ys.value=sd0?String(+sd0[1]):(dr.y?String(dr.y):''); ms.value=sd0?String(+sd0[2]):(dr.m?String(dr.m):''); fillDays(); ds.value=sd0?String(+sd0[3]):(dr.d?String(dr.d):'');
+  function ymdBlank(){ [ys,ms,ds].forEach(function(x){x.classList.toggle('blank',!x.value);}); } ymdBlank();
+  var sd=el('div',{class:'ymd',role:'group','aria-label':t('startDate')},ys,ms,ds);
   var gl=el('input',{class:'field',type:'text','aria-label':t('goal'),placeholder:t('goalHint'),value:DB.settings.goal||''});
   var pv=el('span',{class:'muted','aria-live':'polite'}); function showTitle(){ pv.textContent=reportTitle(today())||t('reportEmpty'); } showTitle();
-  sd.addEventListener('change',function(){DB.settings.startDate=sd.value||'';save();showTitle();});   /* no redraw here: an iPhone reports a change at every turn of the year, month and day wheels, and a redraw replaces this field, which shuts its picker after the first of the three. Only the title line below depends on the date, so that alone is brought up to date. */
+  [ys,ms,ds].forEach(function(x){ x.addEventListener('change',function(){ fillDays();   /* a day the new month does not have (31 → 30) falls back to its last day */
+    var y=+ys.value,m=+ms.value,d=+ds.value;
+    if(y&&m&&d){ DB.settings.startDate=y+'-'+pad(m)+'-'+pad(d); UI.startDraft=null; } else { DB.settings.startDate=''; UI.startDraft={y:y,m:m,d:d}; }   /* a date only once all three are chosen; what is chosen so far is kept for this screen */
+    ymdBlank(); save(); showTitle(); }); });   /* no redraw: only the title line below depends on the date */
   gl.addEventListener('input',function(){DB.settings.goal=gl.value;save();showTitle();});
   var report=node(el('h2',{text:t('report')}),[
     el('div',{class:'kid'},el('span',{class:'muted',text:t('reportNote')})),
-    el('div',{class:'kid'},el('label',{class:'line form'},el('span',{class:'label',text:t('startDate')}),sd)),
+    el('div',{class:'kid'},el('div',{class:'line form wraps'},el('span',{class:'label',text:t('startDate')}),sd)),
     el('div',{class:'kid'},el('label',{class:'line form'},el('span',{class:'label',text:t('goal')}),gl)),
     el('div',{class:'kid'},pv),
     el('div',{class:'kid'},el('button',{class:'habit',type:'button','aria-pressed':String(topMemoOn()),onclick:function(){ DB.settings.topMemo=!topMemoOn(); changed(); }},checkSvg(el('span',{class:'check'})),t('topMemoShow'))),
@@ -1290,15 +1302,16 @@ function screenSettings(){
 function applyLang(){ document.documentElement.lang=lang(); document.title=t('appName'); }
 var TEXT_ZOOM=[1,1.1,1.2];   /* Small 16px, Normal 17.6px (the default), Large 19.2px. Text size: the whole page grows by the same ratio, so nothing on the day page has to change */
 function applyTextSize(){ var i=DB.settings.textSize|0,z=TEXT_ZOOM[i]||1,r=$('#root'); r.style.zoom=z===1?'':String(z); r.classList.toggle('narrow',window.innerWidth/z<360); r.classList.toggle('ts1',i===1); r.classList.toggle('ts2',i===2); }
-window.addEventListener('resize',applyTextSize);
+window.addEventListener('resize',applyTextSize); window.addEventListener('resize',function(){fitYmd();});
 function render(){ var root=$('#root'),keepY=window.scrollY;   /* Chrome (Android, desktop) gives a tapped button the focus, and when that button is replaced by the redraw the page jumps towards the top. Safari does not focus buttons, so an iPhone never showed it. The page stays where it was; go() still starts a new screen at the top. */
-  root.replaceChildren.apply(root,(UI.screen==='summary'?screenSummary():UI.screen==='settings'?screenSettings():UI.screen==='export'?screenExport():UI.screen==='alltext'?screenAllText():screenDay()).filter(Boolean)); renderStatus(); fitHints(); fitRanges(); if(window.scrollY!==keepY) window.scrollTo(0,keepY); }
+  root.replaceChildren.apply(root,(UI.screen==='summary'?screenSummary():UI.screen==='settings'?screenSettings():UI.screen==='export'?screenExport():UI.screen==='alltext'?screenAllText():screenDay()).filter(Boolean)); renderStatus(); fitHints(); fitRanges(); fitYmd(); if(window.scrollY!==keepY) window.scrollTo(0,keepY); }
 /* Morning 06–12, Noon 12–18, Evening 18–24 (three equal parts of six hours; the hours are only a guide, nothing is computed from them): the hours say which slot a stretch of work belongs to, so they stay whenever the row has room for them. If any of the three rows is too tight, all three drop them together. */
 function fitRanges(){ [].forEach.call(document.querySelectorAll('section.node'),function(sec){ if(!sec.querySelector('.label small')) return;
   sec.classList.remove('noranges');
   var tight=[].some.call(sec.querySelectorAll('.line'),function(l){ var lab=l.querySelector('.label'); return (lab&&lab.scrollWidth>lab.clientWidth+1)||l.scrollWidth>l.clientWidth+1; });
   if(tight) sec.classList.add('noranges'); }); }
 /* A hint with its example ('새 숫자 항목 (예: 독서)') may be wider than its box on a small phone or with large text. Rather than show it cut off, the example is dropped and the stock name stands alone. */
+function fitYmd(){ var y=document.querySelector('.ymd'),k=y&&y.closest('.kid'),l=k&&k.querySelector('.label'); if(l) k.classList.toggle('wrapped',y.offsetTop>=l.offsetTop+l.offsetHeight-2); }   /* have the year, month and day boxes gone below their name? CSS cannot tell, and the dot needs to know */
 function fitHints(){ var boxes=document.querySelectorAll('input[data-short]'); if(!boxes.length) return;
   var c=fitHints.c||(fitHints.c=document.createElement('canvas').getContext('2d'));
   [].forEach.call(boxes,function(i){ try{ var cs=getComputedStyle(i),room=i.clientWidth-parseFloat(cs.paddingLeft)-parseFloat(cs.paddingRight); c.font=cs.fontStyle+' '+cs.fontWeight+' '+cs.fontSize+' '+cs.fontFamily;
