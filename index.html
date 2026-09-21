@@ -120,7 +120,7 @@ a.solid{display:inline-flex;align-items:center;text-decoration:none}
 .sec .t{font:600 17px/1.6 var(--ui)}
 .sec .sum{flex:1;text-align:right;font-size:14px;color:var(--ink-2)}
 .sec .go{flex:none;font-size:13px;color:var(--water);text-decoration:underline;text-underline-offset:3px}
-.node.edit>.dot{top:17px} .wipebox{margin:44px 0 6px;text-align:center;font-size:13px} .wipebox button{display:block;margin:0 auto;font-size:13px} .wipebox .wide{width:100%;padding:4px 0} .wipebox .wide+.danger{margin-top:16px} .typeline{min-height:26px;margin:0 0 6px} .typeline>.muted{white-space:nowrap} .node.edit.typed>.dot{display:none} .headwrap{position:relative} .headwrap>.dot2{position:absolute;left:-21px;top:17px;width:8px;height:8px;border-radius:50%;background:var(--ink)}   /* the bullet belongs to the title row, wherever the line above it ends (on a small phone 'Really delete' takes a second line) */
+.node.edit>.dot{top:17px} .wordmark{margin:14px 0 0;text-align:center;font-size:13px;letter-spacing:.06em;color:var(--ink-2);-webkit-user-select:all;user-select:all} .wipebox{margin:28px 0 -40px;padding-top:16px;border-top:1px solid var(--line);text-align:left;font-size:13px} .wipebox button{display:block;margin:0 auto 0 0;font-size:13px} .wipebox .quiet{color:var(--ink-2)} .wipebox.ask{display:flex;align-items:baseline;gap:12px} .wipebox.ask button{margin:0} .wipebox.ask .wide{flex:1;text-align:left} .wipebox.ask .danger{flex:none}   /* a quiet footer under a thin line: grey and to the left. Only the real button of the second step is red */ .typeline{min-height:26px;margin:0 0 6px} .typeline>.muted{white-space:nowrap} .node.edit.typed>.dot{display:none} .headwrap{position:relative} .headwrap>.dot2{position:absolute;left:-21px;top:17px;width:8px;height:8px;border-radius:50%;background:var(--ink)}   /* the bullet belongs to the title row, wherever the line above it ends (on a small phone 'Really delete' takes a second line) */
 .node>h2{margin:0 0 4px;font:600 17px/1.6 var(--ui);padding:3px 0}
 .kids{margin-left:-17px;padding-left:22px;border-left:1px solid var(--line)}
 .kid{position:relative;padding:7px 0}
@@ -342,7 +342,7 @@ en:{appName:'Molip Journal',saved:'Saved on this device {t}',local:'Records stay
  makeBackup:'Make a backup',backupText:'Backup text',copyBackup:'Copy backup',copied:'Copied',copyHint:'Paste it into a note or an email to yourself.',
  merge:'Merge with backup',mergeNote:'Merge keeps everything on this device and adds what only the backup has. Replace swaps everything here for the backup.',merged:'Merged. {a} new days came in, {b} days gained something.',mergedNone:'Merged. Nothing new was in the backup.',
  saveFile:'Save backup file',saveIOS:'On iPhone a share sheet opens. Choose ‘Save to Files’.',saveAsText:'This phone can’t hand over a file here, so the backup is shown as text above. Copy it and keep it in a note or an email.',pickFile:'Choose backup file',pasteHere:'Paste a backup here',importAria:'Backup to restore',restore:'Replace with backup',importEmpty:'Nothing to read yet. Paste your backup text into the box above first.',importEmptyFile:'Nothing to read yet. Paste your backup text into the box above, or use ‘Choose backup file’.',fileRead:'Backup file read: {n} days of records. Now choose Merge or Replace below.',fileBad:'That file isn’t a backup from this app. Choose the file whose name starts with journal-backup.',restoreSure:'Replace now',restoreWarn:'Everything on this device will be replaced by the backup. Tap ‘Replace now’ to go ahead.',
- importErr:'Couldn’t read that backup. Make sure you pasted all of it, from start to end.',wipe:'Erase all records',wipeSure:'Really erase everything (cannot be undone)'},
+ importErr:'Couldn’t read that backup. Make sure you pasted all of it, from start to end.',wipe:'Erase all records',wipeSure:'Really erase everything'},
 ko:{appName:'몰입 일지',saved:'이 기기에 저장됨 {t}',local:'기록은 이 기기에만 저장돼요',blocked:'이 브라우저가 저장을 막고 있어요',
  settings:'항목과 설정',back:'하루 기록으로 돌아가기',prevDay:'전날',nextDay:'다음 날',today:'오늘',yesterday:'어제',tomorrow:'내일',
  daysAgo:'{n}일 전',inDays:'{n}일 뒤',goToday:'오늘로 가기',pickDate:'날짜 고르기',
@@ -384,7 +384,7 @@ ko:{appName:'몰입 일지',saved:'이 기기에 저장됨 {t}',local:'기록은
  makeBackup:'백업 만들기',backupText:'백업 내용',copyBackup:'백업 복사',copied:'복사됨',copyHint:'복사해서 메모장이나 메일에 붙여 두세요.',
  merge:'백업과 합치기',mergeNote:'합치기는 이 기기의 기록을 그대로 두고, 백업에만 있는 날짜와 글을 더해요. 바꾸기는 이 기기의 기록을 백업으로 통째로 바꿔요.',merged:'합쳤어요. 새로 들어온 날 {a}일, 내용이 더해진 날 {b}일.',mergedNone:'합쳤어요. 백업에 새로운 내용은 없었어요.',
  saveFile:'백업 파일로 저장',saveIOS:'아이폰에서는 공유 창이 열려요. ‘파일에 저장’을 고르세요.',saveAsText:'이 폰에서는 파일로 내보낼 수 없어서 위에 백업을 글자로 띄웠어요. 복사해서 메모장이나 메일에 보관하세요.',pickFile:'백업 파일 고르기',pasteHere:'백업 내용을 여기에 붙여 넣기',importAria:'불러올 백업',restore:'백업으로 바꾸기',importEmpty:'아직 읽을 백업이 없어요. 먼저 위 칸에 백업 글자를 붙여 넣으세요.',importEmptyFile:'아직 읽을 백업이 없어요. 위 칸에 백업 글자를 붙여 넣거나 ‘백업 파일 고르기’로 파일을 고르세요.',fileRead:'백업 파일을 읽었어요. {n}일치 기록이 들어 있어요. 아래에서 합치기나 바꾸기를 누르세요.',fileBad:'이 파일은 이 앱의 백업 파일이 아니에요. 이름이 journal-backup으로 시작하는 파일을 골라 주세요.',restoreSure:'지금 바꾸기',restoreWarn:'이 기기의 기록이 모두 백업 내용으로 바뀌어요. 계속하려면 ‘지금 바꾸기’를 누르세요.',
- importErr:'백업 내용을 읽지 못했어요. 처음부터 끝까지 빠짐없이 붙여 넣었는지 확인하세요.',wipe:'모든 기록 지우기',wipeSure:'정말 모두 지우기 (되돌릴 수 없어요)'}
+ importErr:'백업 내용을 읽지 못했어요. 처음부터 끝까지 빠짐없이 붙여 넣었는지 확인하세요.',wipe:'모든 기록 지우기',wipeSure:'정말 모두 지우기'}
 };
 var DEF={
  en:{events:'Today’s events',eventsHint:'e.g. Seminar at 2',todo:'Todo',todoHint:'Add a to-do',flow:'Molip',habits:'Habit Tracker',exercise:'Exercise',vitamins:'Vitamins',sleep:'Sleep Tracker',sleepHours:'Last night’s sleep',light:'Light naps',notes:'Notes',notesHint:'Write freely',uH:'h',uX:'times'},
@@ -420,7 +420,7 @@ function el(tag,attrs){
   function add(x){ if(x==null||x===false) return; if(Array.isArray(x)){x.forEach(add);return;} n.appendChild(x.nodeType?x:document.createTextNode(String(x))); }
   return n;
 }
-var BUILD='9.21 09:32';   /* stamped by the build script */
+var BUILD='9.21 10:00';   /* stamped by the build script */
 function lang(){return STR[DB.settings.lang]?DB.settings.lang:'ko';}
 function t(k,vars){ var s=STR[lang()][k]; if(s==null) s=STR.en[k]!=null?STR.en[k]:k;
   return vars?s.replace(/\{(\w+)\}/g,function(m,a){return vars[a]!=null?vars[a]:'';}):s; }
@@ -1131,11 +1131,11 @@ function twoStep(id,label,confirmLabel,fn,cls){
   return el('button',{class:cls||'mini',type:'button',text:label,onclick:function(){UI.confirm=id;render();}});
 }
 /* Erasing everything cannot be undone, so it sits at the very end of the settings, below the version line and well away from the big ‘back to the day’ button that is pressed all the time.
-   Once tapped, the place where the finger was becomes Cancel (the whole line), the real button appears below it, and for a moment it does not listen: neither a double tap nor a second careless tap erases anything. */
+   Once tapped, the place where the finger was becomes Cancel (everything left of the real button), the real button appears at the far right of the same line, and for a moment it does not listen: neither a double tap nor a second careless tap erases anything. One line, so the page keeps its height: this is the very end of the page, and a second line would fall below the screen. */
 function wipeBox(){
-  if(UI.confirm!=='wipe') return el('div',{class:'wipebox'},el('button',{class:'link danger',type:'button',text:t('wipe'),onclick:function(){UI.confirm='wipe';render();}}));
+  if(UI.confirm!=='wipe') return el('div',{class:'wipebox'},el('button',{class:'link quiet',type:'button',text:t('wipe'),onclick:function(){UI.confirm='wipe';render();}}));
   var born=Date.now();
-  return el('div',{class:'wipebox'},el('button',{class:'link wide',type:'button',text:t('cancel'),onclick:function(){UI.confirm=null;render();}}),
+  return el('div',{class:'wipebox ask'},el('button',{class:'link wide',type:'button',text:t('cancel'),onclick:function(){UI.confirm=null;render();}}),
     el('button',{class:'link danger',type:'button',text:t('wipeSure'),onclick:function(){ if(Date.now()-born<700) return; UI.confirm=null; DB.days={}; DB.pins=[]; DB.trash=[]; DB.template=defaultTemplate(lang()); saveNow(); go('day'); }}));
 }
 function screenSettings(){
@@ -1280,7 +1280,9 @@ function screenSettings(){
   bk.push(el('div',{class:'kid'},el('button',{class:'link',type:'button',text:t('allTextOpen'),onclick:function(){go('alltext');}}),
     el('p',{class:'muted',style:'margin:4px 0 0;font-size:13px',text:t('allTextHint',{btn:t(INSTALLABLE?'saveFile':'makeBackup')})})));
   var end=el('div',{class:'endbar'},el('button',{class:'solid',type:'button',text:t('back'),onclick:function(){go('day');}}),
-    el('p',{class:'muted',style:'margin:14px 0 0;text-align:center;font-size:12px',text:t('version')+' '+BUILD}),wipeBox());
+    /* the app's address as a small wordmark: an installed app has no address bar, so this is where someone finds the address to pass on. Plain grey with a little letter-spacing: no colour of its own, so nothing at the foot of the page asks for attention. */
+    el('p',{class:'wordmark',text:'moliplog.github.io'}),
+    el('p',{class:'muted',style:'margin:2px 0 0;text-align:center;font-size:11px',text:t('version')+' '+BUILD}),wipeBox());
   return [head,report,delNote].concat(secs,[adders,restore,week,langs,sizes,node(el('h2',{text:t('backup')}),bk),end]);
 }
 
