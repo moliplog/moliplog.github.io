@@ -420,7 +420,7 @@ function el(tag,attrs){
   function add(x){ if(x==null||x===false) return; if(Array.isArray(x)){x.forEach(add);return;} n.appendChild(x.nodeType?x:document.createTextNode(String(x))); }
   return n;
 }
-var BUILD='9.21 14:55';   /* stamped by the build script */
+var BUILD='9.21 15:12';   /* stamped by the build script */
 function lang(){return STR[DB.settings.lang]?DB.settings.lang:'ko';}
 function t(k,vars){ var s=STR[lang()][k]; if(s==null) s=STR.en[k]!=null?STR.en[k]:k;
   return vars?s.replace(/\{(\w+)\}/g,function(m,a){return vars[a]!=null?vars[a]:'';}):s; }
@@ -932,10 +932,10 @@ function sumNumbers(sec,mode,dates,prevDates){
   return items.map(function(it){
     var vals=numVals(dates,sec.id,it.id),a=avg(vals),pa=avg(numVals(prevDates,sec.id,it.id)),have=vals.filter(function(v){return v!=null;});
     var mx=Math.max.apply(null,have.concat([1e-9]));
-    /* A month has some thirty bars, too narrow to carry a number each, so they get something to be measured against: the average as a dashed line.
-       It lies behind the bars, and a bar that rises above it is cut by a one-pixel slit in the colour of the page, so it reads as one line from edge to edge.
-       A week has its numbers under the bars and needs no line. Whole pixels, so that line and slits meet exactly. */
-    var BARH=84,ay=(mode==='month'&&have.length>1&&a>0)?Math.round(a/mx*BARH):null;
+    /* Something to measure the bars against: the average as a dashed line. A month needs it most (some thirty bars, too narrow to carry a number each); a week has its numbers under the bars and gets the same line, so the two views read alike.
+       It lies behind the bars, and a bar that rises above it is cut by a one-pixel slit in the colour of the page, so it reads as one line from edge to edge. Whole pixels, so that line and slits meet exactly.
+       With a single record the average is that bar itself, and no line is drawn. */
+    var BARH=84,ay=(have.length>1&&a>0)?Math.round(a/mx*BARH):null;
     var bars=el('div',{class:'bars'},ay==null?null:el('span',{class:'avgline','aria-hidden':'true',style:'bottom:'+ay+'px'}),dates.map(function(d,i){ var v=vals[i],b=el('i',{class:v==null?'none':''}); if(v!=null) b.style.height=Math.max(3,(v/mx)*100)+'%';
       if(v!=null&&ay!=null&&v/mx*BARH>ay+3) b.style.background='linear-gradient(to top,var(--ink) '+ay+'px,var(--paper) '+ay+'px,var(--paper) '+(ay+1)+'px,var(--ink) '+(ay+1)+'px)';
       return el('button',{type:'button','aria-label':md(d)+' '+valText(v,it),onclick:function(){goDay(d);}},b); }));
