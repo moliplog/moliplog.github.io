@@ -223,8 +223,10 @@ select.h{min-width:96px} select.p{min-width:70px}
 .pip{width:22px;height:22px;border-radius:7px;border:1.5px solid var(--line);margin:0 auto 1px}
 .pip.on{background:var(--water);border-color:var(--water)}
 .pipc.today{color:var(--water);font-weight:600}
-.bars{display:flex;align-items:flex-end;gap:3px;height:84px;margin:8px 0 2px}
-.bars button{flex:1;min-width:0;height:100%;border:0;background:none;padding:0;display:flex;align-items:flex-end}
+.bars{display:flex;align-items:flex-end;gap:3px;height:84px;margin:8px 0 2px;position:relative}   /* 84 is BARH in sumNumbers */
+.bars button{flex:1;min-width:0;height:100%;border:0;background:none;padding:0;display:flex;align-items:flex-end;position:relative}
+.bars .avgline{position:absolute;left:0;right:0;height:1px;pointer-events:none;background:repeating-linear-gradient(to right,var(--ink-2) 0,var(--ink-2) 4px,transparent 4px,transparent 7px)}
+.avgkey{display:inline-block;width:18px;height:1px;margin-right:6px;vertical-align:middle;background:repeating-linear-gradient(to right,var(--ink-2) 0,var(--ink-2) 4px,transparent 4px,transparent 7px)}
 .bars i{display:block;width:100%;border-radius:4px 4px 1px 1px;background:var(--ink);opacity:.82;min-height:2px}
 .bars i.none{background:var(--line);opacity:1;height:2px!important}
 .barlabels{display:flex;gap:3px;font-size:11px;color:var(--ink-2)}
@@ -418,7 +420,7 @@ function el(tag,attrs){
   function add(x){ if(x==null||x===false) return; if(Array.isArray(x)){x.forEach(add);return;} n.appendChild(x.nodeType?x:document.createTextNode(String(x))); }
   return n;
 }
-var BUILD='9.21 12:44';   /* stamped by the build script */
+var BUILD='9.21 14:55';   /* stamped by the build script */
 function lang(){return STR[DB.settings.lang]?DB.settings.lang:'ko';}
 function t(k,vars){ var s=STR[lang()][k]; if(s==null) s=STR.en[k]!=null?STR.en[k]:k;
   return vars?s.replace(/\{(\w+)\}/g,function(m,a){return vars[a]!=null?vars[a]:'';}):s; }
@@ -930,12 +932,17 @@ function sumNumbers(sec,mode,dates,prevDates){
   return items.map(function(it){
     var vals=numVals(dates,sec.id,it.id),a=avg(vals),pa=avg(numVals(prevDates,sec.id,it.id)),have=vals.filter(function(v){return v!=null;});
     var mx=Math.max.apply(null,have.concat([1e-9]));
-    var bars=el('div',{class:'bars'},dates.map(function(d,i){ var v=vals[i],b=el('i',{class:v==null?'none':''}); if(v!=null) b.style.height=Math.max(3,(v/mx)*100)+'%';
+    /* A month has some thirty bars, too narrow to carry a number each, so they get something to be measured against: the average as a dashed line.
+       It lies behind the bars, and a bar that rises above it is cut by a one-pixel slit in the colour of the page, so it reads as one line from edge to edge.
+       A week has its numbers under the bars and needs no line. Whole pixels, so that line and slits meet exactly. */
+    var BARH=84,ay=(mode==='month'&&have.length>1&&a>0)?Math.round(a/mx*BARH):null;
+    var bars=el('div',{class:'bars'},ay==null?null:el('span',{class:'avgline','aria-hidden':'true',style:'bottom:'+ay+'px'}),dates.map(function(d,i){ var v=vals[i],b=el('i',{class:v==null?'none':''}); if(v!=null) b.style.height=Math.max(3,(v/mx)*100)+'%';
+      if(v!=null&&ay!=null&&v/mx*BARH>ay+3) b.style.background='linear-gradient(to top,var(--ink) '+ay+'px,var(--paper) '+ay+'px,var(--paper) '+(ay+1)+'px,var(--ink) '+(ay+1)+'px)';
       return el('button',{type:'button','aria-label':md(d)+' '+valText(v,it),onclick:function(){goDay(d);}},b); }));
     var labels=el('div',{class:'barlabels'},dates.map(function(d,i){ if(mode==='week') return el('span',null,el('b',{text:vals[i]==null?'—':fmt(vals[i])}),dow(d));
       return el('span',{text:(d.getDate()%7===1)?String(d.getDate()):''}); }));
     var detail=have.length?t('numDetail',{n:have.length,a:valText(Math.min.apply(null,have),it),b:valText(Math.max.apply(null,have),it)}):t('noRecords');
-    return el('div',{class:'kid block'},el('div',{class:'line'},el('span',{class:'label',text:it.name}),el('span',{class:'muted',text:a==null?'':t('avg',{v:valText(a,it)})})),
+    return el('div',{class:'kid block'},el('div',{class:'line'},el('span',{class:'label',text:it.name}),el('span',{class:'muted'},ay==null?null:el('i',{class:'avgkey','aria-hidden':'true'}),a==null?'':t('avg',{v:valText(a,it)}))),
       bars,labels,el('p',{class:'muted',style:'margin:8px 0 0',text:detail+(pa==null?'':t('numPrev',{w:t(mode==='week'?'wWord':'mWord'),v:valText(pa,it)}))}));
   });
 }
