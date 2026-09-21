@@ -142,7 +142,7 @@ select,.num{height:40px;padding:0 10px;border:1px solid var(--line);border-radiu
 select.h{min-width:96px} select.p{min-width:70px}
 .line{flex-wrap:nowrap}.line .label{min-width:0;white-space:nowrap}
 /* the same narrow-screen rules, for when a larger text size leaves less than 360px of room (see applyTextSize) */
-.narrow select.h{min-width:84px;padding:0 6px} .narrow select.p{min-width:62px;padding:0 6px} .noranges .label small{display:none}   /* the hours beside Morning/Noon/Evening (09–12 …) are hidden only where they really do not fit: see fitRanges. They used to vanish at the default text size on every phone, though the Korean labels have room to spare */
+.narrow select.h{min-width:84px;padding:0 6px} .narrow select.p{min-width:62px;padding:0 6px} .noranges .label small{display:none}   /* the hours beside Morning/Noon/Evening (06–12 …) are hidden only where they really do not fit: see fitRanges. They used to vanish at the default text size on every phone, though the Korean labels have room to spare */
 @media (max-width:359px){select.h{min-width:84px;padding:0 6px} select.p{min-width:62px;padding:0 6px}}
 .num{width:96px}
 .unit{font-size:14px;color:var(--ink-2)}
@@ -390,7 +390,7 @@ var DEF={
  en:{events:'Today’s events',eventsHint:'e.g. Seminar at 2',todo:'Todo',todoHint:'Add a to-do',flow:'Molip',habits:'Habit Tracker',exercise:'Exercise',vitamins:'Vitamins',sleep:'Sleep Tracker',sleepHours:'Last night’s sleep',light:'Light naps',notes:'Notes',notesHint:'Write freely',uH:'h',uX:'times'},
  ko:{events:'오늘 이벤트',eventsHint:'예: 세미나 2시',todo:'할 일',todoHint:'할 일 적기',flow:'몰입도',habits:'습관',exercise:'운동',vitamins:'비타민',sleep:'수면',sleepHours:'어젯밤 수면',light:'선잠',notes:'메모',notesHint:'자유롭게 적기',uH:'시간',uX:'회'}
 };
-var PER={en:[['m','Morning','09–12','Morn'],['a','Noon','12–18','Noon'],['e','Evening','18–24','Eve']],ko:[['m','아침','09–12','아침'],['a','점심','12–18','점심'],['e','저녁','18–24','저녁']]};
+var PER={en:[['m','Morning','06–12','Morn'],['a','Noon','12–18','Noon'],['e','Evening','18–24','Eve']],ko:[['m','아침','06–12','아침'],['a','점심','12–18','점심'],['e','저녁','18–24','저녁']]};
 var DOWS={en:['Sun','Mon','Tue','Wed','Thu','Fri','Sat'],ko:['일','월','화','수','목','금','토']};
 var DOWL=['Sunday','Monday','Tuesday','Wednesday','Thursday','Friday','Saturday'];
 var MON=['Jan','Feb','Mar','Apr','May','Jun','Jul','Aug','Sep','Oct','Nov','Dec'];
@@ -420,7 +420,7 @@ function el(tag,attrs){
   function add(x){ if(x==null||x===false) return; if(Array.isArray(x)){x.forEach(add);return;} n.appendChild(x.nodeType?x:document.createTextNode(String(x))); }
   return n;
 }
-var BUILD='9.21 10:09';   /* stamped by the build script */
+var BUILD='9.21 10:18';   /* stamped by the build script */
 function lang(){return STR[DB.settings.lang]?DB.settings.lang:'ko';}
 function t(k,vars){ var s=STR[lang()][k]; if(s==null) s=STR.en[k]!=null?STR.en[k]:k;
   return vars?s.replace(/\{(\w+)\}/g,function(m,a){return vars[a]!=null?vars[a]:'';}):s; }
@@ -1293,7 +1293,7 @@ function applyTextSize(){ var i=DB.settings.textSize|0,z=TEXT_ZOOM[i]||1,r=$('#r
 window.addEventListener('resize',applyTextSize);
 function render(){ var root=$('#root'),keepY=window.scrollY;   /* Chrome (Android, desktop) gives a tapped button the focus, and when that button is replaced by the redraw the page jumps towards the top. Safari does not focus buttons, so an iPhone never showed it. The page stays where it was; go() still starts a new screen at the top. */
   root.replaceChildren.apply(root,(UI.screen==='summary'?screenSummary():UI.screen==='settings'?screenSettings():UI.screen==='export'?screenExport():UI.screen==='alltext'?screenAllText():screenDay()).filter(Boolean)); renderStatus(); fitHints(); fitRanges(); if(window.scrollY!==keepY) window.scrollTo(0,keepY); }
-/* Morning 09–12, Noon 12–18, Evening 18–24: the hours say which slot a stretch of work belongs to, so they stay whenever the row has room for them. If any of the three rows is too tight, all three drop them together. */
+/* Morning 06–12, Noon 12–18, Evening 18–24 (three equal parts of six hours; the hours are only a guide, nothing is computed from them): the hours say which slot a stretch of work belongs to, so they stay whenever the row has room for them. If any of the three rows is too tight, all three drop them together. */
 function fitRanges(){ [].forEach.call(document.querySelectorAll('section.node'),function(sec){ if(!sec.querySelector('.label small')) return;
   sec.classList.remove('noranges');
   var tight=[].some.call(sec.querySelectorAll('.line'),function(l){ var lab=l.querySelector('.label'); return (lab&&lab.scrollWidth>lab.clientWidth+1)||l.scrollWidth>l.clientWidth+1; });
