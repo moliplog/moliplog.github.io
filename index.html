@@ -98,6 +98,18 @@ button:disabled,select:disabled,input:disabled{cursor:default;opacity:.45}
 .endbar{margin:-9px 0 0 24px}
 .endbar .solid{width:100%;height:48px}
 
+/* install guide (settings → 설치 안내) */
+.guide .gfirst{margin:0 0 6px;padding:10px 14px;border-left:3px solid var(--water);background:var(--surface);border-radius:0 10px 10px 0}
+.guide .gsec{margin:22px 0 0;padding-top:18px;border-top:1px solid var(--line)}
+.guide .gsec h2{margin:0 0 4px;font:600 18px/1.5 var(--ui)} .guide h2 small{font-weight:400;font-size:13px;color:var(--ink-2);margin-left:8px}
+.guide ol{margin:4px 0 0;padding-left:22px} .guide li{margin:6px 0} .guide li::marker{color:var(--water);font-weight:600}
+.guide .note{margin:10px 0 0;font-size:13px;line-height:1.55;color:var(--ink-2)}
+.guide .ico{display:inline-block;width:18px;height:18px;vertical-align:-4px;margin:0 1px;color:var(--ink)}
+.guide dl{margin:6px 0 0} .guide dt{font-weight:600;color:var(--water)} .guide dd{margin:2px 0 12px}
+.guide .gfoot{margin:26px 0 0;padding-top:16px;border-top:1px solid var(--line);font-size:13px;line-height:1.55;color:var(--ink-2)}
+.guide .gfoot p{margin:0} .guide .gfoot p+p{margin-top:6px} .guide .gfoot a{color:var(--water);text-underline-offset:3px}
+.guide .gend{margin-top:28px} .guide .gend .solid{width:100%;height:48px}
+
 /* notices */
 .notice{border:1px solid var(--line);background:var(--surface);border-radius:12px;padding:12px 14px;margin:0 0 24px;font-size:14px;line-height:1.6}
 .notice.bad{border-color:var(--bad);background:var(--bad-bg)}
@@ -327,7 +339,15 @@ en:{appName:'Molip Journal',saved:'Saved on this device {t}',local:'Records stay
  andTitle:'Install as an app',andBody:'You get an icon on your home screen and it opens like an app.',andInstall:'Install',andManual:'Open the browser menu (⋮) and choose ‘Install app’ or ‘Add to Home screen’.',later:'Later',
  flowBoth:'The parts of the day and the whole-day line are added together. To keep only one, set the other back to “Hours”.',
  flowMode:'How to record',flowSplit:'Morning · Noon · Evening',flowWhole:'Whole day in one',
- version:'Version',allRecords:'All records',allSpan:'{a} to {b}, {n} days with records',allStart:'Molip start {d}',allGoal:'purpose {g}',allDays:'{n} days with records',backSettings:'Back to settings',
+ version:'Version',guideOpen:'How to install',guideTitle:'How to install',guideSub:'Adding the app to your home screen or computer',
+ gFirst:'First, pick one device to use. Records stay only on the device where the app is installed. If you will use it on your phone, open it on your phone.',
+ gIos:'iPhone',gIos1:'Open moliplog.github.io in Safari.',gIos2:'Tap the three dots (⋯) beside the address bar, then ‘Share’. If the share button is already showing, tap that.',gIos3:'Scroll down and tap ‘Add to Home Screen’, then ‘Add’ at the top right.',gIos4:'Open the Molip icon on your home screen and start writing.',gIosNote:'What you write in Safari does not carry over to the home-screen app. Add it to the home screen first, then start writing.',
+ gAnd:'Android',gAnd1:'Open moliplog.github.io in Chrome.',gAnd2:'Tap the ‘Install’ button on the screen.',gAnd3:'If there is no button, open the ⋮ menu at the top right and tap ‘Add to Home screen’.',gAnd4:'Open the Molip icon on your home screen.',gAndNote:'Some phones say ‘Install app’ instead of ‘Add to Home screen’. They do the same thing.',
+ gInapp:'If you opened the link inside KakaoTalk or a mail app, it cannot be installed there. Tap ‘Open in my browser’ on the screen, or copy the link and paste it into Safari or Chrome.',
+ gPc:'Laptop or computer',gPcSub:'in Chrome',gPc1:'Open moliplog.github.io in Chrome.',gPc2a:'Click the install icon (',gPc2b:') at the right end of the address bar, then ‘Install’.',gPc3:'Molip opens in its own window, and a Molip icon appears in the Dock (Mac) or the taskbar (Windows).',gPc4:'Right-click that icon to keep it there, and open Molip from it from now on.',gPcNote:'To keep it: on a Mac, ‘Options → Keep in Dock’; on Windows, ‘Pin to taskbar’. If you cannot see the install icon, open the ⋮ menu at the top right and look under ‘Save and share’. Phone and computer records are kept separately.',
+ gAfter:'After installing',gA1t:'Once, at the start',gA1:'At the top of ‘Sections & settings’, enter your Molip start date and purpose. The app then shows which week and day of your Molip it is.',gA2t:'Your own sections',gA2:'Add the sections you need, such as mood, reading, gratitude or prayer, under ‘Sections & settings → Add a section’. The up and down arrows (↑ ↓) beside each section change the order.',gA3t:'Notes under a section',gA3:'To write notes under Molip, habits or sleep too, turn on ‘Show a note line’ in ‘Sections & settings’. For example: 2+4+2+4, or exercise 1 h 30 min. All notes are collected in the ‘Notes’ summary.',gA4t:'Every week',gA4:'You can copy a whole week as text. At the bottom of the day page, tap ‘Copy the whole week’s records as text’.',gA5t:'On another device',gA5:'On the device you have been using, save a backup under ‘Sections & settings → Backup’ and move it to the new device. There, choose that backup and tap ‘Replace with backup’ → ‘Replace now’ to carry on. To merge the records of two devices, tap ‘Merge with backup’.',
+ gFoot:'No sign-up, no ads, no data collection. Records stay on your device, and no one but the device’s user can see them.',gContact:'Questions and feedback',
+allRecords:'All records',allSpan:'{a} to {b}, {n} days with records',allStart:'Molip start {d}',allGoal:'purpose {g}',allDays:'{n} days with records',backSettings:'Back to settings',
  allTextOpen:'Save all records as text',allTextHint:'For reading only. It can be read anywhere without this app, but it cannot be loaded back in. To move to another device, use “{btn}” above.',allTextSub:'For reading. Copy it or save it as a file and keep it in a note, an email or a document. It is not a backup the app can restore.',saveTxt:'Save as a file',saveTxtFail:'This phone can’t hand over a file here. Use “Copy text” instead.',
  memo:'Note',memoLine:'Show a note line',memoLink:'See this period’s {name} notes ({n})',memoHide:'Hide the {name} notes',notesAll:'Also show the {names} notes ({n})',notesAllMany:'Also show notes written under other sections ({n})',notesOnly:'Show {name} only',memoWhere:'Notes written here are gathered, day by day, in the summary of ‘{name}’.',memoEgFlow:'e.g. 2+4+2+4',memoEgChecks:'e.g. Exercise 1 h 30 min',memoHint:'Add a note ({eg})',memoWrite:'Add a note',memoEgSleep:'e.g. Woke up twice before dawn',
  topMemo:'Extra note',topMemoShow:'Show an extra note line under the title',topMemoNote:'Other notes stay on their own day’s page; what you write here (e.g. monthly goal) shows on every day’s page until you remove it with its ×. Enter makes the next line, up to {n} lines.',pinWrite:'Extra note (e.g. monthly goal)',pinItem:'Extra note',pinNew:'New extra note',pinTake:'Remove this note',pinTaken:'Removed: {text}',
@@ -369,7 +389,15 @@ ko:{appName:'몰입 일지',saved:'이 기기에 저장됨 {t}',local:'기록은
  andTitle:'앱으로 설치하기',andBody:'홈 화면에 아이콘이 생기고 앱처럼 열려요.',andInstall:'설치',andManual:'브라우저 메뉴(⋮)에서 ‘앱 설치’ 또는 ‘홈 화면에 추가’를 고르세요.',later:'나중에',
  flowBoth:'아침·점심·저녁과 하루 기록이 함께 더해져요. 하나만 남기려면 다른 쪽을 ‘시간’으로 되돌리세요.',
  flowMode:'기록 방식',flowSplit:'아침·점심·저녁',flowWhole:'하루 통으로',
- version:'버전',allRecords:'전체 기록',allSpan:'{a} ~ {b}, 기록한 날 {n}일',allStart:'몰입 시작일 {d}',allGoal:'목적 {g}',allDays:'기록한 날 {n}일',backSettings:'설정으로 돌아가기',
+ version:'버전',guideOpen:'설치 안내 보기',guideTitle:'설치 안내',guideSub:'홈 화면이나 컴퓨터에 앱으로 설치하는 방법',
+ gFirst:'먼저, 쓸 기기를 하나 정하세요. 기록은 설치한 그 기기 안에만 저장돼요. 폰에서 쓸 분은 폰으로 여세요.',
+ gIos:'아이폰',gIos1:'Safari로 moliplog.github.io를 열어요.',gIos2:'주소창 옆 점 세 개(⋯)를 누르고 ‘공유’를 눌러요. 공유 버튼이 바로 보이면 그 버튼을 누르세요.',gIos3:'화면을 내려서 ‘홈 화면에 추가’를 누르고, 오른쪽 위 ‘추가’를 눌러요.',gIos4:'홈 화면의 Molip 아이콘으로 열어 기록을 시작해요.',gIosNote:'Safari에서 적은 기록은 홈 화면 앱으로 넘어가지 않아요. 홈 화면에 추가한 다음에 기록을 시작하세요.',
+ gAnd:'안드로이드',gAnd1:'Chrome으로 moliplog.github.io를 열어요.',gAnd2:'화면에 나오는 ‘설치’ 버튼을 눌러요.',gAnd3:'버튼이 없으면 오른쪽 위 ⋮ 메뉴에서 ‘홈 화면에 추가’를 눌러요.',gAnd4:'홈 화면의 Molip 아이콘으로 열어요.',gAndNote:'폰에 따라 ‘홈 화면에 추가’ 대신 ‘앱 설치’라고 나와요. 같은 기능이니 보이는 쪽을 누르세요.',
+ gInapp:'카카오톡이나 메일 앱에서 링크를 열었다면 설치가 되지 않아요. 화면에 나오는 ‘내 브라우저로 열기’를 누르거나, ‘링크 복사’ 후 Safari·Chrome 주소창에 붙여 넣으세요.',
+ gPc:'노트북·컴퓨터',gPcSub:'Chrome 기준',gPc1:'Chrome 주소창에 moliplog.github.io를 넣어 열어요.',gPc2a:'주소창 오른쪽 끝의 설치 아이콘(',gPc2b:')을 누르고 ‘설치’를 눌러요.',gPc3:'Molip이 새 창으로 열리고, 화면 아래 Dock(맥)이나 작업 표시줄(윈도우)에 Molip 아이콘이 생겨요.',gPc4:'그 아이콘을 우클릭해 고정해 두고, 다음부터는 그 아이콘으로 열어요.',gPcNote:'고정하는 메뉴는 맥에서 ‘옵션 → Dock에 유지’, 윈도우에서 ‘작업 표시줄에 고정’이에요. 설치 아이콘이 안 보이면 오른쪽 위 ⋮ 메뉴의 ‘저장 및 공유’에서 설치해요. 폰과 노트북의 기록은 따로 저장돼요.',
+ gAfter:'설치한 다음',gA1t:'처음 한 번',gA1:'‘항목과 설정’ 맨 위에 몰입 시작일과 몰입 목적을 적어요. 오늘이 몇 주차, 몇 일차인지 표시돼요.',gA2t:'나만의 항목',gA2:'기분, 독서, 감사, 기도처럼 필요한 항목은 ‘항목과 설정 → 항목 추가’에서 직접 만들 수 있어요. 각 항목 옆의 위아래 화살표(↑ ↓)를 누르면 순서를 바꿀 수 있어요.',gA3t:'항목별 메모',gA3:'몰입도, 습관, 수면에도 메모를 적고 싶으면 ‘항목과 설정’에서 ‘메모 칸 보이기’를 켜요. 예: 2+4+2+4, 운동 1시간 30분. 적은 메모는 모두 ‘메모’ 요약에서 모아 볼 수 있어요.',gA4t:'매주',gA4:'일주일치 기록을 텍스트로 복사하는 기능이 있어요. 하루 기록 맨 아래 ‘일주일치 전체 기록을 텍스트로 복사’를 누르세요.',gA5t:'다른 기기에서도',gA5:'쓰던 기기의 ‘항목과 설정 → 백업’에서 백업을 저장해 새 기기로 옮겨요. 새 기기에서 그 백업을 고른 뒤 ‘백업으로 바꾸기’ → ‘지금 바꾸기’를 누르면 이어서 쓸 수 있어요. 두 기기의 기록을 합치려면 ‘백업과 합치기’를 누르세요.',
+ gFoot:'가입, 광고, 데이터 수집이 없어요. 기록은 내 기기에만 저장되고, 기기 사용자 외에는 아무도 볼 수 없어요.',gContact:'문의는 여기로',
+allRecords:'전체 기록',allSpan:'{a} ~ {b}, 기록한 날 {n}일',allStart:'몰입 시작일 {d}',allGoal:'목적 {g}',allDays:'기록한 날 {n}일',backSettings:'설정으로 돌아가기',
  allTextOpen:'전체 기록을 텍스트로 저장',allTextHint:'읽기용 텍스트예요. 이 앱 없이도 어디서나 읽을 수 있지만, 앱으로 다시 불러올 수는 없어요. 기기를 옮길 때는 위의 ‘{btn}’ 버튼을 쓰세요.',allTextSub:'읽기용 텍스트예요. 복사하거나 파일로 저장해서 메모장, 메일, 문서에 보관하세요. 앱으로 되돌리는 백업은 아니에요.',saveTxt:'파일로 저장',saveTxtFail:'이 폰에서는 파일로 내보낼 수 없어요. ‘텍스트 복사’를 써 주세요.',
  memo:'메모',memoLine:'메모 칸 보이기',memoLink:'이 기간의 {name} 메모 {n}건 보기',memoHide:'{name} 메모 접기',notesAll:'{names} 메모 {n}건도 함께 보기',notesAllMany:'다른 항목 아래 쓴 메모 {n}건도 함께 보기',notesOnly:'{name}만 보기',memoWhere:'여기에 적은 메모는 ‘{name}’ 항목의 요약에서 날짜별로 모아 볼 수 있어요.',memoEgFlow:'예: 2+4+2+4',memoEgChecks:'예: 운동 1시간 30분',memoHint:'메모 ({eg})',memoWrite:'메모 적기',memoEgSleep:'예: 새벽에 두 번 깼다',
  topMemo:'추가 메모',topMemoShow:'제목 아래 추가 메모 칸 보이기',topMemoNote:'다른 메모는 그날 페이지에만 남지만, 이 칸에 적은 것(예: 포커싱 포인트, 이달 목표)은 ×⁠로 지울 때까지 매일 페이지에 보여요. Enter를 치면 다음 줄이 생기고, {n}줄까지 적을 수 있어요.',pinWrite:'추가 메모 (예: 포커싱 포인트, 이달 목표)',pinItem:'추가 메모',pinNew:'새 추가 메모',pinTake:'이 메모 지우기',pinTaken:'지웠어요: {text}',
@@ -420,7 +448,7 @@ function el(tag,attrs){
   function add(x){ if(x==null||x===false) return; if(Array.isArray(x)){x.forEach(add);return;} n.appendChild(x.nodeType?x:document.createTextNode(String(x))); }
   return n;
 }
-var BUILD='9.21 19:32';   /* stamped by the build script */
+var BUILD='9.22 09:43';   /* stamped by the build script */
 function lang(){return STR[DB.settings.lang]?DB.settings.lang:'ko';}
 function t(k,vars){ var s=STR[lang()][k]; if(s==null) s=STR.en[k]!=null?STR.en[k]:k;
   return vars?s.replace(/\{(\w+)\}/g,function(m,a){return vars[a]!=null?vars[a]:'';}):s; }
@@ -1141,6 +1169,28 @@ function screenAllText(){
   return [head,el('p',{class:'muted',style:'margin:0 0 10px',text:t('allTextSub')}),ta,el('div',{class:'rowf',style:'margin-top:10px;gap:10px'},copyBtn,fileBtn),msg];
 }
 
+/* ---------- install guide: the install-guide image, as text inside the app, so it can be found again later (settings, under the version line) ---------- */
+var INSTALL_ICO='<svg viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M20 17H4V5h8V3H4c-1.11 0-2 .89-2 2v12c0 1.1.89 2 2 2h4v2h8v-2h4c1.1 0 2-.9 2-2v-3h-2v3z"/><path d="M17 14l5-5-1.41-1.41L18 10.17V3h-2v7.17l-2.59-2.58L12 9z"/></svg>';
+var CONTACT_MAIL='renaissancy@gmail.com';
+function screenGuide(){
+  var head=el('header',{class:'top'},
+    el('div',{class:'bar'},el('button',{class:'link',type:'button',text:t('backSettings'),onclick:function(){go('settings');}}),el('span',{class:'muted',text:t('guideTitle')})),
+    el('div',{class:'datenav'},el('div',{class:'when',style:'margin:0 auto'},el('h1',{text:t('guideTitle')}),el('p',null,t('guideSub')))));
+  function sec(title,sub,kids){ return el('section',{class:'gsec'},el('h2',null,title,sub?el('small',{text:sub}):null),kids); }
+  function steps(keys){ return el('ol',null,keys.map(function(k){ return el('li',null,k); })); }
+  var ico=el('span',{class:'ico'}); ico.innerHTML=INSTALL_ICO;
+  var body=el('div',{class:'guide'},
+    el('p',{class:'gfirst',text:t('gFirst')}),
+    sec(t('gIos'),null,[steps([t('gIos1'),t('gIos2'),t('gIos3'),t('gIos4')]),el('p',{class:'note',text:t('gIosNote')})]),
+    sec(t('gAnd'),null,[steps([t('gAnd1'),t('gAnd2'),t('gAnd3'),t('gAnd4')]),el('p',{class:'note',text:t('gAndNote')})]),
+    el('section',{class:'gsec'},el('p',{style:'margin:0',text:t('gInapp')})),
+    sec(t('gPc'),t('gPcSub'),[steps([t('gPc1'),[t('gPc2a'),ico,t('gPc2b')],t('gPc3'),t('gPc4')]),el('p',{class:'note',text:t('gPcNote')})]),
+    sec(t('gAfter'),null,el('dl',null,[['gA1t','gA1'],['gA2t','gA2'],['gA3t','gA3'],['gA4t','gA4'],['gA5t','gA5']].map(function(k){ return [el('dt',{text:t(k[0])}),el('dd',{text:t(k[1])})]; }))),
+    el('div',{class:'gfoot'},el('p',{text:t('gFoot')}),el('p',null,t('gContact')+': ',el('a',{href:'mailto:'+CONTACT_MAIL,text:CONTACT_MAIL}))),
+    el('div',{class:'gend'},el('button',{class:'solid',type:'button',text:t('backSettings'),onclick:function(){go('settings');}})));
+  return [head,body];
+}
+
 /* ---------- settings ---------- */
 function twoStep(id,label,confirmLabel,fn,cls){
   var born=Date.now();   /* the confirm button appears right where the finger just was: for a moment it does not listen, so a double tap deletes nothing */
@@ -1314,7 +1364,8 @@ function screenSettings(){
   var end=el('div',{class:'endbar'},el('button',{class:'solid',type:'button',text:t('back'),onclick:function(){go('day');}}),
     /* the app's address as a small wordmark: an installed app has no address bar, so this is where someone finds the address to pass on. Plain grey with a little letter-spacing: no colour of its own, so nothing at the foot of the page asks for attention. */
     el('p',{class:'wordmark',text:'moliplog.github.io'}),
-    el('p',{class:'muted',style:'margin:2px 0 0;text-align:center;font-size:11px',text:t('version')+' '+BUILD}),wipeBox());
+    el('p',{class:'muted',style:'margin:2px 0 0;text-align:center;font-size:11px',text:t('version')+' '+BUILD}),
+    el('p',{class:'muted',style:'margin:14px 0 0;text-align:center;font-size:13px'},el('button',{class:'link',type:'button',style:'font-size:13px',text:t('guideOpen'),onclick:function(){go('guide');}})),wipeBox());
   return [head,report,delNote].concat(secs,[adders,restore,week,langs,sizes,node(el('h2',{text:t('backup')}),bk),end]);
 }
 
@@ -1324,7 +1375,7 @@ var TEXT_ZOOM=[1,1.1,1.2];   /* Small 16px, Normal 17.6px (the default), Large 1
 function applyTextSize(){ var i=DB.settings.textSize|0,z=TEXT_ZOOM[i]||1,r=$('#root'); r.style.zoom=z===1?'':String(z); r.classList.toggle('narrow',window.innerWidth/z<360); r.classList.toggle('ts1',i===1); r.classList.toggle('ts2',i===2); }
 window.addEventListener('resize',applyTextSize); window.addEventListener('resize',function(){fitYmd();});
 function render(){ var root=$('#root'),keepY=window.scrollY;   /* Chrome (Android, desktop) gives a tapped button the focus, and when that button is replaced by the redraw the page jumps towards the top. Safari does not focus buttons, so an iPhone never showed it. The page stays where it was; go() still starts a new screen at the top. */
-  root.replaceChildren.apply(root,(UI.screen==='summary'?screenSummary():UI.screen==='settings'?screenSettings():UI.screen==='export'?screenExport():UI.screen==='alltext'?screenAllText():screenDay()).filter(Boolean)); renderStatus(); fitHints(); fitRanges(); fitYmd(); if(window.scrollY!==keepY) window.scrollTo(0,keepY); }
+  root.replaceChildren.apply(root,(UI.screen==='summary'?screenSummary():UI.screen==='settings'?screenSettings():UI.screen==='export'?screenExport():UI.screen==='alltext'?screenAllText():UI.screen==='guide'?screenGuide():screenDay()).filter(Boolean)); renderStatus(); fitHints(); fitRanges(); fitYmd(); if(window.scrollY!==keepY) window.scrollTo(0,keepY); }
 /* Morning 06–12, Noon 12–18, Evening 18–24 (three equal parts of six hours; the hours are only a guide, nothing is computed from them): the hours say which slot a stretch of work belongs to, so they stay whenever the row has room for them. If any of the three rows is too tight, all three drop them together. */
 function fitRanges(){ [].forEach.call(document.querySelectorAll('section.node'),function(sec){ if(!sec.querySelector('.label small')) return;
   sec.classList.remove('noranges');
