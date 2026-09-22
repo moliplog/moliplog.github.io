@@ -451,7 +451,7 @@ function el(tag,attrs){
   function add(x){ if(x==null||x===false) return; if(Array.isArray(x)){x.forEach(add);return;} n.appendChild(x.nodeType?x:document.createTextNode(String(x))); }
   return n;
 }
-var BUILD='9.22 11:44';   /* stamped by the build script */
+var BUILD='9.22 11:57';   /* stamped by the build script */
 function lang(){return STR[DB.settings.lang]?DB.settings.lang:'ko';}
 function t(k,vars){ var s=STR[lang()][k]; if(s==null) s=STR.en[k]!=null?STR.en[k]:k;
   return vars?s.replace(/\{(\w+)\}/g,function(m,a){return vars[a]!=null?vars[a]:'';}):s; }
@@ -709,7 +709,7 @@ function memoSec(sec){ var eg=memoEg(sec);   /* on the page the empty line says 
   return {id:sec.id+':memo',type:'list',name:sec.name+' '+t('memo'),hint:eg?t('memoHint',{eg:eg}):t('memoWrite')}; }
 function memoRows(sec,key){ return memoOn(sec)?(secVal(key,sec.id+':memo')||[]):[]; }
 function listEditor(sec,key,sumEl){
-  var todo=sec.type==='todo',nest=sec.id==='notes';   /* Notes lines can sit one level under the line above: Tab / Shift+Tab, or a sideways swipe on the line being written */
+  var todo=sec.type==='todo',nest=sec.type==='list';   /* in every memo-type section (Notes, Events, and any the person added) a line can sit one level under the line above: Tab / Shift+Tab, or a sideways swipe on the line being written */
   var rows=(secVal(key,sec.id)||[]).map(function(r){return {id:r.id,text:r.text,done:!!r.done,lvl:nest&&r.lvl===1?1:0};});
   var box=el('div',{class:'kids'});
   function commit(){ var clean=rows.filter(function(r){return r.text.trim();}).map(function(r){var o={id:r.id,text:r.text.trim()}; if(todo&&r.done) o.done=true; if(nest&&r.lvl===1) o.lvl=1; return o;});
