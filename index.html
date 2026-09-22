@@ -340,7 +340,7 @@ en:{appName:'Molip Journal',saved:'Saved on this device {t}',local:'Records stay
  flowBoth:'The parts of the day and the whole-day line are added together. To keep only one, set the other back to “Hours”.',
  flowMode:'How to record',flowSplit:'Morning · Noon · Evening',flowWhole:'Whole day in one',
  version:'Version',guideOpen:'How to install',guideTitle:'How to install',guideSub:'Adding the app to your home screen or computer',
- gFirst:'First, pick one device to use. Records stay only on the device where the app is installed. If you will use it on your phone, open it on your phone.',gFirstNote:'If you write in the browser without installing, the records are kept in the browser, not in the app. Clearing your browsing data can delete them, so install first and then write.',
+ gFirst:'First, pick one device to use. Records stay only on the device where the app is installed. If you will use it on your phone, open it on your phone.',gFirstNote:'If you write in the browser without installing on your device, the records are kept in the browser, not in the app. Clearing your browsing data can delete them, so install on the device you will use, then write.',
  gIos:'iPhone',gIos1:'Open moliplog.github.io in Safari.',gIos2:'Tap the three dots (⋯) beside the address bar, then ‘Share’. If the share button is already showing, tap that.',gIos3:'Scroll down and tap ‘Add to Home Screen’, then ‘Add’ at the top right.',gIos4:'Open the Molip icon on your home screen and start writing.',gIosNote:'What you write in Safari does not carry over to the home-screen app. Add it to the home screen first, then start writing.',
  gAnd:'Android',gAnd1:'Open moliplog.github.io in Chrome.',gAnd2:'Tap the ‘Install’ button on the screen.',gAnd3:'If there is no button, open the ⋮ menu at the top right and tap ‘Add to Home screen’.',gAnd4:'Open the Molip icon on your home screen.',gAndNote:'Some phones say ‘Install app’ instead of ‘Add to Home screen’. They do the same thing.',
  gInapp:'If you opened the link inside KakaoTalk or a mail app, it cannot be installed there. Tap ‘Open in my browser’ on the screen, or copy the link and paste it into Safari or Chrome.',
@@ -390,7 +390,7 @@ ko:{appName:'몰입 일지',saved:'이 기기에 저장됨 {t}',local:'기록은
  flowBoth:'아침·점심·저녁과 하루 기록이 함께 더해져요. 하나만 남기려면 다른 쪽을 ‘시간’으로 되돌리세요.',
  flowMode:'기록 방식',flowSplit:'아침·점심·저녁',flowWhole:'하루 통으로',
  version:'버전',guideOpen:'설치 안내 보기',guideTitle:'설치 안내',guideSub:'홈 화면이나 컴퓨터에 앱으로 설치하는 방법',
- gFirst:'먼저, 쓸 기기를 하나 정하세요. 기록은 설치한 그 기기 안에만 저장됩니다. 폰에서 쓸 분은 폰으로 여세요.',gFirstNote:'설치하지 않고 브라우저에서 바로 적으면 기록이 앱이 아니라 브라우저에 저장됩니다. 브라우저 기록을 지우면 그 기록도 함께 지워질 수 있으니, 설치한 다음에 적으세요.',
+ gFirst:'먼저, 쓸 기기를 하나 정하세요. 기록은 설치한 그 기기 안에만 저장됩니다. 폰에서 쓸 분은 폰으로 여세요.',gFirstNote:'기기에 설치하지 않고 브라우저에서 바로 적으면 기록이 앱이 아니라 브라우저에 저장됩니다. 브라우저 기록을 지우면 그 기록도 함께 지워질 수 있으니, 사용할 기기에 설치한 다음에 적으세요.',
  gIos:'아이폰',gIos1:'Safari로 moliplog.github.io를 엽니다.',gIos2:'주소창 옆 점 세 개(⋯)를 누르고 ‘공유’를 누릅니다. 공유 버튼이 바로 보이면 그 버튼을 누릅니다.',gIos3:'화면을 내려서 ‘홈 화면에 추가’를 누르고, 오른쪽 위 ‘추가’를 누릅니다.',gIos4:'홈 화면의 Molip 아이콘으로 열어 기록을 시작합니다.',gIosNote:'Safari에서 적은 기록은 홈 화면 앱으로 넘어가지 않습니다. 홈 화면에 추가한 다음에 기록을 시작하세요.',
  gAnd:'안드로이드',gAnd1:'Chrome으로 moliplog.github.io를 엽니다.',gAnd2:'화면에 나오는 ‘설치’ 버튼을 누릅니다.',gAnd3:'버튼이 없으면 오른쪽 위 ⋮ 메뉴에서 ‘홈 화면에 추가’를 누릅니다.',gAnd4:'홈 화면의 Molip 아이콘으로 엽니다.',gAndNote:'폰에 따라 ‘홈 화면에 추가’ 대신 ‘앱 설치’라고 나옵니다. 같은 기능이니 보이는 쪽을 누르세요.',
  gInapp:'카카오톡이나 메일 앱에서 링크를 열었다면 설치가 되지 않습니다. 화면에 나오는 ‘내 브라우저로 열기’를 누르거나, ‘링크 복사’ 후 Safari·Chrome 주소창에 붙여 넣으세요.',
@@ -448,7 +448,7 @@ function el(tag,attrs){
   function add(x){ if(x==null||x===false) return; if(Array.isArray(x)){x.forEach(add);return;} n.appendChild(x.nodeType?x:document.createTextNode(String(x))); }
   return n;
 }
-var BUILD='9.22 10:14';   /* stamped by the build script */
+var BUILD='9.22 10:35';   /* stamped by the build script */
 function lang(){return STR[DB.settings.lang]?DB.settings.lang:'ko';}
 function t(k,vars){ var s=STR[lang()][k]; if(s==null) s=STR.en[k]!=null?STR.en[k]:k;
   return vars?s.replace(/\{(\w+)\}/g,function(m,a){return vars[a]!=null?vars[a]:'';}):s; }
@@ -1181,8 +1181,8 @@ function screenGuide(){
   var body=el('div',{class:'guide'},
     el('p',{class:'gfirst',text:t('gFirst')}),
     el('p',{class:'note',style:'margin-top:8px',text:t('gFirstNote')}),
-    sec(t('gIos'),null,[steps([t('gIos1'),t('gIos2'),t('gIos3'),t('gIos4')]),el('p',{class:'note',text:t('gIosNote')})]),
     sec(t('gAnd'),null,[steps([t('gAnd1'),t('gAnd2'),t('gAnd3'),t('gAnd4')]),el('p',{class:'note',text:t('gAndNote')})]),
+    sec(t('gIos'),null,[steps([t('gIos1'),t('gIos2'),t('gIos3'),t('gIos4')]),el('p',{class:'note',text:t('gIosNote')})]),
     el('section',{class:'gsec'},el('p',{style:'margin:0',text:t('gInapp')})),
     sec(t('gPc'),t('gPcSub'),[steps([t('gPc1'),[t('gPc2a'),ico,t('gPc2b')],t('gPc3'),t('gPc4')]),el('p',{class:'note',text:t('gPcNote')})]),
     sec(t('gAfter'),null,el('dl',null,[['gA1t','gA1'],['gA2t','gA2'],['gA3t','gA3'],['gA4t','gA4'],['gA5t','gA5']].map(function(k){ return [el('dt',{text:t(k[0])}),el('dd',{text:t(k[1])})]; }))),
