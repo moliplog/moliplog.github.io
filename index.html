@@ -457,7 +457,7 @@ function el(tag,attrs){
   function add(x){ if(x==null||x===false) return; if(Array.isArray(x)){x.forEach(add);return;} n.appendChild(x.nodeType?x:document.createTextNode(String(x))); }
   return n;
 }
-var BUILD='9.23 16:55';   /* stamped by the build script */
+var BUILD='9.23 17:00';   /* stamped by the build script */
 function lang(){return STR[DB.settings.lang]?DB.settings.lang:'ko';}
 function t(k,vars){ var s=STR[lang()][k]; if(s==null) s=STR.en[k]!=null?STR.en[k]:k;
   return vars?s.replace(/\{(\w+)\}/g,function(m,a){return vars[a]!=null?vars[a]:'';}):s; }
@@ -724,9 +724,10 @@ function listEditor(sec,key,sumEl){
     setVal(key,sec.id,clean.length?clean:undefined); sumEl.textContent=listSum(sec,clean); }
   /* Folding: a line at the top level whose next lines sit one level in gets a small triangle where its dot was; pressed, the lines under it are hidden and their number shows after the text.
      Nothing is lost from the summary or the copied week: a fold is only a way of looking at the page. A line with nothing under it shows no triangle, so most pages look just as before. */
-  function refold(){ var par=null,n=0,w,i,k=box.childNodes; function close(){ if(par){ par.classList.toggle('par',n>0); if(!n&&par._row) par._row.fold=false; var shut=n>0&&!!(par._row&&par._row.fold); par.classList.toggle('shut',shut); if(par._fb) par._fb.textContent=shut?'\u25B8':'\u25BE'; if(par._fc) par._fc.textContent=String(n); } }
+  function refold(){ var par=null,n=0,w,i,k=box.childNodes; function show(x,hide){ var was=x.classList.contains('hid'); x.classList.toggle('hid',hide); if(was&&!hide) autosize(x._ta); }   /* a line measured while hidden got one line of height; measure it again once it can be seen */
+    function close(){ if(par){ par.classList.toggle('par',n>0); if(!n&&par._row) par._row.fold=false; var shut=n>0&&!!(par._row&&par._row.fold),was=par.classList.contains('shut'); par.classList.toggle('shut',shut); if(was!==shut) autosize(par._ta); if(par._fb) par._fb.textContent=shut?'\u25B8':'\u25BE'; if(par._fc) par._fc.textContent=String(n); } }
     for(i=0;i<k.length;i++){ w=k[i]; if(!w._ta) continue;
-      if(w._row&&w._lvl===1){ if(par){ n++; w.classList.toggle('hid',!!(par._row&&par._row.fold)); } else w.classList.remove('hid'); }
+      if(w._row&&w._lvl===1){ if(par){ n++; show(w,!!(par._row&&par._row.fold)); } else show(w,false); }
       else { close(); w.classList.remove('hid'); par=w._row?w:null; n=0; } }
     close(); }
   function lastUnder(wrap){ var w=wrap,nx=wrap.nextSibling; while(nx&&nx._ta&&nx._row&&nx._lvl===1){ w=nx; nx=nx.nextSibling; } return w; }   /* the last line sitting under this one (itself, when none) */
