@@ -100,6 +100,12 @@ button:disabled,select:disabled,input:disabled{cursor:default;opacity:.45}
 
 /* a Notes line one level in (a sub-bullet): moved to the right, its dot with it */
 .kid.text.lv1{margin-left:22px}
+.kid.text.par::before{display:none}   /* a line with sub-bullets: the dot becomes the fold toggle */
+.kid.text .fold{position:absolute;left:-24px;top:8px;width:24px;height:22px;line-height:22px;padding:0;border:0;background:none;color:var(--ink-2);font-size:12px;text-align:center;cursor:pointer;display:none}
+.kid.text.par .fold{display:block}
+.kid.text.lv1.hid{display:none}
+.kid.text.par.shut{display:flex;align-items:flex-start;gap:8px} .kid.text.par.shut textarea{flex:1;min-width:0}
+.kid.text .fcount{display:none;flex:none;font-size:12px;color:var(--ink-2);padding-top:9px} .kid.text.par.shut .fcount{display:block}
 
 /* install guide (settings → 설치 안내) */
 .guide .gfirst{margin:0 0 6px;padding:10px 14px;border-left:3px solid var(--water);background:var(--surface);border-radius:0 10px 10px 0}
@@ -352,7 +358,7 @@ en:{appName:'Molip Journal',saved:'Saved on this device {t}',local:'Records stay
  gFoot:'No sign-up, no ads, no data collection. Records stay on your device, and no one but the device’s user can see them.',
 allRecords:'All records',allSpan:'{a} to {b}, {n} days with records',allStart:'Molip start {d}',allGoal:'purpose {g}',allDays:'{n} days with records',backSettings:'Back to settings',
  allTextOpen:'Save all records as text',allTextHint:'For reading only. It can be read anywhere without this app, but it cannot be loaded back in. To move to another device, use “{btn}” above.',allTextSub:'For reading. Copy it or save it as a file and keep it in a note, an email or a document. It is not a backup the app can restore.',saveTxt:'Save as a file',saveTxtFail:'This phone can’t hand over a file here. Use “Copy text” instead.',
- memo:'Note',memoLine:'Show a note line',nestLine:'Bullet indenting',nestHowSwipe:'While writing, swipe the line sideways to indent it one level; swipe back to undo.',nestHowTab:'While writing, Tab indents the line one level; Shift+Tab brings it back.',memoLink:'See this period’s {name} notes ({n})',memoHide:'Hide the {name} notes',orderNewest:'Newest first',orderOldest:'Oldest first',notesAll:'Also show the {names} notes ({n})',notesAllMany:'Also show notes written under other sections ({n})',notesOnly:'Show {name} only',memoWhere:'Notes written here are gathered, day by day, in the summary of ‘{name}’.',memoEgFlow:'e.g. 2+4+2+4',memoEgChecks:'e.g. Exercise 1 h 30 min',memoHint:'Add a note ({eg})',memoWrite:'Add a note',memoEgSleep:'e.g. Woke up twice before dawn',
+ memo:'Note',memoLine:'Show a note line',nestLine:'Bullet indenting',foldLine:'Fold or unfold the lines under this one',nestHowSwipe:'While writing, swipe the line sideways to indent it one level; swipe back to undo.',nestHowTab:'While writing, Tab indents the line one level; Shift+Tab brings it back.',memoLink:'See this period’s {name} notes ({n})',memoHide:'Hide the {name} notes',orderNewest:'Newest first',orderOldest:'Oldest first',notesAll:'Also show the {names} notes ({n})',notesAllMany:'Also show notes written under other sections ({n})',notesOnly:'Show {name} only',memoWhere:'Notes written here are gathered, day by day, in the summary of ‘{name}’.',memoEgFlow:'e.g. 2+4+2+4',memoEgChecks:'e.g. Exercise 1 h 30 min',memoHint:'Add a note ({eg})',memoWrite:'Add a note',memoEgSleep:'e.g. Woke up twice before dawn',
  topMemo:'Extra note',topMemoShow:'Show an extra note line under the title',topMemoNote:'Other notes stay on their own day’s page; what you write here (e.g. monthly goal) shows on every day’s page until you remove it with its ×. Enter makes the next line, up to {n} lines.',pinWrite:'Extra note (e.g. monthly goal)',pinItem:'Extra note',pinNew:'New extra note',pinTake:'Remove this note',pinTaken:'Removed: {text}',
  mergedJust:'Merged.',mergedPins:'{n} extra notes came in.',
  dayNo:'Day {n}',dayRange:'days {a}–{b}',
@@ -402,7 +408,7 @@ ko:{appName:'몰입 일지',saved:'이 기기에 저장됨 {t}',local:'기록은
  gFoot:'가입, 광고, 데이터 수집이 없습니다. 기록은 내 기기에만 저장되며, 기기 사용자 외에는 아무도 볼 수 없습니다.',
 allRecords:'전체 기록',allSpan:'{a} ~ {b}, 기록한 날 {n}일',allStart:'몰입 시작일 {d}',allGoal:'목적 {g}',allDays:'기록한 날 {n}일',backSettings:'설정으로 돌아가기',
  allTextOpen:'전체 기록을 텍스트로 저장',allTextHint:'읽기용 텍스트예요. 이 앱 없이도 어디서나 읽을 수 있지만, 앱으로 다시 불러올 수는 없어요. 기기를 옮길 때는 위의 ‘{btn}’ 버튼을 쓰세요.',allTextSub:'읽기용 텍스트예요. 복사하거나 파일로 저장해서 메모장, 메일, 문서에 보관하세요. 앱으로 되돌리는 백업은 아니에요.',saveTxt:'파일로 저장',saveTxtFail:'이 폰에서는 파일로 내보낼 수 없어요. ‘텍스트 복사’를 써 주세요.',
- memo:'메모',memoLine:'메모 칸 보이기',nestLine:'불렛 들여쓰기',nestHowSwipe:'적을 때 줄을 옆으로 밀면 한 단계 들어가고, 반대로 밀면 돌아와요.',nestHowTab:'적을 때 Tab을 누르면 한 단계 들어가고, Shift+Tab을 누르면 돌아와요.',memoLink:'이 기간의 {name} 메모 {n}건 보기',memoHide:'{name} 메모 접기',orderNewest:'최근 날짜부터 보기',orderOldest:'오래된 날짜부터 보기',notesAll:'{names} 메모 {n}건도 함께 보기',notesAllMany:'다른 항목 아래 쓴 메모 {n}건도 함께 보기',notesOnly:'{name}만 보기',memoWhere:'여기에 적은 메모는 ‘{name}’ 항목의 요약에서 날짜별로 모아 볼 수 있어요.',memoEgFlow:'예: 2+4+2+4',memoEgChecks:'예: 운동 1시간 30분',memoHint:'메모 ({eg})',memoWrite:'메모 적기',memoEgSleep:'예: 새벽에 두 번 깼다',
+ memo:'메모',memoLine:'메모 칸 보이기',nestLine:'불렛 들여쓰기',foldLine:'아래 줄 접기·펼치기',nestHowSwipe:'적을 때 줄을 옆으로 밀면 한 단계 들어가고, 반대로 밀면 돌아와요.',nestHowTab:'적을 때 Tab을 누르면 한 단계 들어가고, Shift+Tab을 누르면 돌아와요.',memoLink:'이 기간의 {name} 메모 {n}건 보기',memoHide:'{name} 메모 접기',orderNewest:'최근 날짜부터 보기',orderOldest:'오래된 날짜부터 보기',notesAll:'{names} 메모 {n}건도 함께 보기',notesAllMany:'다른 항목 아래 쓴 메모 {n}건도 함께 보기',notesOnly:'{name}만 보기',memoWhere:'여기에 적은 메모는 ‘{name}’ 항목의 요약에서 날짜별로 모아 볼 수 있어요.',memoEgFlow:'예: 2+4+2+4',memoEgChecks:'예: 운동 1시간 30분',memoHint:'메모 ({eg})',memoWrite:'메모 적기',memoEgSleep:'예: 새벽에 두 번 깼다',
  topMemo:'추가 메모',topMemoShow:'제목 아래 추가 메모 칸 보이기',topMemoNote:'다른 메모는 그날 페이지에만 남지만, 이 칸에 적은 것(예: 포커싱 포인트, 이달 목표)은 ×⁠로 지울 때까지 매일 페이지에 보여요. Enter를 치면 다음 줄이 생기고, {n}줄까지 적을 수 있어요.',pinWrite:'추가 메모 (예: 포커싱 포인트, 이달 목표)',pinItem:'추가 메모',pinNew:'새 추가 메모',pinTake:'이 메모 지우기',pinTaken:'지웠어요: {text}',
  mergedJust:'합쳤어요.',mergedPins:'추가 메모 {n}개가 들어왔어요.',
  dayNo:'{n}일차',dayRange:'{a}–{b}일차',
@@ -451,7 +457,7 @@ function el(tag,attrs){
   function add(x){ if(x==null||x===false) return; if(Array.isArray(x)){x.forEach(add);return;} n.appendChild(x.nodeType?x:document.createTextNode(String(x))); }
   return n;
 }
-var BUILD='9.23 14:20';   /* stamped by the build script */
+var BUILD='9.23 15:05';   /* stamped by the build script */
 function lang(){return STR[DB.settings.lang]?DB.settings.lang:'ko';}
 function t(k,vars){ var s=STR[lang()][k]; if(s==null) s=STR.en[k]!=null?STR.en[k]:k;
   return vars?s.replace(/\{(\w+)\}/g,function(m,a){return vars[a]!=null?vars[a]:'';}):s; }
@@ -712,12 +718,20 @@ function touchy(){ try{ return window.matchMedia&&matchMedia('(pointer:coarse)')
 function nestOn(sec){ return sec.type==='list'&&!sec.memo&&sec.nest===true; }   /* a sub-bullet level: off in every text section until the person switches it on in the settings; never in the note lines under other sections */
 function listEditor(sec,key,sumEl){
   var todo=sec.type==='todo',nest=nestOn(sec);   /* a line can sit one level under the line above: Tab / Shift+Tab, or a sideways swipe on the line being written */
-  var rows=(secVal(key,sec.id)||[]).map(function(r){return {id:r.id,text:r.text,done:!!r.done,lvl:r.lvl===1?1:0};});
+  var rows=(secVal(key,sec.id)||[]).map(function(r){return {id:r.id,text:r.text,done:!!r.done,lvl:r.lvl===1?1:0,fold:r.fold===true};});
   var box=el('div',{class:'kids'});
-  function commit(){ var clean=rows.filter(function(r){return r.text.trim();}).map(function(r){var o={id:r.id,text:r.text.trim()}; if(todo&&r.done) o.done=true; if(r.lvl===1) o.lvl=1; return o;});
+  function commit(){ if(nest) refold(); var clean=rows.filter(function(r){return r.text.trim();}).map(function(r){var o={id:r.id,text:r.text.trim()}; if(todo&&r.done) o.done=true; if(r.lvl===1) o.lvl=1; if(nest&&r.fold&&r.lvl!==1) o.fold=true; return o;});
     setVal(key,sec.id,clean.length?clean:undefined); sumEl.textContent=listSum(sec,clean); }
+  /* Folding: a line at the top level whose next lines sit one level in gets a small triangle where its dot was; pressed, the lines under it are hidden and their number shows after the text.
+     Nothing is lost from the summary or the copied week: a fold is only a way of looking at the page. A line with nothing under it shows no triangle, so most pages look just as before. */
+  function refold(){ var par=null,n=0,w,i,k=box.childNodes; function close(){ if(par){ par.classList.toggle('par',n>0); if(!n&&par._row) par._row.fold=false; var shut=n>0&&!!(par._row&&par._row.fold); par.classList.toggle('shut',shut); if(par._fb) par._fb.textContent=shut?'\u25B8':'\u25BE'; if(par._fc) par._fc.textContent=String(n); } }
+    for(i=0;i<k.length;i++){ w=k[i]; if(!w._ta) continue;
+      if(w._row&&w._lvl===1){ if(par){ n++; w.classList.toggle('hid',!!(par._row&&par._row.fold)); } else w.classList.remove('hid'); }
+      else { close(); w.classList.remove('hid'); par=w._row?w:null; n=0; } }
+    close(); }
+  function lastUnder(wrap){ var w=wrap,nx=wrap.nextSibling; while(nx&&nx._ta&&nx._row&&nx._lvl===1){ w=nx; nx=nx.nextSibling; } return w; }   /* the last line sitting under this one (itself, when none) */
   function removeRow(wrap){ var i=rows.indexOf(wrap._row); if(i>=0) rows.splice(i,1); if(wrap.parentNode) wrap.parentNode.removeChild(wrap); commit(); }
-  function insertAfter(wrap,text){ var nr={id:uid(),text:text||'',done:false,lvl:nest&&wrap._row&&wrap._row.lvl===1?1:0}; rows.splice(rows.indexOf(wrap._row)+1,0,nr); var ne=rowEl(nr); box.insertBefore(ne,wrap.nextSibling); return ne; }
+  function insertAfter(wrap,text,lvl){ var nr={id:uid(),text:text||'',done:false,lvl:lvl!=null?lvl:(nest&&wrap._row&&wrap._row.lvl===1?1:0)}; rows.splice(rows.indexOf(wrap._row)+1,0,nr); var ne=rowEl(nr); box.insertBefore(ne,wrap.nextSibling); return ne; }
   function insertAbove(wrap,text){ var nr={id:uid(),text:text||'',done:false,lvl:nest&&wrap._row&&wrap._row.lvl===1?1:0}; rows.splice(rows.indexOf(wrap._row),0,nr); var ne=rowEl(nr); box.insertBefore(ne,wrap); return ne; }
   function joinUp(wrap){          /* Backspace at the very start of a line that has text: the text goes up onto the end of the line before, the cursor at the seam (as in Roam, and any editor). The first line has nowhere to go and stays. */
     var ta=wrap._ta,up=wrap.previousSibling;
@@ -729,18 +743,20 @@ function listEditor(sec,key,sumEl){
     ta.addEventListener('focus',function(){ if(!ta.value) ta.style.height=minH(ta)+'px'; }); ta.addEventListener('blur',function(){ if(!ta.value) autosize(ta); });
     var cb=todo?checkSvg(el('button',{class:'tcheck',type:'button','aria-label':t('markDone'),'aria-pressed':String(!!(r&&r.done)),disabled:!r})):null;
     var wrap=el('div',{class:'kid text'+(todo?' todo':'')+(r&&r.done?' done':'')+(nest&&r&&r.lvl===1?' lv1':'')},cb,ta); wrap._row=r||null; wrap._ta=ta; ta.value=r?r.text:''; wrap._lvl=nest&&r&&r.lvl===1?1:0;
+    if(nest){ wrap._fb=el('button',{class:'fold',type:'button','aria-label':t('foldLine'),text:'\u25BE',onclick:function(){ if(!wrap._row) return; wrap._row.fold=!wrap._row.fold; commit(); }}); wrap._fc=el('span',{class:'fcount'}); wrap.insertBefore(wrap._fb,wrap.firstChild); wrap.appendChild(wrap._fc); }
     /* one level in or out. The empty last line remembers the level it was given, and takes it when words arrive. */
     function setLvl(l){ if(!nest||wrap._lvl===l) return; wrap._lvl=l; wrap.classList.toggle('lv1',l===1); if(wrap._row){ wrap._row.lvl=l; commit(); } }
     if(cb) cb.addEventListener('click',function(){ if(!wrap._row) return; wrap._row.done=!wrap._row.done;
       cb.setAttribute('aria-pressed',String(wrap._row.done)); wrap.classList.toggle('done',wrap._row.done); commit(); });
     function promote(){ var nr={id:uid(),text:ta.value,done:false,lvl:wrap._lvl}; rows.push(nr); wrap._row=nr; ta.placeholder=''; if(cb) cb.disabled=false; box.appendChild(rowEl(null)); }
-    function enter(s,en){          /* Enter with the cursor at s..en, as in Roam: at the end of the line, on to the next one; in the middle, what is after the cursor goes down onto a new line and the cursor goes with it, to its start; at the start of a line with text, an empty line opens above it (Backspace at the start is the reverse: joinUp). Nothing is copied or re-rendered, so this costs the same as Enter at the end. */
+    function enter(s,en){          /* Enter with the cursor at s..en, as in Roam: at the end of the line, on to the next one; in the middle, what is after the cursor goes down onto a new line and the cursor goes with it, to its start; at the start of a line with text, an empty line opens above it (Backspace at the start is the reverse: joinUp). On a folded line the new line comes after what is hidden under it, not inside. Nothing is copied or re-rendered, so this costs the same as Enter at the end. */
       if(!wrap._row){ ta.blur(); return; }
       var v=ta.value,head=v.slice(0,s).replace(/\s+$/,''),tail=v.slice(en).replace(/^\s+/,'');
+      var shut=nest&&wrap._row.fold&&wrap.classList.contains('shut'),after=shut?lastUnder(wrap):wrap,lvl=shut?0:null;
       if(tail&&!head){ insertAbove(wrap,'')._ta.focus(); return; }
-      if(tail){ ta.value=head; wrap._row.text=head; autosize(ta); var ne=insertAfter(wrap,tail); commit(); ne._ta.focus(); ne._ta.setSelectionRange(0,0); return; }
-      var nxt=wrap.nextSibling; if(nxt&&nxt._ta&&!nxt._row){ if(nest&&nxt._setLvl) nxt._setLvl(wrap._lvl); nxt._ta.focus(); return; }
-      insertAfter(wrap,'')._ta.focus(); }
+      if(tail){ ta.value=head; wrap._row.text=head; autosize(ta); var ne=insertAfter(after,tail,lvl); commit(); ne._ta.focus(); ne._ta.setSelectionRange(0,0); return; }
+      var nxt=after.nextSibling; if(nxt&&nxt._ta&&!nxt._row){ if(nest&&nxt._setLvl) nxt._setLvl(shut?0:wrap._lvl); nxt._ta.focus(); return; }
+      insertAfter(after,'',lvl)._ta.focus(); }
     ta.addEventListener('input',function(e){
       var nl=ta.value.indexOf('\n');
       if(nl>=0&&ta.value.indexOf('\n',nl+1)<0&&e.inputType!=='insertFromPaste'){   /* one line break that arrived in the text (a phone keyboard, or an IME committing a syllable with Enter): the same as the Enter key, at the same spot */
@@ -783,7 +799,7 @@ function listEditor(sec,key,sumEl){
     setTimeout(function(){autosize(ta);},0);
     return wrap;
   }
-  rows.forEach(function(r){box.appendChild(rowEl(r));}); box.appendChild(rowEl(null));
+  rows.forEach(function(r){box.appendChild(rowEl(r));}); box.appendChild(rowEl(null)); if(nest) refold();
   return box;
 }
 /* The memo under the journal title: one bullet per line, a × at the end of each. An empty line stands there only while there is no memo at all
