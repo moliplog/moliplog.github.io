@@ -101,7 +101,7 @@ button:disabled,select:disabled,input:disabled{cursor:default;opacity:.45}
 /* a Notes line one level in (a sub-bullet): moved to the right, its dot with it */
 .kid.text.lv1{margin-left:22px}
 .kid.text.par::before{display:none}   /* a line with sub-bullets: the dot becomes the fold toggle */
-.kid.text .fold{position:absolute;left:-24px;top:8px;width:24px;height:22px;line-height:22px;padding:0;border:0;background:none;color:var(--ink-2);font-size:12px;text-align:center;cursor:pointer;display:none}
+.kid.text .fold{position:absolute;left:-25px;top:8px;width:26px;height:22px;line-height:22px;padding:0;border:0;background:none;color:var(--ink-2);font-size:19px;text-align:center;cursor:pointer;display:none}
 .kid.text.par .fold{display:block}
 .kid.text.lv1.hid{display:none}
 .kid.text.par.shut{display:flex;align-items:flex-start;gap:8px} .kid.text.par.shut textarea{flex:1;min-width:0}
@@ -457,7 +457,7 @@ function el(tag,attrs){
   function add(x){ if(x==null||x===false) return; if(Array.isArray(x)){x.forEach(add);return;} n.appendChild(x.nodeType?x:document.createTextNode(String(x))); }
   return n;
 }
-var BUILD='9.23 15:05';   /* stamped by the build script */
+var BUILD='9.23 16:55';   /* stamped by the build script */
 function lang(){return STR[DB.settings.lang]?DB.settings.lang:'ko';}
 function t(k,vars){ var s=STR[lang()][k]; if(s==null) s=STR.en[k]!=null?STR.en[k]:k;
   return vars?s.replace(/\{(\w+)\}/g,function(m,a){return vars[a]!=null?vars[a]:'';}):s; }
