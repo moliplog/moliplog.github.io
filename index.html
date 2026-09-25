@@ -264,6 +264,11 @@ select.h{min-width:96px} select.p{min-width:70px}
 .kids>.kid.sum .entry{font-size:15px;line-height:1.5;gap:8px}
 .kids>.kid.sum .entry .d{font-size:12.5px}
 .kids>.kid.sum.pick{padding:2px 0 6px}.kids>.kid.sum.pick::before{display:none}.kid.sum.pick .link{padding:4px 0;font-size:14px}
+/* the search box over a written-lines summary: one plain field, a × once there is something in it. While a search is on, the week/month controls in the header step aside (the results come from every day there is). */
+.search{position:relative;margin:-8px 0 20px 24px}
+.search .field{height:40px;padding-right:38px}   /* the letters stay 16px: smaller, and an iPhone zooms in on the field when it is tapped */
+.search .pinx{position:absolute;right:4px;top:1px;margin:0;width:34px}
+.top.searching .datenav,.top.searching .seg{display:none}
 
 /* settings */
 .field{display:block;width:100%;height:42px;padding:0 12px;border:1px solid var(--line);border-radius:10px;background:var(--surface)}
@@ -359,6 +364,7 @@ en:{appName:'Molip Journal',saved:'Saved on this device {t}',local:'Records stay
 allRecords:'All records',allSpan:'{a} to {b}, {n} days with records',allStart:'Molip start {d}',allGoal:'purpose {g}',allDays:'{n} days with records',backSettings:'Back to settings',
  allTextOpen:'Save all records as text',allTextHint:'For reading only. It can be read anywhere without this app, but it cannot be loaded back in. To move to another device, use “{btn}” above.',allTextSub:'For reading. Copy it or save it as a file and keep it in a note, an email or a document. It is not a backup the app can restore.',saveTxt:'Save as a file',saveTxtFail:'This phone can’t hand over a file here. Use “Copy text” instead.',
  memo:'Note',memoLine:'Show a note line',nestLine:'Bullet indenting',foldLine:'Fold or unfold the lines under this one',nestHowSwipe:'While writing, swipe the line sideways to indent it one level; swipe back to undo.',nestHowTab:'While writing, Tab indents the line one level; Shift+Tab brings it back.',memoLink:'See this period’s {name} notes ({n})',memoHide:'Hide the {name} notes',orderNewest:'Newest first',orderOldest:'Oldest first',notesAll:'Also show the {names} notes ({n})',notesAllMany:'Also show notes written under other sections ({n})',notesOnly:'Show {name} only',memoWhere:'Notes written here are gathered, day by day, in the summary of ‘{name}’.',memoEgFlow:'e.g. 2+4+2+4',memoEgChecks:'e.g. Exercise 1 h 30 min',memoHint:'Add a note ({eg})',memoWrite:'Add a note',memoEgSleep:'e.g. Woke up twice before dawn',
+ search:'Search (e.g. #research, molip)',searchShort:'Search',searchAria:'Search every line written in the app',searchClear:'Clear the search',searchHead:'Search results ({n})',searchNone:'No line has this.',
  topMemo:'Extra note',topMemoShow:'Show an extra note line under the title',topMemoNote:'Other notes stay on their own day’s page; what you write here (e.g. monthly goal) shows on every day’s page until you remove it with its ×. Enter makes the next line, up to {n} lines.',pinWrite:'Extra note (e.g. monthly goal)',pinItem:'Extra note',pinNew:'New extra note',pinTake:'Remove this note',pinTaken:'Removed: {text}',
  mergedJust:'Merged.',mergedPins:'{n} extra notes came in.',
  dayNo:'Day {n}',dayRange:'days {a}–{b}',
@@ -409,6 +415,7 @@ ko:{appName:'몰입 일지',saved:'이 기기에 저장됨 {t}',local:'기록은
 allRecords:'전체 기록',allSpan:'{a} ~ {b}, 기록한 날 {n}일',allStart:'몰입 시작일 {d}',allGoal:'목적 {g}',allDays:'기록한 날 {n}일',backSettings:'설정으로 돌아가기',
  allTextOpen:'전체 기록을 텍스트로 저장',allTextHint:'읽기용 텍스트예요. 이 앱 없이도 어디서나 읽을 수 있지만, 앱으로 다시 불러올 수는 없어요. 기기를 옮길 때는 위의 ‘{btn}’ 버튼을 쓰세요.',allTextSub:'읽기용 텍스트예요. 복사하거나 파일로 저장해서 메모장, 메일, 문서에 보관하세요. 앱으로 되돌리는 백업은 아니에요.',saveTxt:'파일로 저장',saveTxtFail:'이 폰에서는 파일로 내보낼 수 없어요. ‘텍스트 복사’를 써 주세요.',
  memo:'메모',memoLine:'메모 칸 보이기',nestLine:'불렛 들여쓰기',foldLine:'아래 줄 접기·펼치기',nestHowSwipe:'적을 때 줄을 옆으로 밀면 한 단계 들어가고, 반대로 밀면 돌아와요.',nestHowTab:'적을 때 Tab을 누르면 한 단계 들어가고, Shift+Tab을 누르면 돌아와요.',memoLink:'이 기간의 {name} 메모 {n}건 보기',memoHide:'{name} 메모 접기',orderNewest:'최근 날짜부터 보기',orderOldest:'오래된 날짜부터 보기',notesAll:'{names} 메모 {n}건도 함께 보기',notesAllMany:'다른 항목 아래 쓴 메모 {n}건도 함께 보기',notesOnly:'{name}만 보기',memoWhere:'여기에 적은 메모는 ‘{name}’ 항목의 요약에서 날짜별로 모아 볼 수 있어요.',memoEgFlow:'예: 2+4+2+4',memoEgChecks:'예: 운동 1시간 30분',memoHint:'메모 ({eg})',memoWrite:'메모 적기',memoEgSleep:'예: 새벽에 두 번 깼다',
+ search:'검색 (예: #연구, 몰입)',searchShort:'검색',searchAria:'앱에 적은 모든 줄에서 찾기',searchClear:'검색 지우기',searchHead:'검색 결과 {n}건',searchNone:'이 글자가 든 줄이 없어요.',
  topMemo:'추가 메모',topMemoShow:'제목 아래 추가 메모 칸 보이기',topMemoNote:'다른 메모는 그날 페이지에만 남지만, 이 칸에 적은 것(예: 포커싱 포인트, 이달 목표)은 ×⁠로 지울 때까지 매일 페이지에 보여요. Enter를 치면 다음 줄이 생기고, {n}줄까지 적을 수 있어요.',pinWrite:'추가 메모 (예: 포커싱 포인트, 이달 목표)',pinItem:'추가 메모',pinNew:'새 추가 메모',pinTake:'이 메모 지우기',pinTaken:'지웠어요: {text}',
  mergedJust:'합쳤어요.',mergedPins:'추가 메모 {n}개가 들어왔어요.',
  dayNo:'{n}일차',dayRange:'{a}–{b}일차',
@@ -457,7 +464,7 @@ function el(tag,attrs){
   function add(x){ if(x==null||x===false) return; if(Array.isArray(x)){x.forEach(add);return;} n.appendChild(x.nodeType?x:document.createTextNode(String(x))); }
   return n;
 }
-var BUILD='9.23 17:00';   /* stamped by the build script */
+var BUILD='9.25 10:05';   /* stamped by the build script */
 function lang(){return STR[DB.settings.lang]?DB.settings.lang:'ko';}
 function t(k,vars){ var s=STR[lang()][k]; if(s==null) s=STR.en[k]!=null?STR.en[k]:k;
   return vars?s.replace(/\{(\w+)\}/g,function(m,a){return vars[a]!=null?vars[a]:'';}):s; }
@@ -657,7 +664,7 @@ function renderStatus(){
   s.className='status'+(storageOk?'':' bad');
   s.replaceChildren(el('i'),storageOk?(lastSaved?t('saved',{t:hm(lastSaved)}):t('local')):t('blocked'));
 }
-function go(screen,opts){ UI.screen=screen; UI.confirm=null; UI.pinUndo=null; UI.memoOpen=null; UI.notesAll=false; UI.allText=null; UI.mergeMsg=null; if(opts) for(var k in opts) UI[k]=opts[k]; render(); window.scrollTo(0,0); }
+function go(screen,opts){ UI.screen=screen; UI.confirm=null; UI.pinUndo=null; UI.memoOpen=null; UI.notesAll=false; UI.allText=null; UI.mergeMsg=null; UI.q=''; if(opts) for(var k in opts) UI[k]=opts[k]; render(); window.scrollTo(0,0); }
 function goDay(d){ go('day',{date:sod(d)}); }
 /* Turning the page with a sideways swipe: next/previous day on the day page, next/previous week or month in a summary, next/previous week in the week text. The arrow buttons stay. */
 function pageTurn(n){
@@ -1031,8 +1038,8 @@ function sumNumbers(sec,mode,dates,prevDates){
 }
 /* the width of the date column in a list summary: just enough for the longest date shown (letters 12.5px, see .kid.sum). An estimate per kind of letter, a little generous, so nothing depends on the web font having arrived. */
 function dateW(labels){ var m=0; labels.forEach(function(s){ var w=0,i,c; for(i=0;i<s.length;i++){ c=s.charAt(i); w+=/[0-9]/.test(c)?0.6:c==='/'?0.4:c===' '?0.25:/[\uAC00-\uD7A3]/.test(c)?0.95:/[A-Z]/.test(c)?0.78:0.58; } if(w>m) m=w; }); return Math.ceil(m*12.5)+3; }
-function sumRow(d,text,tag,w,lvl){ var sub=lvl===1;   /* a sub-bullet: no date of its own (it is the line above's), its dot just left of where that line's words begin */
-  return el('div',{class:'kid sum'+(sub?' lv1':''),style:sub?'margin-left:'+(w+8)+'px':null},el('button',{class:'entry',type:'button',onclick:function(){goDay(d);}},sub?null:el('span',{class:'d',style:'width:'+w+'px',text:md(d)+' '+dow(d)}),
+function sumRow(d,text,tag,w,lvl,label){ var sub=lvl===1;   /* a sub-bullet: no date of its own (it is the line above's), its dot just left of where that line's words begin; label: a date written another way (search results from other years carry the year) */
+  return el('div',{class:'kid sum'+(sub?' lv1':''),style:sub?'margin-left:'+(w+8)+'px':null},el('button',{class:'entry',type:'button',onclick:function(){goDay(d);}},sub?null:el('span',{class:'d',style:'width:'+w+'px',text:label||(md(d)+' '+dow(d))}),
   el('span',null,tag?el('span',{class:'muted',text:'('+tag+') '}):null,text))); }
 function sumDates(dates){ return DB.settings.listNewest===true?dates.slice().reverse():dates; }
 function sumList(sec,mode,dates){
@@ -1053,6 +1060,37 @@ function sumList(sec,mode,dates){
   if(rows.length) out.unshift(el('div',{class:'kid sum pick'},el('button',{class:'link',type:'button','aria-pressed':String(newest),text:t(newest?'orderOldest':'orderNewest'),
     onclick:function(){ DB.settings.listNewest=!newest; save(); render(); }})));
   return out;
+}
+/* ---------- search: every line ever written, in one list ----------
+   The box over a written-lines summary (notes, events, a section of one's own) filters every line the app holds — the text sections, the to-dos, the note lines under Immersion, Habits and Sleep,
+   and the extra notes under the title — from the first day to the last, not only this week or month. A line is a hit when the letters are in it anywhere ('몰입' finds '몰입이 잘 됐다', 'molip' finds 'Molip').
+   So a tag is just a word: write #연구 in a note, search #연구, and those lines gather. Nothing is indexed or kept; a few thousand lines are read through in a moment. Each visit to a summary starts with an empty box, like the other choices on these pages. */
+function searchRows(q){ q=String(q||'').trim().toLowerCase();
+  function hit(s){ return !!s&&String(s).toLowerCase().indexOf(q)>=0; }
+  var rows=[],lists=DB.template.filter(function(s){return s.type==='list'||s.type==='todo';}),memos=DB.template.filter(memoOn);
+  Object.keys(DB.days).forEach(function(k){ var d=DB.days[k]; if(!d||!d.s) return; var dt=parseKey(k);
+    lists.forEach(function(s){ (d.s[s.id]||[]).forEach(function(r){ if(hit(r.text)) rows.push({d:dt,text:r.text,tag:sumName(s)}); }); });
+    memos.forEach(function(s){ (d.s[s.id+':memo']||[]).forEach(function(r){ if(hit(r.text)) rows.push({d:dt,text:r.text,tag:s.name}); }); }); });
+  (DB.pins||[]).forEach(function(p){ if(p.from&&hit(p.text)) rows.push({d:parseKey(p.from),text:p.text,tag:t('pinItem')}); });
+  var newest=DB.settings.listNewest===true; rows.sort(function(x,y){ return newest?y.d-x.d:x.d-y.d; });   /* a stable sort: within one day the lines keep the order of the page */
+  return rows;
+}
+function searchList(q){ var rows=searchRows(q),td=today(),years=rows.some(function(r){return r.d.getFullYear()!==td.getFullYear();}),newest=DB.settings.listNewest===true;
+  var labels=rows.map(function(r){ return years?(lang()==='ko'?ymd(r.d)+' '+dow(r.d):ymd(r.d)):md(r.d)+' '+dow(r.d); }),w=dateW(labels);   /* once a line from another year is in the list, every date says its year */
+  var out=rows.map(function(r,i){ return sumRow(r.d,r.text,r.tag,w,0,labels[i]); });
+  if(!out.length) out=[el('div',{class:'kid'},el('span',{class:'muted',text:t('searchNone')}))];
+  else out.unshift(el('div',{class:'kid sum pick'},el('button',{class:'link',type:'button','aria-pressed':String(newest),text:t(newest?'orderOldest':'orderNewest'),
+    onclick:function(){ DB.settings.listNewest=!newest; save(); render(); }})));
+  return node(el('h2',{text:t('searchHead',{n:rows.length})}),out);
+}
+function searchBox(head,box,plain){   /* the field, its ×, and the swap: results in place of the period's list while there is something in the field, the list back when it is emptied. Typing redraws only the list, so the field keeps the cursor and the phone keeps its keyboard. */
+  var inp=el('input',{class:'field',type:'text',value:UI.q||'',placeholder:t('search'),'data-short':t('searchShort'),'aria-label':t('searchAria'),autocomplete:'off',autocorrect:'off',autocapitalize:'off',spellcheck:'false',enterkeyhint:'search'}),
+      x=el('button',{class:'pinx',type:'button','aria-label':t('searchClear'),text:'×',onclick:function(){ inp.value=''; UI.q=''; show(); inp.focus(); }});
+  var show=function(){ var on=!!(UI.q||'').trim(); head.classList.toggle('searching',on); x.style.display=on?'':'none';
+    box.replaceChildren.apply(box,(on?[searchList(UI.q)]:plain).filter(Boolean)); };
+  inp.addEventListener('input',function(){ UI.q=inp.value; show(); });
+  inp.addEventListener('keydown',function(e){ if(e.key==='Enter'&&!e.isComposing&&e.keyCode!==229) inp.blur(); });   /* Enter on a phone: put the keyboard away and look at the results */
+  show(); return el('div',{class:'search'},inp,x);
 }
 /* To-do page: like a Roam TODO page. Every unfinished item from every day, newest first, grouped by week. */
 function screenTodo(sec){
@@ -1113,7 +1151,9 @@ function screenSummary(){
         open?el('div',{class:'kids',style:'margin-top:4px;margin-bottom:10px'},(function(){ var w=dateW(mem.map(function(m){return md(m.d)+' '+dow(m.d);})); return mem.map(function(m){ return sumRow(m.d,m.r.text,null,w); }); })()):null); } }
   var wrap=sec.type==='flow'?el('section',{class:'node'},el('span',{class:'dot'}),el('h2',{text:headName}),body):node(el('h2',{text:headName}),body);
   var copy=mode==='week'?el('p',{style:'margin:4px 0 0 24px'},el('button',{class:'link',type:'button',text:t('copyWeek'),onclick:function(){go('export',{exportText:null});}})):null;
-  return [head,wrap,memoLink,copy];
+  if(sec.type!=='list') return [head,wrap,memoLink,copy];
+  var box=el('div'),search=searchBox(head,box,[wrap,memoLink,copy]);   /* the search box sits over the written-lines summaries only; the charts have no lines to search */
+  return [head,search,box];
 }
 
 /* ---------- one week as plain text (for an email to a coach) ---------- */
