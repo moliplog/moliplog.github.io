@@ -334,7 +334,7 @@ en:{appName:'Molip Journal',saved:'Saved on this device {t}',local:'Records stay
  warnStorage:'This browser is blocking storage, so your records will disappear when you close this window. Turn off private browsing or open the app in another browser.',
  summary:'Summary',openSummary:'Open {name} summary',sumOf:'{name} summary',eventsPlain:'Events',noSections:'There are no sections yet. Add some in ‘Sections & settings’.',
  write:'Write freely',newItem:'{name}: new item',item:'{name} item',entries:'{n}',hours:'Hours',hoursOf:'{p} hours',intensityOf:'{p} intensity',hUnit:'{n} h',ymdY:'Year',ymdM:'Month',ymdD:'Day',
- daySum:'{h} h, avg {p}%',daySumNoAvg:'{h} h',noChecks:'Add things to check in Sections & settings.',noNumbers:'Add numbers to track in Sections & settings.',none:'Not recorded',
+ daySum:'{h} h, avg {p}%',daySumNoAvg:'{h} h',digestTime:'Molip time',digestInt:'Intensity',digestH:'h',noChecks:'Add things to check in Sections & settings.',noNumbers:'Add numbers to track in Sections & settings.',none:'Not recorded',
  copyWeek:'Copy the whole week’s records as text',weekText:'Week as text',weekTextSub:'Check it, then copy it into an email and delete what you don’t need',copyText:'Copy text',shareText:'Share',weekTextAria:'The week as text',weeklySummary:'Weekly summary',noRecordsDay:'no records',sumFlowLine:'{h} h, average intensity {p}%, {d} days recorded',sumTodoLine:'{a} done, {b} unfinished',sumListLine:'{n} entries',avgShort:'avg',
  markDone:'Mark as done',openList:'Open list',openListAria:'Open the list of unfinished {name} items',openTodos:'Unfinished to-dos',upcoming:'Upcoming',earlier:'Earlier',since:'since {date}',noneOpen:'Nothing unfinished',markedDone:'Marked done: {text}',undo:'Undo',
  week:'Week',month:'Month',unitAria:'Summary period',prevWeek:'Previous week',nextWeek:'Next week',prevMonth:'Previous month',nextMonth:'Next month',
@@ -385,7 +385,7 @@ ko:{appName:'몰입 일지',saved:'이 기기에 저장됨 {t}',local:'기록은
  warnStorage:'이 브라우저가 저장을 막고 있어서, 창을 닫으면 기록이 사라져요. 사생활 보호 모드를 끄거나 다른 브라우저로 열어 주세요.',
  summary:'요약',openSummary:'{name} 요약 열기',sumOf:'{name} 요약',eventsPlain:'이벤트',noSections:'기록할 항목이 없어요. ‘항목과 설정’에서 항목을 추가하세요.',
  write:'자유롭게 적기',newItem:'{name} 새 항목',item:'{name} 항목',entries:'{n}건',hours:'시간',hoursOf:'{p} 몰입 시간',intensityOf:'{p} 몰입도',hUnit:'{n}시간',ymdY:'년',ymdM:'월',ymdD:'일',
- daySum:'{h}시간, 평균 {p}%',daySumNoAvg:'{h}시간',noChecks:'항목과 설정에서 체크할 것을 추가하세요.',noNumbers:'항목과 설정에서 기록할 숫자를 추가하세요.',none:'기록 없음',
+ daySum:'{h}시간, 평균 {p}%',daySumNoAvg:'{h}시간',digestTime:'몰입 시간',digestInt:'몰입도',digestH:'H',noChecks:'항목과 설정에서 체크할 것을 추가하세요.',noNumbers:'항목과 설정에서 기록할 숫자를 추가하세요.',none:'기록 없음',
  copyWeek:'일주일치 전체 기록을 텍스트로 복사',weekText:'주간 텍스트',weekTextSub:'확인한 뒤 복사해서 이메일에 붙이고, 필요 없는 부분은 지우세요',copyText:'텍스트 복사',shareText:'공유',weekTextAria:'일주일치 텍스트',weeklySummary:'주간 요약',noRecordsDay:'기록 없음',sumFlowLine:'{h}시간, 평균 몰입도 {p}%, 기록한 날 {d}일',sumTodoLine:'완료 {a}개, 미완료 {b}개',sumListLine:'{n}건',avgShort:'평균',
  markDone:'완료 표시',openList:'미완료 목록',openListAria:'{name} 미완료 목록 열기',openTodos:'미완료 할 일',upcoming:'다가오는 할 일',earlier:'이전 미완료',since:'{date} 이후',noneOpen:'미완료 없음',markedDone:'완료로 표시: {text}',undo:'되돌리기',
  week:'주간',month:'월간',unitAria:'요약 단위',prevWeek:'전 주',nextWeek:'다음 주',prevMonth:'전 달',nextMonth:'다음 달',
@@ -464,7 +464,7 @@ function el(tag,attrs){
   function add(x){ if(x==null||x===false) return; if(Array.isArray(x)){x.forEach(add);return;} n.appendChild(x.nodeType?x:document.createTextNode(String(x))); }
   return n;
 }
-var BUILD='9.25 10:30';   /* stamped by the build script */
+var BUILD='9.26 09:55';   /* stamped by the build script */
 function lang(){return STR[DB.settings.lang]?DB.settings.lang:'ko';}
 function t(k,vars){ var s=STR[lang()][k]; if(s==null) s=STR.en[k]!=null?STR.en[k]:k;
   return vars?s.replace(/\{(\w+)\}/g,function(m,a){return vars[a]!=null?vars[a]:'';}):s; }
@@ -1170,11 +1170,27 @@ function screenSummary(){
 
 /* ---------- one week as plain text (for an email to a coach) ---------- */
 function dayHas(k){ var d=DB.days[k]; return !!(d&&d.s&&Object.keys(d.s).some(function(id){ var v=d.s[id]; return Array.isArray(v)?v.length:(v&&Object.keys(v).length); })); }
-/* One day written out as plain lines: its title, then every section that holds something. */
+/* The day's numbers in one line, right under the day's title, so a week can be skimmed before its details:
+   'Events: 2. Last night’s sleep: 5H. Naps: 2회. Molip time: 14H. Intensity: 95%.' — every number section, in the order of the day page, with '—' where nothing was written.
+   The to-dos, the check-lists and the written sections are not numbers, so they stay out (the events are counted). Hours are written with an H, as one writes them by hand, not 5시간 30분. */
+function dayDigest(k){
+  var F=[];
+  DB.template.forEach(function(sec){
+    var v=secVal(k,sec.id);
+    if(sec.id==='events'&&sec.type==='list') F.push(sumName(sec)+': '+((v||[]).length));
+    else if(sec.type==='flow'){ var f=flowDay(k,sec.id),dflt=sec.name===DEF.ko.flow||sec.name===DEF.en.flow;   /* the built-in name says 'intensity', so the hours get a name of their own; a name the person gave is kept for the hours */
+      F.push((dflt?t('digestTime'):sec.name)+': '+(f.total==null?'—':fmt(f.total)+t('digestH')));
+      F.push(t('digestInt')+': '+(f.avg==null?'—':Math.round(f.avg)+'%')); }
+    else if(sec.type==='numbers') (sec.items||[]).forEach(function(it){ var x=v&&v[it.id]; F.push(it.name+': '+(x==null?'—':isHours(it)?fmt(+x)+t('digestH'):valText(x,it))); });
+  });
+  return F.length?F.join('. ')+'.':null;
+}
+/* One day written out as plain lines: its title, then its numbers in one line, then every section that holds something. */
 function dayLines(d,P,L,withYear){      /* records that span years say which year each day belongs to */
   var k=keyOf(d),dn=dayNo(d),ttl=withYear?(lang()==='ko'?d.getFullYear()+'년 '+dayTitle(d):dayTitle(d)+', '+d.getFullYear()):dayTitle(d);
   L.push(ttl+(dn?' ('+t('dayNo',{n:dn})+')':''));
   if(!dayHas(k)){ L.push('- '+t('noRecordsDay')); return; }
+  var dg=dayDigest(k); if(dg) L.push(dg);
   DB.template.forEach(function(sec){
     var v=secVal(k,sec.id);
     var ms=memoRows(sec,k),named=false;
