@@ -464,7 +464,7 @@ function el(tag,attrs){
   function add(x){ if(x==null||x===false) return; if(Array.isArray(x)){x.forEach(add);return;} n.appendChild(x.nodeType?x:document.createTextNode(String(x))); }
   return n;
 }
-var BUILD='9.27 23:10';   /* stamped by the build script */
+var BUILD='10.1 13:10';   /* stamped by the build script */
 function lang(){return STR[DB.settings.lang]?DB.settings.lang:'ko';}
 function t(k,vars){ var s=STR[lang()][k]; if(s==null) s=STR.en[k]!=null?STR.en[k]:k;
   return vars?s.replace(/\{(\w+)\}/g,function(m,a){return vars[a]!=null?vars[a]:'';}):s; }
@@ -705,6 +705,27 @@ function autosize(ta){
   ta.style.height='auto'; ta.style.height=Math.max(ta.scrollHeight,minH(ta))+'px';
   if(ph) ta.value='';
 }
+/* A line is measured when something is typed in it. That is not the only way its height can come to be wrong: words can arrive with no 'input' event
+   (dictation, a keyboard correcting itself), and a line can become narrower after it was measured (the phone turned, a window made smaller, a sub-bullet).
+   The text then needs one line more than it was given and the last line is cut off: 'three lines, but only two are showing'.
+   So a line being written is looked at again whenever the cursor moves, a key comes up, or it gains or loses the cursor, and twice a second while it has the cursor;
+   a line found too short is given the height its text asks for. Nothing is done to a line that fits, so this costs two readings of one box. */
+function fitLine(ta){ if(!ta||ta.tagName!=='TEXTAREA'||!ta.hasAttribute('rows')) return;
+  if(ta.value&&ta.scrollHeight-ta.clientHeight>4) ta.style.height=Math.max(ta.scrollHeight,minH(ta))+'px';   /* grown straight to its height, not by way of 'auto': the page never gets shorter for a moment, so it cannot jump */
+  if(ta.scrollTop) ta.scrollTop=0; }
+(function(){ var tick=0;
+  function now(e){ fitLine(e&&e.target&&e.target.tagName?e.target:document.activeElement); }
+  ['keyup','compositionend','focusout'].forEach(function(n){ document.addEventListener(n,now,true); });
+  document.addEventListener('scroll',now,{capture:true,passive:true});   /* a box that cuts its text off is scrolled by the browser to show the cursor: that scroll says the box is too short */
+  document.addEventListener('selectionchange',function(){ fitLine(document.activeElement); });
+  document.addEventListener('focusin',function(e){ now(e); clearInterval(tick); tick=0;
+    if(e.target&&e.target.tagName==='TEXTAREA'&&e.target.hasAttribute('rows')) tick=setInterval(function(){ fitLine(document.activeElement); },500); },true);
+  document.addEventListener('focusout',function(){ clearInterval(tick); tick=0; },true);
+})();
+/* the width changed (not the height: a keyboard coming up changes nothing about how the words wrap): every line is measured again, and the page stays where it was */
+var fitW=window.innerWidth;
+function fitWidth(){ if(window.innerWidth===fitW) return; fitW=window.innerWidth;
+  var y=window.scrollY; [].forEach.call(document.querySelectorAll('textarea[rows]'),autosize); if(window.scrollY!==y) window.scrollTo(0,y); }
 
 /* ---------- day page ---------- */
 function listSum(sec,rows){ rows=rows||[]; if(!rows.length) return '';
@@ -753,7 +774,7 @@ function listEditor(sec,key,sumEl){
     var wrap=el('div',{class:'kid text'+(todo?' todo':'')+(r&&r.done?' done':'')+(nest&&r&&r.lvl===1?' lv1':'')},cb,ta); wrap._row=r||null; wrap._ta=ta; ta.value=r?r.text:''; wrap._lvl=nest&&r&&r.lvl===1?1:0;
     if(nest){ wrap._fb=el('button',{class:'fold',type:'button','aria-label':t('foldLine'),text:'\u25BE',onclick:function(){ if(!wrap._row) return; wrap._row.fold=!wrap._row.fold; commit(); }}); wrap._fc=el('span',{class:'fcount'}); wrap.insertBefore(wrap._fb,wrap.firstChild); wrap.appendChild(wrap._fc); }
     /* one level in or out. The empty last line remembers the level it was given, and takes it when words arrive. */
-    function setLvl(l){ if(!nest||wrap._lvl===l) return; wrap._lvl=l; wrap.classList.toggle('lv1',l===1); if(wrap._row){ wrap._row.lvl=l; commit(); } }
+    function setLvl(l){ if(!nest||wrap._lvl===l) return; wrap._lvl=l; wrap.classList.toggle('lv1',l===1); if(ta.value) autosize(ta); if(wrap._row){ wrap._row.lvl=l; commit(); } }   /* one level in, the line is narrower and its words may need a line more */
     if(cb) cb.addEventListener('click',function(){ if(!wrap._row) return; wrap._row.done=!wrap._row.done;
       cb.setAttribute('aria-pressed',String(wrap._row.done)); wrap.classList.toggle('done',wrap._row.done); commit(); });
     function promote(){ var nr={id:uid(),text:ta.value,done:false,lvl:wrap._lvl}; rows.push(nr); wrap._row=nr; ta.placeholder=''; if(cb) cb.disabled=false; box.appendChild(rowEl(null)); }
@@ -1493,7 +1514,7 @@ function screenSettings(){
 function applyLang(){ document.documentElement.lang=lang(); document.title=t('appName'); }
 var TEXT_ZOOM=[1,1.1,1.2];   /* Small 16px, Normal 17.6px (the default), Large 19.2px. Text size: the whole page grows by the same ratio, so nothing on the day page has to change */
 function applyTextSize(){ var i=DB.settings.textSize|0,z=TEXT_ZOOM[i]||1,r=$('#root'); r.style.zoom=z===1?'':String(z); r.classList.toggle('narrow',window.innerWidth/z<360); r.classList.toggle('ts1',i===1); r.classList.toggle('ts2',i===2); }
-window.addEventListener('resize',applyTextSize); window.addEventListener('resize',function(){fitYmd();});
+window.addEventListener('resize',applyTextSize); window.addEventListener('resize',fitWidth); window.addEventListener('resize',function(){fitYmd();});
 function render(){ var root=$('#root'),keepY=window.scrollY;   /* Chrome (Android, desktop) gives a tapped button the focus, and when that button is replaced by the redraw the page jumps towards the top. Safari does not focus buttons, so an iPhone never showed it. The page stays where it was; go() still starts a new screen at the top. */
   root.replaceChildren.apply(root,(UI.screen==='summary'?screenSummary():UI.screen==='settings'?screenSettings():UI.screen==='export'?screenExport():UI.screen==='alltext'?screenAllText():UI.screen==='guide'?screenGuide():screenDay()).filter(Boolean));
   [].forEach.call(root.querySelectorAll('textarea[rows]'),autosize);   /* memo and event lines are given their height for their text right now, not a moment later (a line can only be measured once it is on the page, so each one also measures itself again in a timeout). While they were still one line high the page was shorter, and a page scrolled near its bottom (ticking a habit box below long memos) was pulled up: the box 'jumped' and stayed up once the lines grew back. */
