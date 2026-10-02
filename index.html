@@ -464,7 +464,7 @@ function el(tag,attrs){
   function add(x){ if(x==null||x===false) return; if(Array.isArray(x)){x.forEach(add);return;} n.appendChild(x.nodeType?x:document.createTextNode(String(x))); }
   return n;
 }
-var BUILD='10.1 13:10';   /* stamped by the build script */
+var BUILD='10.2 14:30';   /* stamped by the build script */
 function lang(){return STR[DB.settings.lang]?DB.settings.lang:'ko';}
 function t(k,vars){ var s=STR[lang()][k]; if(s==null) s=STR.en[k]!=null?STR.en[k]:k;
   return vars?s.replace(/\{(\w+)\}/g,function(m,a){return vars[a]!=null?vars[a]:'';}):s; }
@@ -724,8 +724,19 @@ function fitLine(ta){ if(!ta||ta.tagName!=='TEXTAREA'||!ta.hasAttribute('rows'))
 })();
 /* the width changed (not the height: a keyboard coming up changes nothing about how the words wrap): every line is measured again, and the page stays where it was */
 var fitW=window.innerWidth;
-function fitWidth(){ if(window.innerWidth===fitW) return; fitW=window.innerWidth;
-  var y=window.scrollY; [].forEach.call(document.querySelectorAll('textarea[rows]'),autosize); if(window.scrollY!==y) window.scrollTo(0,y); }
+function fitAll(){ var y=window.scrollY,a=document.activeElement;
+  [].forEach.call(document.querySelectorAll('textarea[rows]'),function(ta){ if(ta===a) fitLine(ta); else autosize(ta); });   /* the line being written is only ever made taller, never touched otherwise */
+  if(window.scrollY!==y) window.scrollTo(0,y); }
+function fitWidth(){ if(window.innerWidth===fitW) return; fitW=window.innerWidth; fitAll(); }
+/* The app's letters (IBM Plex Sans KR) come in after the page is drawn, in pieces, each piece when one of its letters is first needed. Until a piece is there the phone's own letters stand in,
+   and on an iPhone those are narrower: a memo that fits one line when it is measured needs two once the real letters arrive, and its second line is cut off ('the memo under the title shows half a line').
+   Nothing was typed and the window did not change, so nothing measured it again. Now every line is measured again each time letters arrive, and once more on coming back to the app. */
+(function(){ var t=0; function soon(){ clearTimeout(t); t=setTimeout(fitAll,60); }
+  try{ if(document.fonts){ if(document.fonts.addEventListener) document.fonts.addEventListener('loadingdone',soon); if(document.fonts.ready&&document.fonts.ready.then) document.fonts.ready.then(soon); } }catch(e){}
+  window.addEventListener('load',soon);
+  document.addEventListener('visibilitychange',function(){ if(document.visibilityState!=='hidden') soon(); });
+  window.addEventListener('pageshow',soon);
+})();
 
 /* ---------- day page ---------- */
 function listSum(sec,rows){ rows=rows||[]; if(!rows.length) return '';
