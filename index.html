@@ -464,7 +464,7 @@ function el(tag,attrs){
   function add(x){ if(x==null||x===false) return; if(Array.isArray(x)){x.forEach(add);return;} n.appendChild(x.nodeType?x:document.createTextNode(String(x))); }
   return n;
 }
-var BUILD='10.2 14:30';   /* stamped by the build script */
+var BUILD='10.6 21:10';   /* stamped by the build script */
 function lang(){return STR[DB.settings.lang]?DB.settings.lang:'ko';}
 function t(k,vars){ var s=STR[lang()][k]; if(s==null) s=STR.en[k]!=null?STR.en[k]:k;
   return vars?s.replace(/\{(\w+)\}/g,function(m,a){return vars[a]!=null?vars[a]:'';}):s; }
@@ -702,7 +702,13 @@ function minH(ta){ var v=0; try{ v=parseFloat(getComputedStyle(ta).getPropertyVa
 function autosize(ta){
   var ph=!ta.value&&ta.placeholder&&document.activeElement!==ta;      /* measure the example text when that is all there is */
   if(ph) ta.value=ta.placeholder;
+  /* To learn how tall its text is, a line is first let go to one line high ('auto') and then given its height. For that instant a long memo is one line high,
+     the page is shorter by all the rest, and a page scrolled further down than the shorter page reaches is pulled up: 'while I was writing, the screen jumped to the top of that item'.
+     So the page is held at its full height while a line that already has a height is measured again, and is put back where it was should it have moved all the same. */
+  var hold=!!ta.style.height,b=document.body,y=window.scrollY;
+  if(hold) b.style.minHeight=document.documentElement.scrollHeight+'px';
   ta.style.height='auto'; ta.style.height=Math.max(ta.scrollHeight,minH(ta))+'px';
+  if(hold){ b.style.minHeight=''; if(window.scrollY!==y) window.scrollTo(0,y); }
   if(ph) ta.value='';
 }
 /* A line is measured when something is typed in it. That is not the only way its height can come to be wrong: words can arrive with no 'input' event
